@@ -1,0 +1,30 @@
+{
+  "name": "lmi-prototype",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "catalogo": "node scripts/build-catalogo.mjs",
+    "check": "node scripts/check-store.mjs",
+    "check:chat": "node scripts/check-chat.mjs",
+    "verify": "node scripts/build-catalogo.mjs && node scripts/check-store.mjs && node scripts/check-chat.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^2.27.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "vite": "^8.3.0"
+  }
+}

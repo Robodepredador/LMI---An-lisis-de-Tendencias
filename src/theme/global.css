@@ -1,0 +1,121 @@
+/* ═══════════════════════════════════════════════════════════
+   LMI-U · Global Styles & Design Tokens
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Background ── */
+  --bg-primary:    #12110f;
+  --bg-elevated:   #1a1916;
+  --bg-surface:    #1f1d1a;
+  --bg-sidebar:    #0e0d0c;
+  --bg-overlay:    rgba(8,7,6,.7);
+  --bg-page:       #e9e6df;
+
+  /* ── Text ── */
+  --text-primary:  #f2efe9;
+  --text-secondary:#bdb7ac;
+  --text-muted:    #a9a398;
+  --text-dim:      #8a857b;
+  --text-dark:     #17120a;
+
+  /* ── Accent (LMI-U brand) ── */
+  --accent:        oklch(0.78 0.14 60);
+
+  /* ── Borders ── */
+  --border-subtle: rgba(242,239,233,.08);
+  --border-light:  rgba(242,239,233,.14);
+  --border-visible:rgba(242,239,233,.16);
+  --border-card:   rgba(242,239,233,.09);
+
+  /* ── Semantic ── */
+  --success:       oklch(0.8 0.11 175);
+  --success-bg:    oklch(0.8 0.11 175 / .16);
+  --success-fg:    oklch(0.85 0.1 175);
+  --error:         oklch(0.68 0.15 28);
+  --error-bg:      oklch(0.65 0.15 28 / .08);
+  --error-border:  oklch(0.65 0.15 28 / .45);
+  --error-fg:      oklch(0.8 0.13 28);
+
+  /* ── Typography ── */
+  --font-display:  'Newsreader', Georgia, serif;
+  --font-body:     'Schibsted Grotesk', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+
+  /* ── Radii ── */
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     16px;
+  --radius-xl:     18px;
+  --radius-2xl:    20px;
+  --radius-full:   999px;
+
+  /* ── Shadows ── */
+  --shadow-card:   0 2px 6px rgba(0,0,0,.12), 0 20px 50px rgba(0,0,0,.14);
+  --shadow-modal:  0 20px 60px rgba(0,0,0,.5);
+  --shadow-hero:   0 30px 80px rgba(0,0,0,.4);
+
+  /* ── Transitions ── */
+  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+  --duration:      200ms;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: var(--accent); text-decoration: none; cursor: pointer; }
+a:hover { opacity: 0.85; }
+input, button, textarea { font: inherit; color: inherit; }
+::placeholder { color: var(--text-dim); }
+ul { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, h4, h5, h6 { margin: 0; }
+p { margin: 0; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(242,239,233,.12); border-radius: 3px; }
+
+/* ── Utilities ── */
+.mono { font-family: var(--font-mono); }
+.serif { font-family: var(--font-display); }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade    { animation: fadeIn 0.35s var(--ease-out) both; }
+.animate-fade-up { animation: fadeInUp 0.4s var(--ease-out) both; }
+.animate-scale   { animation: scaleIn 0.3s var(--ease-out) both; }
+.animate-slide   { animation: slideInRight 0.35s var(--ease-out) both; }

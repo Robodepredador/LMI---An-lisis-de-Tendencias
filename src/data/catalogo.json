@@ -1,0 +1,2979 @@
+{
+ "minMuestra": 30,
+ "areas": [
+  "Datos y Analítica",
+  "Finanzas",
+  "Marketing",
+  "Ingeniería Industrial",
+  "Derecho",
+  "Sistemas",
+  "Psicología",
+  "Administración"
+ ],
+ "ciudades": [
+  "Lima",
+  "Arequipa",
+  "Trujillo",
+  "Cusco",
+  "Remoto"
+ ],
+ "roles": [
+  {
+   "id": "analista-datos-jr",
+   "nombre": "Analista de Datos junior",
+   "area": "Datos y Analítica",
+   "nivel": "junior",
+   "sinonimos": [
+    "analista de data",
+    "data analyst",
+    "analista datos"
+   ],
+   "ofertas": 1264,
+   "habilidades": [
+    {
+     "k": "SQL",
+     "pct": 81,
+     "tendencia": 19
+    },
+    {
+     "k": "Excel avanzado",
+     "pct": 74,
+     "tendencia": 2
+    },
+    {
+     "k": "Power BI",
+     "pct": 63,
+     "tendencia": 19
+    },
+    {
+     "k": "Python",
+     "pct": 52,
+     "tendencia": 6
+    },
+    {
+     "k": "Estadística",
+     "pct": 41,
+     "tendencia": 0
+    },
+    {
+     "k": "Comunicar resultados",
+     "pct": 38,
+     "tendencia": 4
+    }
+   ],
+   "salario": {
+    "p25": 2600,
+    "med": 3400,
+    "p75": 4300,
+    "n": 708
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2600,
+     "med": 3400,
+     "p75": 4300,
+     "n": 396,
+     "ofertas": 708
+    },
+    "Arequipa": {
+     "p25": 2240,
+     "med": 2920,
+     "p75": 3700,
+     "n": 78,
+     "ofertas": 139
+    },
+    "Trujillo": {
+     "p25": 2130,
+     "med": 2790,
+     "p75": 3530,
+     "n": 53,
+     "ofertas": 95
+    },
+    "Cusco": {
+     "n": 25,
+     "ofertas": 44
+    },
+    "Remoto": {
+     "p25": 2810,
+     "med": 3670,
+     "p75": 4640,
+     "n": 78,
+     "ofertas": 139
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "powerbi-codigolab",
+    "ruta-analista",
+    "python-datos",
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "analista-bi-jr",
+   "nombre": "Analista de BI junior",
+   "area": "Datos y Analítica",
+   "nivel": "junior",
+   "sinonimos": [
+    "business intelligence",
+    "analista bi",
+    "desarrollador bi"
+   ],
+   "ofertas": 712,
+   "habilidades": [
+    {
+     "k": "Power BI",
+     "pct": 89,
+     "tendencia": 14
+    },
+    {
+     "k": "SQL",
+     "pct": 86,
+     "tendencia": 8
+    },
+    {
+     "k": "Excel avanzado",
+     "pct": 68,
+     "tendencia": -3
+    },
+    {
+     "k": "Modelado de datos",
+     "pct": 58,
+     "tendencia": 11
+    },
+    {
+     "k": "DAX",
+     "pct": 44,
+     "tendencia": 16
+    },
+    {
+     "k": "ETL",
+     "pct": 37,
+     "tendencia": 9
+    }
+   ],
+   "salario": {
+    "p25": 2900,
+    "med": 3700,
+    "p75": 4800,
+    "n": 406
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2900,
+     "med": 3700,
+     "p75": 4800,
+     "n": 227,
+     "ofertas": 399
+    },
+    "Arequipa": {
+     "p25": 2490,
+     "med": 3180,
+     "p75": 4130,
+     "n": 45,
+     "ofertas": 78
+    },
+    "Trujillo": {
+     "p25": 2380,
+     "med": 3030,
+     "p75": 3940,
+     "n": 30,
+     "ofertas": 53
+    },
+    "Cusco": {
+     "n": 14,
+     "ofertas": 25
+    },
+    "Remoto": {
+     "p25": 3130,
+     "med": 4000,
+     "p75": 5180,
+     "n": 45,
+     "ofertas": 78
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "powerbi-codigolab",
+    "ruta-analista",
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "data-scientist-jr",
+   "nombre": "Data Scientist junior",
+   "area": "Datos y Analítica",
+   "nivel": "junior",
+   "sinonimos": [
+    "científico de datos",
+    "data science"
+   ],
+   "ofertas": 389,
+   "habilidades": [
+    {
+     "k": "Python",
+     "pct": 91,
+     "tendencia": 7
+    },
+    {
+     "k": "Estadística",
+     "pct": 84,
+     "tendencia": 3
+    },
+    {
+     "k": "SQL",
+     "pct": 77,
+     "tendencia": 5
+    },
+    {
+     "k": "Machine learning",
+     "pct": 72,
+     "tendencia": 21
+    },
+    {
+     "k": "Inglés intermedio",
+     "pct": 64,
+     "tendencia": 6
+    },
+    {
+     "k": "Pandas",
+     "pct": 59,
+     "tendencia": 12
+    }
+   ],
+   "salario": {
+    "p25": 3800,
+    "med": 4800,
+    "p75": 6200,
+    "n": 218
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3800,
+     "med": 4800,
+     "p75": 6200,
+     "n": 122,
+     "ofertas": 218
+    },
+    "Arequipa": {
+     "n": 24,
+     "ofertas": 43
+    },
+    "Trujillo": {
+     "n": 16,
+     "ofertas": 29
+    },
+    "Cusco": {
+     "n": 8,
+     "ofertas": 14
+    },
+    "Remoto": {
+     "n": 24,
+     "ofertas": 43
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "ruta-analista",
+    "python-datos",
+    "ingles-negocios"
+   ]
+  },
+  {
+   "id": "ingeniero-datos",
+   "nombre": "Ingeniero de Datos",
+   "area": "Datos y Analítica",
+   "nivel": "semi-senior",
+   "sinonimos": [
+    "data engineer",
+    "ingeniero de data"
+   ],
+   "ofertas": 296,
+   "habilidades": [
+    {
+     "k": "SQL",
+     "pct": 88,
+     "tendencia": 4
+    },
+    {
+     "k": "Python",
+     "pct": 79,
+     "tendencia": 9
+    },
+    {
+     "k": "ETL",
+     "pct": 74,
+     "tendencia": 13
+    },
+    {
+     "k": "Cloud (AWS/Azure)",
+     "pct": 66,
+     "tendencia": 24
+    },
+    {
+     "k": "Spark",
+     "pct": 41,
+     "tendencia": 15
+    },
+    {
+     "k": "Airflow",
+     "pct": 33,
+     "tendencia": 18
+    }
+   ],
+   "salario": {
+    "p25": 4200,
+    "med": 5600,
+    "p75": 7400,
+    "n": 160
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 4200,
+     "med": 5600,
+     "p75": 7400,
+     "n": 90,
+     "ofertas": 166
+    },
+    "Arequipa": {
+     "n": 18,
+     "ofertas": 33
+    },
+    "Trujillo": {
+     "n": 12,
+     "ofertas": 22
+    },
+    "Cusco": {
+     "n": 6,
+     "ofertas": 10
+    },
+    "Remoto": {
+     "n": 18,
+     "ofertas": 33
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "ruta-analista",
+    "python-datos"
+   ]
+  },
+  {
+   "id": "analista-datos-semi",
+   "nombre": "Analista de Datos semi-senior",
+   "area": "Datos y Analítica",
+   "nivel": "semi-senior",
+   "sinonimos": [
+    "analista de datos ssr",
+    "analista datos senior"
+   ],
+   "ofertas": 437,
+   "habilidades": [
+    {
+     "k": "SQL",
+     "pct": 87,
+     "tendencia": 6
+    },
+    {
+     "k": "Power BI",
+     "pct": 71,
+     "tendencia": 12
+    },
+    {
+     "k": "Python",
+     "pct": 64,
+     "tendencia": 14
+    },
+    {
+     "k": "Estadística",
+     "pct": 52,
+     "tendencia": 2
+    },
+    {
+     "k": "Gestión de stakeholders",
+     "pct": 44,
+     "tendencia": 8
+    }
+   ],
+   "salario": {
+    "p25": 3900,
+    "med": 4900,
+    "p75": 6100,
+    "n": 240
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3900,
+     "med": 4900,
+     "p75": 6100,
+     "n": 134,
+     "ofertas": 245
+    },
+    "Arequipa": {
+     "n": 26,
+     "ofertas": 48
+    },
+    "Trujillo": {
+     "n": 18,
+     "ofertas": 33
+    },
+    "Cusco": {
+     "n": 8,
+     "ofertas": 15
+    },
+    "Remoto": {
+     "n": 26,
+     "ofertas": 48
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "powerbi-codigolab",
+    "ruta-analista",
+    "python-datos"
+   ]
+  },
+  {
+   "id": "analista-financiero",
+   "nombre": "Analista Financiero",
+   "area": "Finanzas",
+   "nivel": "junior",
+   "sinonimos": [
+    "analista de finanzas",
+    "finanzas corporativas"
+   ],
+   "ofertas": 1041,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 92,
+     "tendencia": 1
+    },
+    {
+     "k": "Análisis financiero",
+     "pct": 78,
+     "tendencia": 3
+    },
+    {
+     "k": "SAP",
+     "pct": 51,
+     "tendencia": 7
+    },
+    {
+     "k": "Inglés intermedio",
+     "pct": 46,
+     "tendencia": 5
+    },
+    {
+     "k": "Power BI",
+     "pct": 38,
+     "tendencia": 17
+    },
+    {
+     "k": "NIIF",
+     "pct": 34,
+     "tendencia": 2
+    }
+   ],
+   "salario": {
+    "p25": 2800,
+    "med": 3600,
+    "p75": 4700,
+    "n": 593
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2800,
+     "med": 3600,
+     "p75": 4700,
+     "n": 332,
+     "ofertas": 583
+    },
+    "Arequipa": {
+     "p25": 2410,
+     "med": 3100,
+     "p75": 4040,
+     "n": 65,
+     "ofertas": 115
+    },
+    "Trujillo": {
+     "p25": 2300,
+     "med": 2950,
+     "p75": 3850,
+     "n": 44,
+     "ofertas": 78
+    },
+    "Cusco": {
+     "n": 21,
+     "ofertas": 36
+    },
+    "Remoto": {
+     "p25": 3020,
+     "med": 3890,
+     "p75": 5080,
+     "n": 65,
+     "ofertas": 115
+    }
+   },
+   "cursos": [
+    "powerbi-codigolab",
+    "excel-avanzado",
+    "ingles-negocios"
+   ]
+  },
+  {
+   "id": "analista-riesgos",
+   "nombre": "Analista de Riesgos",
+   "area": "Finanzas",
+   "nivel": "junior",
+   "sinonimos": [
+    "riesgo crediticio",
+    "gestión de riesgos",
+    "risk analyst"
+   ],
+   "ofertas": 488,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 88,
+     "tendencia": 0
+    },
+    {
+     "k": "Modelos de riesgo",
+     "pct": 62,
+     "tendencia": 9
+    },
+    {
+     "k": "SQL",
+     "pct": 57,
+     "tendencia": 22
+    },
+    {
+     "k": "Normativa SBS",
+     "pct": 48,
+     "tendencia": 4
+    },
+    {
+     "k": "SAS o R",
+     "pct": 34,
+     "tendencia": -6
+    }
+   ],
+   "salario": {
+    "p25": 3100,
+    "med": 3900,
+    "p75": 5000,
+    "n": 278
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3100,
+     "med": 3900,
+     "p75": 5000,
+     "n": 156,
+     "ofertas": 273
+    },
+    "Arequipa": {
+     "p25": 2670,
+     "med": 3350,
+     "p75": 4300,
+     "n": 31,
+     "ofertas": 54
+    },
+    "Trujillo": {
+     "n": 21,
+     "ofertas": 37
+    },
+    "Cusco": {
+     "n": 10,
+     "ofertas": 17
+    },
+    "Remoto": {
+     "p25": 3350,
+     "med": 4210,
+     "p75": 5400,
+     "n": 31,
+     "ofertas": 54
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "ruta-analista",
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "analista-inversiones",
+   "nombre": "Analista de Inversiones",
+   "area": "Finanzas",
+   "nivel": "junior",
+   "sinonimos": [
+    "inversiones",
+    "portafolio",
+    "equity research"
+   ],
+   "ofertas": 214,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 94,
+     "tendencia": 0
+    },
+    {
+     "k": "Valorización",
+     "pct": 71,
+     "tendencia": 5
+    },
+    {
+     "k": "Inglés avanzado",
+     "pct": 68,
+     "tendencia": 8
+    },
+    {
+     "k": "Bloomberg",
+     "pct": 39,
+     "tendencia": 3
+    },
+    {
+     "k": "Python",
+     "pct": 27,
+     "tendencia": 15
+    }
+   ],
+   "salario": {
+    "p25": 3600,
+    "med": 4600,
+    "p75": 6000,
+    "n": 120
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3600,
+     "med": 4600,
+     "p75": 6000,
+     "n": 67,
+     "ofertas": 120
+    },
+    "Arequipa": {
+     "n": 13,
+     "ofertas": 24
+    },
+    "Trujillo": {
+     "n": 9,
+     "ofertas": 16
+    },
+    "Cusco": {
+     "n": 4,
+     "ofertas": 7
+    },
+    "Remoto": {
+     "n": 13,
+     "ofertas": 24
+    }
+   },
+   "cursos": [
+    "python-datos",
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "asistente-contable",
+   "nombre": "Asistente Contable",
+   "area": "Finanzas",
+   "nivel": "junior",
+   "sinonimos": [
+    "auxiliar contable",
+    "contabilidad"
+   ],
+   "ofertas": 1583,
+   "habilidades": [
+    {
+     "k": "Excel",
+     "pct": 86,
+     "tendencia": 0
+    },
+    {
+     "k": "SUNAT y tributario",
+     "pct": 71,
+     "tendencia": 3
+    },
+    {
+     "k": "Concar o Siscont",
+     "pct": 64,
+     "tendencia": -2
+    },
+    {
+     "k": "NIIF",
+     "pct": 32,
+     "tendencia": 4
+    },
+    {
+     "k": "SAP",
+     "pct": 28,
+     "tendencia": 9
+    }
+   ],
+   "salario": {
+    "p25": 1500,
+    "med": 1950,
+    "p75": 2500,
+    "n": 839
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 1500,
+     "med": 1950,
+     "p75": 2500,
+     "n": 470,
+     "ofertas": 886
+    },
+    "Arequipa": {
+     "p25": 1290,
+     "med": 1680,
+     "p75": 2150,
+     "n": 92,
+     "ofertas": 174
+    },
+    "Trujillo": {
+     "p25": 1230,
+     "med": 1600,
+     "p75": 2050,
+     "n": 63,
+     "ofertas": 119
+    },
+    "Cusco": {
+     "n": 29,
+     "ofertas": 55
+    },
+    "Remoto": {
+     "p25": 1620,
+     "med": 2110,
+     "p75": 2700,
+     "n": 92,
+     "ofertas": 174
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "analista-credito",
+   "nombre": "Analista de Créditos",
+   "area": "Finanzas",
+   "nivel": "junior",
+   "sinonimos": [
+    "créditos",
+    "evaluación crediticia"
+   ],
+   "ofertas": 667,
+   "habilidades": [
+    {
+     "k": "Evaluación crediticia",
+     "pct": 84,
+     "tendencia": 2
+    },
+    {
+     "k": "Excel",
+     "pct": 79,
+     "tendencia": 0
+    },
+    {
+     "k": "Normativa SBS",
+     "pct": 52,
+     "tendencia": 6
+    },
+    {
+     "k": "Atención al cliente",
+     "pct": 47,
+     "tendencia": 3
+    }
+   ],
+   "salario": {
+    "p25": 2200,
+    "med": 2800,
+    "p75": 3600,
+    "n": 360
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2200,
+     "med": 2800,
+     "p75": 3600,
+     "n": 202,
+     "ofertas": 374
+    },
+    "Arequipa": {
+     "p25": 1890,
+     "med": 2410,
+     "p75": 3100,
+     "n": 40,
+     "ofertas": 73
+    },
+    "Trujillo": {
+     "n": 27,
+     "ofertas": 50
+    },
+    "Cusco": {
+     "n": 13,
+     "ofertas": 23
+    },
+    "Remoto": {
+     "p25": 2380,
+     "med": 3020,
+     "p75": 3890,
+     "n": 40,
+     "ofertas": 73
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "analista-marketing-digital",
+   "nombre": "Analista de Marketing Digital",
+   "area": "Marketing",
+   "nivel": "junior",
+   "sinonimos": [
+    "marketing digital",
+    "performance marketing"
+   ],
+   "ofertas": 892,
+   "habilidades": [
+    {
+     "k": "Google Analytics",
+     "pct": 82,
+     "tendencia": 6
+    },
+    {
+     "k": "Meta Ads",
+     "pct": 77,
+     "tendencia": 11
+    },
+    {
+     "k": "Google Ads",
+     "pct": 71,
+     "tendencia": 8
+    },
+    {
+     "k": "Excel",
+     "pct": 58,
+     "tendencia": 0
+    },
+    {
+     "k": "SEO",
+     "pct": 49,
+     "tendencia": 4
+    },
+    {
+     "k": "Looker Studio",
+     "pct": 37,
+     "tendencia": 19
+    }
+   ],
+   "salario": {
+    "p25": 2400,
+    "med": 3100,
+    "p75": 4100,
+    "n": 491
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2400,
+     "med": 3100,
+     "p75": 4100,
+     "n": 275,
+     "ofertas": 500
+    },
+    "Arequipa": {
+     "p25": 2060,
+     "med": 2670,
+     "p75": 3530,
+     "n": 54,
+     "ofertas": 98
+    },
+    "Trujillo": {
+     "p25": 1970,
+     "med": 2540,
+     "p75": 3360,
+     "n": 37,
+     "ofertas": 67
+    },
+    "Cusco": {
+     "n": 17,
+     "ofertas": 31
+    },
+    "Remoto": {
+     "p25": 2590,
+     "med": 3350,
+     "p75": 4430,
+     "n": 54,
+     "ofertas": 98
+    }
+   },
+   "cursos": [
+    "ads-performance",
+    "analytics-ga4"
+   ]
+  },
+  {
+   "id": "community-manager",
+   "nombre": "Community Manager",
+   "area": "Marketing",
+   "nivel": "junior",
+   "sinonimos": [
+    "redes sociales",
+    "social media"
+   ],
+   "ofertas": 1147,
+   "habilidades": [
+    {
+     "k": "Gestión de redes",
+     "pct": 91,
+     "tendencia": 1
+    },
+    {
+     "k": "Creación de contenido",
+     "pct": 84,
+     "tendencia": 7
+    },
+    {
+     "k": "Canva y diseño básico",
+     "pct": 66,
+     "tendencia": 5
+    },
+    {
+     "k": "Meta Ads",
+     "pct": 52,
+     "tendencia": 13
+    },
+    {
+     "k": "Analítica de redes",
+     "pct": 44,
+     "tendencia": 9
+    }
+   ],
+   "salario": {
+    "p25": 1800,
+    "med": 2300,
+    "p75": 3000,
+    "n": 665
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 1800,
+     "med": 2300,
+     "p75": 3000,
+     "n": 372,
+     "ofertas": 642
+    },
+    "Arequipa": {
+     "p25": 1550,
+     "med": 1980,
+     "p75": 2580,
+     "n": 73,
+     "ofertas": 126
+    },
+    "Trujillo": {
+     "p25": 1480,
+     "med": 1890,
+     "p75": 2460,
+     "n": 50,
+     "ofertas": 86
+    },
+    "Cusco": {
+     "n": 23,
+     "ofertas": 40
+    },
+    "Remoto": {
+     "p25": 1940,
+     "med": 2480,
+     "p75": 3240,
+     "n": 73,
+     "ofertas": 126
+    }
+   },
+   "cursos": [
+    "ads-performance"
+   ]
+  },
+  {
+   "id": "especialista-seo-sem",
+   "nombre": "Especialista SEO/SEM",
+   "area": "Marketing",
+   "nivel": "semi-senior",
+   "sinonimos": [
+    "seo",
+    "sem",
+    "posicionamiento web"
+   ],
+   "ofertas": 263,
+   "habilidades": [
+    {
+     "k": "SEO técnico",
+     "pct": 88,
+     "tendencia": 9
+    },
+    {
+     "k": "Google Analytics",
+     "pct": 83,
+     "tendencia": 3
+    },
+    {
+     "k": "Google Ads",
+     "pct": 79,
+     "tendencia": 4
+    },
+    {
+     "k": "Semrush o Ahrefs",
+     "pct": 61,
+     "tendencia": 12
+    },
+    {
+     "k": "HTML básico",
+     "pct": 43,
+     "tendencia": 0
+    }
+   ],
+   "salario": {
+    "p25": 3000,
+    "med": 3900,
+    "p75": 5100,
+    "n": 147
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3000,
+     "med": 3900,
+     "p75": 5100,
+     "n": 82,
+     "ofertas": 147
+    },
+    "Arequipa": {
+     "n": 16,
+     "ofertas": 29
+    },
+    "Trujillo": {
+     "n": 11,
+     "ofertas": 20
+    },
+    "Cusco": {
+     "n": 5,
+     "ofertas": 9
+    },
+    "Remoto": {
+     "n": 16,
+     "ofertas": 29
+    }
+   },
+   "cursos": [
+    "analytics-ga4"
+   ]
+  },
+  {
+   "id": "analista-investigacion-mercados",
+   "nombre": "Analista de Investigación de Mercados",
+   "area": "Marketing",
+   "nivel": "junior",
+   "sinonimos": [
+    "investigación de mercado",
+    "market research",
+    "estudios de mercado"
+   ],
+   "ofertas": 318,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 81,
+     "tendencia": 0
+    },
+    {
+     "k": "Diseño de encuestas",
+     "pct": 79,
+     "tendencia": 2
+    },
+    {
+     "k": "Estadística",
+     "pct": 63,
+     "tendencia": 4
+    },
+    {
+     "k": "Presentación de hallazgos",
+     "pct": 58,
+     "tendencia": 6
+    },
+    {
+     "k": "SPSS",
+     "pct": 57,
+     "tendencia": -8
+    }
+   ],
+   "salario": {
+    "p25": 2500,
+    "med": 3200,
+    "p75": 4200,
+    "n": 175
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2500,
+     "med": 3200,
+     "p75": 4200,
+     "n": 98,
+     "ofertas": 178
+    },
+    "Arequipa": {
+     "n": 19,
+     "ofertas": 35
+    },
+    "Trujillo": {
+     "n": 13,
+     "ofertas": 24
+    },
+    "Cusco": {
+     "n": 6,
+     "ofertas": 11
+    },
+    "Remoto": {
+     "n": 19,
+     "ofertas": 35
+    }
+   },
+   "cursos": [
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "analista-procesos",
+   "nombre": "Analista de Procesos",
+   "area": "Ingeniería Industrial",
+   "nivel": "junior",
+   "sinonimos": [
+    "mejora continua",
+    "procesos",
+    "lean"
+   ],
+   "ofertas": 741,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 86,
+     "tendencia": 0
+    },
+    {
+     "k": "Mapeo de procesos",
+     "pct": 81,
+     "tendencia": 4
+    },
+    {
+     "k": "Lean y Six Sigma",
+     "pct": 74,
+     "tendencia": 11
+    },
+    {
+     "k": "Power BI",
+     "pct": 41,
+     "tendencia": 21
+    },
+    {
+     "k": "AutoCAD",
+     "pct": 29,
+     "tendencia": -4
+    }
+   ],
+   "salario": {
+    "p25": 2600,
+    "med": 3300,
+    "p75": 4300,
+    "n": 430
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2600,
+     "med": 3300,
+     "p75": 4300,
+     "n": 241,
+     "ofertas": 415
+    },
+    "Arequipa": {
+     "p25": 2240,
+     "med": 2840,
+     "p75": 3700,
+     "n": 47,
+     "ofertas": 82
+    },
+    "Trujillo": {
+     "p25": 2130,
+     "med": 2710,
+     "p75": 3530,
+     "n": 32,
+     "ofertas": 56
+    },
+    "Cusco": {
+     "n": 15,
+     "ofertas": 26
+    },
+    "Remoto": {
+     "p25": 2810,
+     "med": 3560,
+     "p75": 4640,
+     "n": 47,
+     "ofertas": 82
+    }
+   },
+   "cursos": [
+    "powerbi-codigolab",
+    "excel-avanzado",
+    "lean-six"
+   ]
+  },
+  {
+   "id": "analista-logistica",
+   "nombre": "Analista de Logística",
+   "area": "Ingeniería Industrial",
+   "nivel": "junior",
+   "sinonimos": [
+    "supply chain",
+    "cadena de suministro",
+    "almacén"
+   ],
+   "ofertas": 968,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 89,
+     "tendencia": 0
+    },
+    {
+     "k": "Gestión de inventarios",
+     "pct": 77,
+     "tendencia": 3
+    },
+    {
+     "k": "Indicadores logísticos",
+     "pct": 64,
+     "tendencia": 8
+    },
+    {
+     "k": "SAP MM/WM",
+     "pct": 58,
+     "tendencia": 7
+    },
+    {
+     "k": "Negociación con proveedores",
+     "pct": 42,
+     "tendencia": 2
+    }
+   ],
+   "salario": {
+    "p25": 2300,
+    "med": 3000,
+    "p75": 3900,
+    "n": 523
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2300,
+     "med": 3000,
+     "p75": 3900,
+     "n": 293,
+     "ofertas": 542
+    },
+    "Arequipa": {
+     "p25": 1980,
+     "med": 2580,
+     "p75": 3350,
+     "n": 58,
+     "ofertas": 106
+    },
+    "Trujillo": {
+     "p25": 1890,
+     "med": 2460,
+     "p75": 3200,
+     "n": 39,
+     "ofertas": 73
+    },
+    "Cusco": {
+     "n": 18,
+     "ofertas": 34
+    },
+    "Remoto": {
+     "p25": 2480,
+     "med": 3240,
+     "p75": 4210,
+     "n": 58,
+     "ofertas": 106
+    }
+   },
+   "cursos": [
+    "excel-avanzado",
+    "sap-logistica"
+   ]
+  },
+  {
+   "id": "analista-calidad",
+   "nombre": "Analista de Calidad",
+   "area": "Ingeniería Industrial",
+   "nivel": "junior",
+   "sinonimos": [
+    "aseguramiento de calidad",
+    "iso",
+    "qa industrial"
+   ],
+   "ofertas": 534,
+   "habilidades": [
+    {
+     "k": "ISO 9001",
+     "pct": 83,
+     "tendencia": 2
+    },
+    {
+     "k": "Excel",
+     "pct": 79,
+     "tendencia": 0
+    },
+    {
+     "k": "Auditorías internas",
+     "pct": 68,
+     "tendencia": 5
+    },
+    {
+     "k": "Estadística aplicada",
+     "pct": 44,
+     "tendencia": 3
+    },
+    {
+     "k": "HACCP",
+     "pct": 37,
+     "tendencia": 6
+    }
+   ],
+   "salario": {
+    "p25": 2400,
+    "med": 3100,
+    "p75": 4000,
+    "n": 288
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2400,
+     "med": 3100,
+     "p75": 4000,
+     "n": 161,
+     "ofertas": 299
+    },
+    "Arequipa": {
+     "p25": 2060,
+     "med": 2670,
+     "p75": 3440,
+     "n": 32,
+     "ofertas": 59
+    },
+    "Trujillo": {
+     "n": 22,
+     "ofertas": 40
+    },
+    "Cusco": {
+     "n": 10,
+     "ofertas": 19
+    },
+    "Remoto": {
+     "p25": 2590,
+     "med": 3350,
+     "p75": 4320,
+     "n": 32,
+     "ofertas": 59
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "jefe-produccion",
+   "nombre": "Jefe de Producción",
+   "area": "Ingeniería Industrial",
+   "nivel": "semi-senior",
+   "sinonimos": [
+    "supervisor de producción",
+    "planta"
+   ],
+   "ofertas": 387,
+   "habilidades": [
+    {
+     "k": "Gestión de equipos",
+     "pct": 88,
+     "tendencia": 3
+    },
+    {
+     "k": "Indicadores de producción",
+     "pct": 84,
+     "tendencia": 2
+    },
+    {
+     "k": "Seguridad industrial",
+     "pct": 76,
+     "tendencia": 6
+    },
+    {
+     "k": "Lean y Six Sigma",
+     "pct": 71,
+     "tendencia": 9
+    },
+    {
+     "k": "SAP PP",
+     "pct": 48,
+     "tendencia": 5
+    }
+   ],
+   "salario": {
+    "p25": 4500,
+    "med": 5800,
+    "p75": 7600,
+    "n": 209
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 4500,
+     "med": 5800,
+     "p75": 7600,
+     "n": 117,
+     "ofertas": 217
+    },
+    "Arequipa": {
+     "n": 23,
+     "ofertas": 43
+    },
+    "Trujillo": {
+     "n": 16,
+     "ofertas": 29
+    },
+    "Cusco": {
+     "n": 7,
+     "ofertas": 14
+    },
+    "Remoto": {
+     "n": 23,
+     "ofertas": 43
+    }
+   },
+   "cursos": [
+    "lean-six"
+   ]
+  },
+  {
+   "id": "asistente-legal",
+   "nombre": "Asistente Legal",
+   "area": "Derecho",
+   "nivel": "junior",
+   "sinonimos": [
+    "auxiliar legal",
+    "practicante de derecho",
+    "asistente de abogado"
+   ],
+   "ofertas": 824,
+   "habilidades": [
+    {
+     "k": "Redacción de documentos",
+     "pct": 89,
+     "tendencia": 1
+    },
+    {
+     "k": "Gestión de expedientes",
+     "pct": 82,
+     "tendencia": 2
+    },
+    {
+     "k": "Investigación jurídica",
+     "pct": 71,
+     "tendencia": 3
+    },
+    {
+     "k": "Excel",
+     "pct": 46,
+     "tendencia": 4
+    }
+   ],
+   "salario": {
+    "p25": 1600,
+    "med": 2100,
+    "p75": 2700,
+    "n": 470
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 1600,
+     "med": 2100,
+     "p75": 2700,
+     "n": 263,
+     "ofertas": 461
+    },
+    "Arequipa": {
+     "p25": 1380,
+     "med": 1810,
+     "p75": 2320,
+     "n": 52,
+     "ofertas": 91
+    },
+    "Trujillo": {
+     "p25": 1310,
+     "med": 1720,
+     "p75": 2210,
+     "n": 35,
+     "ofertas": 62
+    },
+    "Cusco": {
+     "n": 16,
+     "ofertas": 29
+    },
+    "Remoto": {
+     "p25": 1730,
+     "med": 2270,
+     "p75": 2920,
+     "n": 52,
+     "ofertas": 91
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "abogado-corporativo-jr",
+   "nombre": "Abogado Corporativo junior",
+   "area": "Derecho",
+   "nivel": "junior",
+   "sinonimos": [
+    "abogado corporativo",
+    "derecho corporativo",
+    "legal corporativo"
+   ],
+   "ofertas": 412,
+   "habilidades": [
+    {
+     "k": "Contratos",
+     "pct": 91,
+     "tendencia": 3
+    },
+    {
+     "k": "Derecho societario",
+     "pct": 84,
+     "tendencia": 2
+    },
+    {
+     "k": "Inglés intermedio",
+     "pct": 57,
+     "tendencia": 9
+    },
+    {
+     "k": "Cumplimiento normativo",
+     "pct": 52,
+     "tendencia": 11
+    },
+    {
+     "k": "Due diligence",
+     "pct": 48,
+     "tendencia": 6
+    }
+   ],
+   "salario": {
+    "p25": 2900,
+    "med": 3800,
+    "p75": 5000,
+    "n": 239
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2900,
+     "med": 3800,
+     "p75": 5000,
+     "n": 134,
+     "ofertas": 231
+    },
+    "Arequipa": {
+     "n": 26,
+     "ofertas": 45
+    },
+    "Trujillo": {
+     "n": 18,
+     "ofertas": 31
+    },
+    "Cusco": {
+     "n": 8,
+     "ofertas": 14
+    },
+    "Remoto": {
+     "n": 26,
+     "ofertas": 45
+    }
+   },
+   "cursos": [
+    "ingles-negocios",
+    "contratos-legal"
+   ]
+  },
+  {
+   "id": "analista-cumplimiento",
+   "nombre": "Analista de Cumplimiento",
+   "area": "Derecho",
+   "nivel": "junior",
+   "sinonimos": [
+    "compliance",
+    "cumplimiento normativo",
+    "oficial de cumplimiento"
+   ],
+   "ofertas": 297,
+   "habilidades": [
+    {
+     "k": "Prevención LAFT",
+     "pct": 86,
+     "tendencia": 14
+    },
+    {
+     "k": "Normativa SBS",
+     "pct": 68,
+     "tendencia": 5
+    },
+    {
+     "k": "Excel",
+     "pct": 63,
+     "tendencia": 0
+    },
+    {
+     "k": "Auditoría",
+     "pct": 59,
+     "tendencia": 3
+    },
+    {
+     "k": "Inglés intermedio",
+     "pct": 51,
+     "tendencia": 7
+    }
+   ],
+   "salario": {
+    "p25": 3200,
+    "med": 4100,
+    "p75": 5300,
+    "n": 163
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3200,
+     "med": 4100,
+     "p75": 5300,
+     "n": 91,
+     "ofertas": 166
+    },
+    "Arequipa": {
+     "n": 18,
+     "ofertas": 33
+    },
+    "Trujillo": {
+     "n": 12,
+     "ofertas": 22
+    },
+    "Cusco": {
+     "n": 6,
+     "ofertas": 10
+    },
+    "Remoto": {
+     "n": 18,
+     "ofertas": 33
+    }
+   },
+   "cursos": [
+    "ingles-negocios"
+   ]
+  },
+  {
+   "id": "abogado-laboral-jr",
+   "nombre": "Abogado Laboral junior",
+   "area": "Derecho",
+   "nivel": "junior",
+   "sinonimos": [
+    "derecho laboral",
+    "abogado laboralista"
+   ],
+   "ofertas": 236,
+   "habilidades": [
+    {
+     "k": "Derecho laboral",
+     "pct": 94,
+     "tendencia": 1
+    },
+    {
+     "k": "Litigios",
+     "pct": 72,
+     "tendencia": 2
+    },
+    {
+     "k": "SUNAFIL",
+     "pct": 63,
+     "tendencia": 8
+    },
+    {
+     "k": "Negociación colectiva",
+     "pct": 48,
+     "tendencia": 4
+    }
+   ],
+   "salario": {
+    "p25": 2700,
+    "med": 3500,
+    "p75": 4600,
+    "n": 135
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2700,
+     "med": 3500,
+     "p75": 4600,
+     "n": 76,
+     "ofertas": 132
+    },
+    "Arequipa": {
+     "n": 15,
+     "ofertas": 26
+    },
+    "Trujillo": {
+     "n": 10,
+     "ofertas": 18
+    },
+    "Cusco": {
+     "n": 5,
+     "ofertas": 8
+    },
+    "Remoto": {
+     "n": 15,
+     "ofertas": 26
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "desarrollador-backend-jr",
+   "nombre": "Desarrollador Backend junior",
+   "area": "Sistemas",
+   "nivel": "junior",
+   "sinonimos": [
+    "backend",
+    "programador backend",
+    "desarrollador java",
+    "desarrollador node"
+   ],
+   "ofertas": 1038,
+   "habilidades": [
+    {
+     "k": "Java o Node.js",
+     "pct": 88,
+     "tendencia": 5
+    },
+    {
+     "k": "SQL",
+     "pct": 84,
+     "tendencia": 2
+    },
+    {
+     "k": "APIs REST",
+     "pct": 81,
+     "tendencia": 7
+    },
+    {
+     "k": "Git",
+     "pct": 79,
+     "tendencia": 3
+    },
+    {
+     "k": "Docker",
+     "pct": 47,
+     "tendencia": 18
+    },
+    {
+     "k": "Cloud (AWS/Azure)",
+     "pct": 43,
+     "tendencia": 22
+    }
+   ],
+   "salario": {
+    "p25": 3000,
+    "med": 3900,
+    "p75": 5200,
+    "n": 561
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3000,
+     "med": 3900,
+     "p75": 5200,
+     "n": 314,
+     "ofertas": 581
+    },
+    "Arequipa": {
+     "p25": 2580,
+     "med": 3350,
+     "p75": 4470,
+     "n": 62,
+     "ofertas": 114
+    },
+    "Trujillo": {
+     "p25": 2460,
+     "med": 3200,
+     "p75": 4260,
+     "n": 42,
+     "ofertas": 78
+    },
+    "Cusco": {
+     "n": 20,
+     "ofertas": 36
+    },
+    "Remoto": {
+     "p25": 3240,
+     "med": 4210,
+     "p75": 5620,
+     "n": 62,
+     "ofertas": 114
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "ruta-analista"
+   ]
+  },
+  {
+   "id": "desarrollador-frontend-jr",
+   "nombre": "Desarrollador Frontend junior",
+   "area": "Sistemas",
+   "nivel": "junior",
+   "sinonimos": [
+    "frontend",
+    "programador frontend",
+    "desarrollador react"
+   ],
+   "ofertas": 794,
+   "habilidades": [
+    {
+     "k": "JavaScript",
+     "pct": 93,
+     "tendencia": 1
+    },
+    {
+     "k": "HTML y CSS",
+     "pct": 91,
+     "tendencia": 0
+    },
+    {
+     "k": "React",
+     "pct": 78,
+     "tendencia": 12
+    },
+    {
+     "k": "Git",
+     "pct": 76,
+     "tendencia": 3
+    },
+    {
+     "k": "TypeScript",
+     "pct": 54,
+     "tendencia": 23
+    },
+    {
+     "k": "Figma",
+     "pct": 38,
+     "tendencia": 7
+    }
+   ],
+   "salario": {
+    "p25": 2800,
+    "med": 3600,
+    "p75": 4800,
+    "n": 437
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2800,
+     "med": 3600,
+     "p75": 4800,
+     "n": 245,
+     "ofertas": 445
+    },
+    "Arequipa": {
+     "p25": 2410,
+     "med": 3100,
+     "p75": 4130,
+     "n": 48,
+     "ofertas": 87
+    },
+    "Trujillo": {
+     "p25": 2300,
+     "med": 2950,
+     "p75": 3940,
+     "n": 33,
+     "ofertas": 60
+    },
+    "Cusco": {
+     "n": 15,
+     "ofertas": 28
+    },
+    "Remoto": {
+     "p25": 3020,
+     "med": 3890,
+     "p75": 5180,
+     "n": 48,
+     "ofertas": 87
+    }
+   },
+   "cursos": [
+    "js-react"
+   ]
+  },
+  {
+   "id": "analista-soporte-ti",
+   "nombre": "Analista de Soporte TI",
+   "area": "Sistemas",
+   "nivel": "junior",
+   "sinonimos": [
+    "soporte técnico",
+    "mesa de ayuda",
+    "help desk"
+   ],
+   "ofertas": 1296,
+   "habilidades": [
+    {
+     "k": "Windows y Office 365",
+     "pct": 88,
+     "tendencia": 0
+    },
+    {
+     "k": "Atención al usuario",
+     "pct": 84,
+     "tendencia": 3
+    },
+    {
+     "k": "Redes básicas",
+     "pct": 71,
+     "tendencia": 2
+    },
+    {
+     "k": "Active Directory",
+     "pct": 52,
+     "tendencia": 4
+    },
+    {
+     "k": "SQL básico",
+     "pct": 33,
+     "tendencia": 6
+    }
+   ],
+   "salario": {
+    "p25": 1900,
+    "med": 2400,
+    "p75": 3100,
+    "n": 687
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 1900,
+     "med": 2400,
+     "p75": 3100,
+     "n": 385,
+     "ofertas": 726
+    },
+    "Arequipa": {
+     "p25": 1630,
+     "med": 2060,
+     "p75": 2670,
+     "n": 76,
+     "ofertas": 143
+    },
+    "Trujillo": {
+     "p25": 1560,
+     "med": 1970,
+     "p75": 2540,
+     "n": 52,
+     "ofertas": 97
+    },
+    "Cusco": {
+     "n": 24,
+     "ofertas": 45
+    },
+    "Remoto": {
+     "p25": 2050,
+     "med": 2590,
+     "p75": 3350,
+     "n": 76,
+     "ofertas": 143
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "analista-qa",
+   "nombre": "Analista QA",
+   "area": "Sistemas",
+   "nivel": "junior",
+   "sinonimos": [
+    "qa",
+    "tester",
+    "control de calidad software",
+    "quality assurance"
+   ],
+   "ofertas": 467,
+   "habilidades": [
+    {
+     "k": "Pruebas funcionales",
+     "pct": 89,
+     "tendencia": 1
+    },
+    {
+     "k": "Jira",
+     "pct": 74,
+     "tendencia": 2
+    },
+    {
+     "k": "SQL",
+     "pct": 61,
+     "tendencia": 4
+    },
+    {
+     "k": "Automatización con Selenium",
+     "pct": 58,
+     "tendencia": 16
+    },
+    {
+     "k": "Pruebas de API",
+     "pct": 46,
+     "tendencia": 13
+    }
+   ],
+   "salario": {
+    "p25": 2700,
+    "med": 3500,
+    "p75": 4600,
+    "n": 266
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2700,
+     "med": 3500,
+     "p75": 4600,
+     "n": 149,
+     "ofertas": 262
+    },
+    "Arequipa": {
+     "n": 29,
+     "ofertas": 51
+    },
+    "Trujillo": {
+     "n": 20,
+     "ofertas": 35
+    },
+    "Cusco": {
+     "n": 9,
+     "ofertas": 16
+    },
+    "Remoto": {
+     "n": 29,
+     "ofertas": 51
+    }
+   },
+   "cursos": [
+    "sql-datum",
+    "ruta-analista"
+   ]
+  },
+  {
+   "id": "analista-ciberseguridad-jr",
+   "nombre": "Analista de Ciberseguridad junior",
+   "area": "Sistemas",
+   "nivel": "junior",
+   "sinonimos": [
+    "ciberseguridad",
+    "seguridad informática",
+    "security analyst",
+    "soc"
+   ],
+   "ofertas": 258,
+   "habilidades": [
+    {
+     "k": "Gestión de vulnerabilidades",
+     "pct": 81,
+     "tendencia": 17
+    },
+    {
+     "k": "Redes y firewalls",
+     "pct": 76,
+     "tendencia": 4
+    },
+    {
+     "k": "Inglés intermedio",
+     "pct": 67,
+     "tendencia": 5
+    },
+    {
+     "k": "ISO 27001",
+     "pct": 63,
+     "tendencia": 8
+    },
+    {
+     "k": "SIEM",
+     "pct": 54,
+     "tendencia": 21
+    }
+   ],
+   "salario": {
+    "p25": 3500,
+    "med": 4500,
+    "p75": 5800,
+    "n": 150
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3500,
+     "med": 4500,
+     "p75": 5800,
+     "n": 84,
+     "ofertas": 144
+    },
+    "Arequipa": {
+     "n": 17,
+     "ofertas": 28
+    },
+    "Trujillo": {
+     "n": 11,
+     "ofertas": 19
+    },
+    "Cusco": {
+     "n": 5,
+     "ofertas": 9
+    },
+    "Remoto": {
+     "n": 17,
+     "ofertas": 28
+    }
+   },
+   "cursos": [
+    "ingles-negocios",
+    "iso-27001"
+   ]
+  },
+  {
+   "id": "psicologo-organizacional",
+   "nombre": "Psicólogo Organizacional",
+   "area": "Psicología",
+   "nivel": "junior",
+   "sinonimos": [
+    "psicología organizacional",
+    "psicólogo laboral"
+   ],
+   "ofertas": 583,
+   "habilidades": [
+    {
+     "k": "Evaluación psicolaboral",
+     "pct": 86,
+     "tendencia": 2
+    },
+    {
+     "k": "Clima y cultura",
+     "pct": 73,
+     "tendencia": 6
+    },
+    {
+     "k": "Capacitación",
+     "pct": 68,
+     "tendencia": 4
+    },
+    {
+     "k": "Excel",
+     "pct": 57,
+     "tendencia": 0
+    },
+    {
+     "k": "Gestión del desempeño",
+     "pct": 51,
+     "tendencia": 7
+    }
+   ],
+   "salario": {
+    "p25": 2100,
+    "med": 2700,
+    "p75": 3500,
+    "n": 315
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2100,
+     "med": 2700,
+     "p75": 3500,
+     "n": 176,
+     "ofertas": 326
+    },
+    "Arequipa": {
+     "p25": 1810,
+     "med": 2320,
+     "p75": 3010,
+     "n": 35,
+     "ofertas": 64
+    },
+    "Trujillo": {
+     "n": 24,
+     "ofertas": 44
+    },
+    "Cusco": {
+     "n": 11,
+     "ofertas": 20
+    },
+    "Remoto": {
+     "p25": 2270,
+     "med": 2920,
+     "p75": 3780,
+     "n": 35,
+     "ofertas": 64
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "analista-seleccion",
+   "nombre": "Analista de Selección",
+   "area": "Psicología",
+   "nivel": "junior",
+   "sinonimos": [
+    "reclutamiento",
+    "selección de personal",
+    "recruiter",
+    "talent acquisition"
+   ],
+   "ofertas": 1124,
+   "habilidades": [
+    {
+     "k": "Entrevista por competencias",
+     "pct": 91,
+     "tendencia": 2
+    },
+    {
+     "k": "Fuentes de reclutamiento",
+     "pct": 82,
+     "tendencia": 5
+    },
+    {
+     "k": "LinkedIn Recruiter",
+     "pct": 64,
+     "tendencia": 11
+    },
+    {
+     "k": "Excel",
+     "pct": 61,
+     "tendencia": 0
+    },
+    {
+     "k": "Employer branding",
+     "pct": 38,
+     "tendencia": 14
+    }
+   ],
+   "salario": {
+    "p25": 2000,
+    "med": 2600,
+    "p75": 3400,
+    "n": 629
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2000,
+     "med": 2600,
+     "p75": 3400,
+     "n": 352,
+     "ofertas": 629
+    },
+    "Arequipa": {
+     "p25": 1720,
+     "med": 2240,
+     "p75": 2920,
+     "n": 69,
+     "ofertas": 124
+    },
+    "Trujillo": {
+     "p25": 1640,
+     "med": 2130,
+     "p75": 2790,
+     "n": 47,
+     "ofertas": 84
+    },
+    "Cusco": {
+     "n": 22,
+     "ofertas": 39
+    },
+    "Remoto": {
+     "p25": 2160,
+     "med": 2810,
+     "p75": 3670,
+     "n": 69,
+     "ofertas": 124
+    }
+   },
+   "cursos": [
+    "competencias-rrhh"
+   ]
+  },
+  {
+   "id": "psicologo-clinico-jr",
+   "nombre": "Psicólogo Clínico junior",
+   "area": "Psicología",
+   "nivel": "junior",
+   "sinonimos": [
+    "psicología clínica",
+    "terapeuta",
+    "psicólogo asistencial"
+   ],
+   "ofertas": 341,
+   "habilidades": [
+    {
+     "k": "Evaluación psicológica",
+     "pct": 89,
+     "tendencia": 1
+    },
+    {
+     "k": "Historia clínica",
+     "pct": 81,
+     "tendencia": 2
+    },
+    {
+     "k": "Intervención breve",
+     "pct": 74,
+     "tendencia": 5
+    },
+    {
+     "k": "Terapia cognitivo-conductual",
+     "pct": 62,
+     "tendencia": 7
+    }
+   ],
+   "salario": {
+    "p25": 1900,
+    "med": 2500,
+    "p75": 3300,
+    "n": 194
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 1900,
+     "med": 2500,
+     "p75": 3300,
+     "n": 109,
+     "ofertas": 191
+    },
+    "Arequipa": {
+     "n": 21,
+     "ofertas": 38
+    },
+    "Trujillo": {
+     "n": 15,
+     "ofertas": 26
+    },
+    "Cusco": {
+     "n": 7,
+     "ofertas": 12
+    },
+    "Remoto": {
+     "n": 21,
+     "ofertas": 38
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "analista-clima-cultura",
+   "nombre": "Analista de Clima y Cultura",
+   "area": "Psicología",
+   "nivel": "junior",
+   "sinonimos": [
+    "clima laboral",
+    "cultura organizacional",
+    "engagement"
+   ],
+   "ofertas": 187,
+   "habilidades": [
+    {
+     "k": "Análisis de clima",
+     "pct": 88,
+     "tendencia": 4
+    },
+    {
+     "k": "Diseño de encuestas",
+     "pct": 84,
+     "tendencia": 3
+    },
+    {
+     "k": "Excel avanzado",
+     "pct": 71,
+     "tendencia": 0
+    },
+    {
+     "k": "Comunicación interna",
+     "pct": 66,
+     "tendencia": 5
+    },
+    {
+     "k": "Power BI",
+     "pct": 34,
+     "tendencia": 18
+    }
+   ],
+   "salario": {
+    "p25": 2400,
+    "med": 3100,
+    "p75": 4000,
+    "n": 107
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2400,
+     "med": 3100,
+     "p75": 4000,
+     "n": 60,
+     "ofertas": 105
+    },
+    "Arequipa": {
+     "n": 12,
+     "ofertas": 21
+    },
+    "Trujillo": {
+     "n": 8,
+     "ofertas": 14
+    },
+    "Cusco": {
+     "n": 4,
+     "ofertas": 7
+    },
+    "Remoto": {
+     "n": 12,
+     "ofertas": 21
+    }
+   },
+   "cursos": [
+    "powerbi-codigolab",
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "asistente-administrativo",
+   "nombre": "Asistente Administrativo",
+   "area": "Administración",
+   "nivel": "junior",
+   "sinonimos": [
+    "auxiliar administrativo",
+    "asistente de gerencia",
+    "recepción"
+   ],
+   "ofertas": 1872,
+   "habilidades": [
+    {
+     "k": "Excel",
+     "pct": 87,
+     "tendencia": 0
+    },
+    {
+     "k": "Office 365",
+     "pct": 84,
+     "tendencia": 2
+    },
+    {
+     "k": "Atención al cliente",
+     "pct": 79,
+     "tendencia": 1
+    },
+    {
+     "k": "Gestión documental",
+     "pct": 71,
+     "tendencia": 2
+    },
+    {
+     "k": "Facturación",
+     "pct": 48,
+     "tendencia": 3
+    }
+   ],
+   "salario": {
+    "p25": 1400,
+    "med": 1800,
+    "p75": 2300,
+    "n": 1030
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 1400,
+     "med": 1800,
+     "p75": 2300,
+     "n": 577,
+     "ofertas": 1048
+    },
+    "Arequipa": {
+     "p25": 1200,
+     "med": 1550,
+     "p75": 1980,
+     "n": 113,
+     "ofertas": 206
+    },
+    "Trujillo": {
+     "p25": 1150,
+     "med": 1480,
+     "p75": 1890,
+     "n": 77,
+     "ofertas": 140
+    },
+    "Cusco": {
+     "p25": 1120,
+     "med": 1440,
+     "p75": 1840,
+     "n": 36,
+     "ofertas": 66
+    },
+    "Remoto": {
+     "p25": 1510,
+     "med": 1940,
+     "p75": 2480,
+     "n": 113,
+     "ofertas": 206
+    }
+   },
+   "cursos": []
+  },
+  {
+   "id": "analista-rrhh",
+   "nombre": "Analista de Recursos Humanos",
+   "area": "Administración",
+   "nivel": "junior",
+   "sinonimos": [
+    "rrhh",
+    "recursos humanos",
+    "gestión humana",
+    "analista de personal"
+   ],
+   "ofertas": 946,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 86,
+     "tendencia": 0
+    },
+    {
+     "k": "Planilla y beneficios",
+     "pct": 82,
+     "tendencia": 2
+    },
+    {
+     "k": "Legislación laboral",
+     "pct": 68,
+     "tendencia": 4
+    },
+    {
+     "k": "Selección",
+     "pct": 59,
+     "tendencia": 3
+    },
+    {
+     "k": "Indicadores de RRHH",
+     "pct": 47,
+     "tendencia": 12
+    }
+   ],
+   "salario": {
+    "p25": 2200,
+    "med": 2900,
+    "p75": 3700,
+    "n": 501
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2200,
+     "med": 2900,
+     "p75": 3700,
+     "n": 281,
+     "ofertas": 530
+    },
+    "Arequipa": {
+     "p25": 1890,
+     "med": 2490,
+     "p75": 3180,
+     "n": 55,
+     "ofertas": 104
+    },
+    "Trujillo": {
+     "p25": 1800,
+     "med": 2380,
+     "p75": 3030,
+     "n": 38,
+     "ofertas": 71
+    },
+    "Cusco": {
+     "n": 18,
+     "ofertas": 33
+    },
+    "Remoto": {
+     "p25": 2380,
+     "med": 3130,
+     "p75": 4000,
+     "n": 55,
+     "ofertas": 104
+    }
+   },
+   "cursos": [
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "coordinador-operaciones",
+   "nombre": "Coordinador de Operaciones",
+   "area": "Administración",
+   "nivel": "semi-senior",
+   "sinonimos": [
+    "operaciones",
+    "jefe de operaciones",
+    "coordinador operativo"
+   ],
+   "ofertas": 512,
+   "habilidades": [
+    {
+     "k": "Gestión de equipos",
+     "pct": 87,
+     "tendencia": 3
+    },
+    {
+     "k": "Excel avanzado",
+     "pct": 84,
+     "tendencia": 0
+    },
+    {
+     "k": "Indicadores operativos",
+     "pct": 81,
+     "tendencia": 6
+    },
+    {
+     "k": "Mejora de procesos",
+     "pct": 66,
+     "tendencia": 8
+    },
+    {
+     "k": "Negociación",
+     "pct": 54,
+     "tendencia": 2
+    }
+   ],
+   "salario": {
+    "p25": 3400,
+    "med": 4400,
+    "p75": 5700,
+    "n": 271
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 3400,
+     "med": 4400,
+     "p75": 5700,
+     "n": 152,
+     "ofertas": 287
+    },
+    "Arequipa": {
+     "p25": 2920,
+     "med": 3780,
+     "p75": 4900,
+     "n": 30,
+     "ofertas": 56
+    },
+    "Trujillo": {
+     "n": 20,
+     "ofertas": 38
+    },
+    "Cusco": {
+     "n": 9,
+     "ofertas": 18
+    },
+    "Remoto": {
+     "p25": 3670,
+     "med": 4750,
+     "p75": 6160,
+     "n": 30,
+     "ofertas": 56
+    }
+   },
+   "cursos": [
+    "excel-avanzado"
+   ]
+  },
+  {
+   "id": "analista-comercial",
+   "nombre": "Analista Comercial",
+   "area": "Administración",
+   "nivel": "junior",
+   "sinonimos": [
+    "análisis comercial",
+    "inteligencia comercial",
+    "trade"
+   ],
+   "ofertas": 703,
+   "habilidades": [
+    {
+     "k": "Excel avanzado",
+     "pct": 91,
+     "tendencia": 0
+    },
+    {
+     "k": "Análisis de ventas",
+     "pct": 84,
+     "tendencia": 3
+    },
+    {
+     "k": "CRM (Salesforce o HubSpot)",
+     "pct": 56,
+     "tendencia": 15
+    },
+    {
+     "k": "Negociación",
+     "pct": 48,
+     "tendencia": 2
+    },
+    {
+     "k": "Power BI",
+     "pct": 44,
+     "tendencia": 20
+    }
+   ],
+   "salario": {
+    "p25": 2300,
+    "med": 3000,
+    "p75": 3900,
+    "n": 387
+   },
+   "porCiudad": {
+    "Lima": {
+     "p25": 2300,
+     "med": 3000,
+     "p75": 3900,
+     "n": 217,
+     "ofertas": 394
+    },
+    "Arequipa": {
+     "p25": 1980,
+     "med": 2580,
+     "p75": 3350,
+     "n": 43,
+     "ofertas": 77
+    },
+    "Trujillo": {
+     "n": 29,
+     "ofertas": 53
+    },
+    "Cusco": {
+     "n": 14,
+     "ofertas": 25
+    },
+    "Remoto": {
+     "p25": 2480,
+     "med": 3240,
+     "p75": 4210,
+     "n": 43,
+     "ofertas": 77
+    }
+   },
+   "cursos": [
+    "powerbi-codigolab",
+    "excel-avanzado"
+   ]
+  }
+ ],
+ "cursos": [
+  {
+   "id": "sql-datum",
+   "skill": "SQL",
+   "t": "SQL para análisis de datos: de cero a intermedio",
+   "p": "Academia Datum · en línea",
+   "meta": [
+    "6 semanas",
+    "S/ 180",
+    "4.7 ★"
+   ]
+  },
+  {
+   "id": "powerbi-codigolab",
+   "skill": "Power BI",
+   "t": "Power BI aplicado: dashboards para negocio",
+   "p": "CódigoLab · en vivo",
+   "meta": [
+    "5 semanas",
+    "S/ 240",
+    "4.6 ★"
+   ]
+  },
+  {
+   "id": "ruta-analista",
+   "skill": "SQL",
+   "t": "Ruta Analista de Datos junior",
+   "p": "Escuela Andes Online · a tu ritmo",
+   "meta": [
+    "12 semanas",
+    "S/ 390",
+    "Certificado"
+   ]
+  },
+  {
+   "id": "python-datos",
+   "skill": "Python",
+   "t": "Python para análisis y automatización",
+   "p": "Academia Datum · en línea",
+   "meta": [
+    "8 semanas",
+    "S/ 260",
+    "4.8 ★"
+   ]
+  },
+  {
+   "id": "excel-avanzado",
+   "skill": "Excel avanzado",
+   "t": "Excel avanzado para analistas",
+   "p": "CódigoLab · a tu ritmo",
+   "meta": [
+    "4 semanas",
+    "S/ 120",
+    "4.5 ★"
+   ]
+  },
+  {
+   "id": "ingles-negocios",
+   "skill": "Inglés intermedio",
+   "t": "Inglés para entornos corporativos",
+   "p": "Instituto Lima Idiomas · en vivo",
+   "meta": [
+    "16 semanas",
+    "S/ 540",
+    "4.4 ★"
+   ]
+  },
+  {
+   "id": "lean-six",
+   "skill": "Lean y Six Sigma",
+   "t": "Lean Six Sigma Yellow Belt",
+   "p": "Escuela Andes Online · en línea",
+   "meta": [
+    "7 semanas",
+    "S/ 310",
+    "Certificado"
+   ]
+  },
+  {
+   "id": "ads-performance",
+   "skill": "Meta Ads",
+   "t": "Campañas de performance en Meta y Google",
+   "p": "CódigoLab · en vivo",
+   "meta": [
+    "5 semanas",
+    "S/ 220",
+    "4.6 ★"
+   ]
+  },
+  {
+   "id": "js-react",
+   "skill": "React",
+   "t": "React desde cero para desarrolladores junior",
+   "p": "Academia Datum · a tu ritmo",
+   "meta": [
+    "10 semanas",
+    "S/ 350",
+    "4.7 ★"
+   ]
+  },
+  {
+   "id": "iso-27001",
+   "skill": "ISO 27001",
+   "t": "Fundamentos de seguridad de la información",
+   "p": "Escuela Andes Online · en línea",
+   "meta": [
+    "6 semanas",
+    "S/ 280",
+    "4.5 ★"
+   ]
+  },
+  {
+   "id": "competencias-rrhh",
+   "skill": "Entrevista por competencias",
+   "t": "Entrevista por competencias en la práctica",
+   "p": "Instituto Lima Idiomas · en vivo",
+   "meta": [
+    "4 semanas",
+    "S/ 190",
+    "4.6 ★"
+   ]
+  },
+  {
+   "id": "contratos-legal",
+   "skill": "Contratos",
+   "t": "Redacción y negociación de contratos",
+   "p": "CódigoLab · en línea",
+   "meta": [
+    "6 semanas",
+    "S/ 300",
+    "4.5 ★"
+   ]
+  },
+  {
+   "id": "sap-logistica",
+   "skill": "SAP MM/WM",
+   "t": "SAP para logística y almacenes",
+   "p": "Escuela Andes Online · en vivo",
+   "meta": [
+    "8 semanas",
+    "S/ 420",
+    "4.4 ★"
+   ]
+  },
+  {
+   "id": "analytics-ga4",
+   "skill": "Google Analytics",
+   "t": "Google Analytics 4 para marketing",
+   "p": "CódigoLab · a tu ritmo",
+   "meta": [
+    "4 semanas",
+    "S/ 160",
+    "4.6 ★"
+   ]
+  }
+ ],
+ "mallas": {
+  "Economía": [
+   "Excel avanzado",
+   "Estadística",
+   "Inglés avanzado",
+   "Análisis financiero",
+   "Econometría"
+  ],
+  "Administración": [
+   "Excel avanzado",
+   "Negociación",
+   "Gestión de equipos",
+   "Atención al cliente"
+  ],
+  "Ingeniería de Sistemas": [
+   "Java o Node.js",
+   "HTML y CSS",
+   "SQL",
+   "Redes básicas",
+   "Git"
+  ],
+  "Psicología": [
+   "Evaluación psicológica",
+   "Clima y cultura",
+   "Estadística",
+   "Entrevista por competencias"
+  ]
+ },
+ "carreraAreas": {
+  "Economía": [
+   "Finanzas",
+   "Datos y Analítica"
+  ],
+  "Administración": [
+   "Administración",
+   "Marketing"
+  ],
+  "Ingeniería de Sistemas": [
+   "Sistemas",
+   "Datos y Analítica"
+  ],
+  "Psicología": [
+   "Psicología",
+   "Administración"
+  ]
+ }
+}
