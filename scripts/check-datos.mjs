@@ -117,3 +117,32 @@ for (const c of ['float', 'head', 'hand', 'eyes', 'lids', 'bulb', 'arm', 'bar',
 assert.ok(!/\.lumi-logo[^{]*\{[^}]*animation/.test(lumiCss), 'el logo no se anima');
 
 console.log('check-datos: animaciones de Lumi OK');
+
+// ── Landing: lo que no se puede publicar ─────────────────────────────
+import { readdirSync } from 'node:fs';
+const dirLanding = new URL('../src/pages/landing/', import.meta.url);
+const landing = readdirSync(dirLanding)
+  .map((f) => readFileSync(new URL(f, dirLanding), 'utf8')).join('\n')
+  + readFileSync(new URL('../src/pages/Landing.jsx', import.meta.url), 'utf8');
+
+// Reseñas y casos van con nombres creíbles, pero sin sellos de verificación:
+// una reseña inventada certificada como verificada es un registro falso, y
+// este link se reenvía.
+for (const prohibido of [
+  'Verificada', 'verificadas', '312 reseñas', 'Placeholder', 'placeholder',
+  'Foto del estudiante', 'Nombre Apellido', 'S/ 150',
+]) {
+  assert.ok(!landing.includes(prohibido), `la landing no debe publicar "${prohibido}"`);
+}
+
+// Las cifras de cobertura salen del catálogo, no escritas a mano.
+for (const cifra of ['48,200', '48200', '60 roles', '8 regiones', '8 ámbitos']) {
+  assert.ok(!landing.includes(cifra), `"${cifra}" debe salir de cobertura(), no escrita a mano`);
+}
+assert.ok(landing.includes('cobertura'), 'la landing usa cobertura() para las cifras');
+
+// Ningún enlace sin href: no recibe foco ni se activa con Enter.
+assert.ok(!/<a(?![^>]*href)(?![^>]*\{)/.test(landing),
+  'ningun <a> sin href en la landing');
+
+console.log('check-datos: landing OK');

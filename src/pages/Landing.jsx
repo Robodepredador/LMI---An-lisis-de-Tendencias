@@ -1,3 +1,4 @@
+import { Casos, ConoceLumi, Funciones, Pie } from './landing/Secciones.jsx';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import catalogo from '../data/catalogo.json';
@@ -98,24 +99,9 @@ export default function Landing() {
       </section>
 
       {/* ── Cómo funciona ── */}
-      <section id="como-funciona" className="seccion seccion--pantalla pila" style={{ gap: 28, justifyContent: 'center' }}>
-        <div className="pila" style={{ gap: 8, maxWidth: 640 }}>
-          <span className="eti">ARQUITECTURA DEL SISTEMA</span>
-          <h2 className="display display--pag" style={{ margin: 0 }}>Cómo funciona LMI-U</h2>
-          <p className="lead" style={{ margin: 0 }}>
-            Tres principios diseñados para responder con certeza estadística antes de tomar una decisión laboral o curricular.
-          </p>
-        </div>
-        <div className="rejilla--fina">
-          {FEATURES.map((f) => (
-            <div key={f.n} className="pila" style={{ gap: 10 }}>
-              <span className="mono" style={{ fontSize: 12, color: 'var(--accent)' }}>{f.n}</span>
-              <strong style={{ fontSize: 18, fontWeight: 600 }}>{f.t}</strong>
-              <span style={{ fontSize: 14, lineHeight: 1.5, color: 'var(--text-muted)' }}>{f.d}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ConoceLumi />
+      <Funciones />
+      <Casos />
 
       {/* ── Metodología ── va antes de los precios: la confianza en el dato es
           el argumento de venta, así que se gana antes de pedir dinero. */}
@@ -167,21 +153,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Para universidades ── */}
-      <section id="universidades" className="seccion seccion--pantalla" style={{ justifyContent: 'center' }}>
-        <div className="tarjeta fila" style={{ borderRadius: 'var(--radius-2xl)', padding: 36, gap: 24, alignItems: 'center', justifyContent: 'space-between' }}>
-          <div className="pila" style={{ gap: 8, maxWidth: 600 }}>
-            <span className="mono" style={{ fontSize: 12, color: 'var(--accent)' }}>PARA UNIVERSIDADES</span>
-            <strong className="display display--card">Licencia institucional para docentes y directores, con el nombre de tu universidad.</strong>
-            <span style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Consultas ilimitadas, brechas frente a la malla curricular y reportes para comités.
-            </span>
-          </div>
-          <a href="mailto:convenios@lmi-u.pe?subject=Consulta%20de%20Convenio%20Institucional" className="btn btn--linea">
-            Solicitar información
-          </a>
-        </div>
-      </section>
+      <Pie />
 
       <Modal abierto={verMetodologia} onCerrar={() => setVerMetodologia(false)} titulo="Metodología y fuentes">
         <ContenidoMetodologia />
