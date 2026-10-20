@@ -54,7 +54,13 @@ export default function App() {
 
   // Marca blanca: el acento del tenant manda sobre el token global.
   useEffect(() => {
-    document.documentElement.style.setProperty('--accent', getTenant(tenant).accent);
+    // Solo la marca blanca pisa el acento. LMI-U es la marca del producto: su
+    // color vive en tokens.css, y asi el tema oscuro puede cambiarlo a lima
+    // como manda el sistema de diseno.
+    const t = getTenant(tenant);
+    const raiz = document.documentElement.style;
+    if (t.powered) raiz.setProperty('--accent', t.accent);
+    else raiz.removeProperty('--accent');
   }, [tenant]);
 
   // Cambiar de ruta devuelve el scroll arriba; si no, se entra a media página.

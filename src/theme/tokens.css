@@ -85,6 +85,8 @@
   --sombra-cta:   0 8px 24px rgba(75, 59, 255, .3);
   --sombra-panel: 0 6px 24px rgba(23, 21, 58, .08);
   --sombra-modal: 0 20px 60px rgba(15, 14, 41, .35);
+  --sombra-sm:    0 1px 3px rgba(23, 21, 58, .12);
+  --sombra-hover: 0 6px 18px rgba(23, 21, 58, .14);
 
   /* ── Movimiento ── */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -168,4 +170,10 @@
 
   --estrella:    #FFB020;
   --lumi-linea:  #F4F3FF;   /* el contorno se invierte o Lumi desaparece */
+
+  --sombra-cta:   0 8px 24px rgba(198, 242, 78, .22);
+  --sombra-panel: 0 6px 24px rgba(0, 0, 0, .4);
+  --sombra-modal: 0 20px 60px rgba(0, 0, 0, .6);
+  --sombra-sm:    0 1px 3px rgba(0, 0, 0, .4);
+  --sombra-hover: 0 6px 18px rgba(0, 0, 0, .5);
 }

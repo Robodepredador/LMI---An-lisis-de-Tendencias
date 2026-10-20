@@ -3,7 +3,7 @@
 export const TENANTS = {
   'LMI-U': {
     id: 'LMI-U', name: 'LMI-U', mono: 'L',
-    accent: 'oklch(0.78 0.14 60)',
+    accent: '#4B3BFF',  // informativo: LMI-U toma el acento de tokens.css
     powered: false,
     uni: 'Universidad Andina del Sur', dom: 'uandina.edu.pe',
   },
