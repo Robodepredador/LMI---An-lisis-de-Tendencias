@@ -1,4 +1,5 @@
 import catalogo from '../data/catalogo.json' with { type: 'json' };
+import { resolverLocal } from './respaldo.js';
 
 export const MIN_MUESTRA = catalogo.minMuestra;
 
@@ -67,6 +68,9 @@ export function brechasDe(carrera) {
 export class ErrorConsulta extends Error {}
 
 export async function consultar(pregunta) {
+  // Cualquier fallo del camino normal cae al respaldo local en vez de pintar
+  // un error de infraestructura: este link lo recorren estudiantes solos, y una
+  // cuota agotada no puede costar una sesión de feedback entera.
   let res;
   try {
     res = await fetch('/api/chat', {
@@ -75,13 +79,12 @@ export async function consultar(pregunta) {
       body: JSON.stringify({ pregunta }),
     });
   } catch {
-    // Sin red no hay forma de distinguir un fallo del servidor de uno del cable.
-    throw new ErrorConsulta('No pudimos conectar. Revisa tu conexión e inténtalo de nuevo.');
+    return resolverLocal(pregunta);
   }
 
   let datos;
-  try { datos = await res.json(); } catch { throw new ErrorConsulta('La respuesta del servidor no se pudo leer.'); }
-  if (!res.ok) throw new ErrorConsulta(datos?.error ?? 'No pudimos procesar la consulta.');
+  try { datos = await res.json(); } catch { return resolverLocal(pregunta); }
+  if (!res.ok) return resolverLocal(pregunta);
 
   return {
     intent: datos.intent ?? 'otro',
@@ -91,6 +94,7 @@ export async function consultar(pregunta) {
     insight: datos.insight ?? '',
     sinDatos: !!datos.sinDatos,
     fueraDeAlcance: !!datos.fueraDeAlcance,
+    local: false,
   };
 }
 
