@@ -58,7 +58,7 @@ const OBLIGATORIOS = [
   '--sobre-accent', '--sobre-accent-tenue',
   '--resalte', '--resalte-fg',
   '--linea', '--borde-campo',
-  '--dato-1', '--dato-2', '--dato-3', '--dato-4',
+  '--dato-1', '--dato-2', '--dato-3', '--dato-4', '--dato-5',
   '--alerta', '--alerta-bg', '--alerta-fg',
   '--estrella', '--lumi-linea',
 ];
@@ -113,7 +113,7 @@ assert.ok(contraste(o('--text-primary'), o('--bg-page')) >= 4.5,
   'el texto principal sobre el fondo oscuro debe pasar AA');
 assert.ok(contraste(o('--borde-campo'), o('--bg-surface')) >= 3,
   'el borde de campo tambien debe cumplir 1.4.11 en oscuro');
-for (const d of ['--dato-1', '--dato-2', '--dato-3', '--dato-4'])
+for (const d of ['--dato-1', '--dato-2', '--dato-3', '--dato-4', '--dato-5'])
   assert.ok(contraste(o(d), o('--bg-surface')) >= 3,
     `${d} debe distinguirse de la tarjeta oscura`);
 

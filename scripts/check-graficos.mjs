@@ -56,7 +56,7 @@ assert.equal(filasDe(justas).length, 4, 'con 4 habilidades no se inventa una qui
 console.log(`check-graficos: filas OK (${catalogo.roles.length} roles)`);
 
 // ── Rótulos: regresión de la contradicción del prototipo ─────────────
-const { rotulo, celdasDe, bandaDe } = await import('../src/lib/habilidades.js');
+const { rotulo, celdasDe, bandaDe, etiquetaDelta } = await import('../src/lib/habilidades.js');
 for (const rol of catalogo.roles) {
   const f = filasDe(rol);
   for (let i = 1; i < f.length; i++) {
@@ -99,3 +99,37 @@ assert.ok(Number.isFinite(plano.medL) && Number.isFinite(plano.bandW),
   'percentiles iguales no pueden producir NaN');
 
 console.log('check-graficos: celdas y franja OK');
+
+// ── Serie de tendencia ───────────────────────────────────────────────
+// Dos puntos, no cuatro: el catálogo tiene un solo `tendencia` por habilidad
+// y ninguna serie temporal. En el prototipo la curva estaba sintetizada y su
+// forma dependía del largo del nombre de la habilidad.
+const { serieDe } = await import('../src/lib/tendencia.js');
+
+for (const rol of catalogo.roles) {
+  const s = serieDe(filasDe(rol));
+  assert.ok(s.length >= 4 && s.length <= 5, `${rol.id}: una serie por fila`);
+  for (const x of s) {
+    assert.ok(x.desde >= 0 && x.desde <= 100, `${rol.id}/${x.k}: desde fuera de 0-100 (${x.desde})`);
+    assert.ok(x.hasta >= 0 && x.hasta <= 100, `${rol.id}/${x.k}: hasta fuera de 0-100 (${x.hasta})`);
+  }
+  assert.equal(new Set(s.map((x) => x.color)).size, s.length,
+    `${rol.id}: cada serie necesita color propio o la leyenda no sirve`);
+  assert.equal(s.filter((x) => x.destacada).length, 1, `${rol.id}: una sola destacada`);
+}
+
+// ── Review Focus #2: tendencia negativa o cero ───────────────────────
+const baja = serieDe([{ k: 'Concar', pct: 54, tendencia: -3, destacada: false }]);
+assert.ok(baja[0].desde > baja[0].hasta, 'una tendencia negativa dibuja la pendiente hacia abajo');
+assert.equal(baja[0].delta, -3);
+
+const plana = serieDe([{ k: 'Excel', pct: 58, tendencia: 0, destacada: false }]);
+assert.equal(plana[0].desde, plana[0].hasta, 'tendencia cero es una linea horizontal');
+assert.equal(etiquetaDelta(0), 'sin cambio', 'cero no se muestra como "+0 pts"');
+assert.equal(etiquetaDelta(-4), '−4 pts', 'el negativo lleva signo menos tipografico');
+
+// Una habilidad que ya estaba al 100% no puede "venir" de más de 100.
+const tope = serieDe([{ k: 'X', pct: 100, tendencia: -5, destacada: true }]);
+assert.ok(tope[0].desde <= 100, 'el punto de partida no se sale del eje');
+
+console.log('check-graficos: tendencia OK');

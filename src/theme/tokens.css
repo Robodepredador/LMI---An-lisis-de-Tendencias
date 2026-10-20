@@ -47,6 +47,7 @@
   --dato-2: #5F5A86;
   --dato-3: #A8521F;
   --dato-4: #5A7D0C;
+  --dato-5: #126E6B;
 
   /* ── Alerta ──
      Coral es fondo y acento, nunca texto: sobre blanco da 2.82:1. */
@@ -163,6 +164,7 @@
   --dato-2: #B3AEE0;
   --dato-3: #FFA06B;
   --dato-4: #C6F24E;
+  --dato-5: #67D9D2;
 
   --alerta:     #FF8A6E;
   --alerta-bg:  #43201A;

@@ -881,3 +881,18 @@
 /* ── Insignias de delta ── */
 .insignia--sube { background: var(--resalte); color: var(--resalte-fg); }
 .insignia--baja { background: var(--alerta-bg); color: var(--alerta-fg); }
+
+/* ── Gráfico de tendencia ── */
+.tendencia { display: flex; flex-direction: column; gap: 10px; }
+.tendencia__sub, .tendencia__pie { font-size: var(--tipo-sm); color: var(--text-secondary); }
+.tendencia__svg { width: 100%; height: auto; display: block; }
+.tendencia__guia { stroke: var(--linea); stroke-width: 1.5; }
+.tendencia__marca { font-size: 12px; fill: var(--text-secondary); font-family: var(--font-body); }
+.tendencia__linea { stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+.tendencia__linea--on { stroke-width: 4.5; }
+.tendencia__punto { fill: currentColor; stroke: var(--bg-surface); stroke-width: 2; }
+.tendencia__nombre {
+  font-size: 12px; fill: var(--text-primary);
+  font-family: var(--font-body); font-weight: 500;
+}
+.tendencia__nombre--on { font-weight: 700; }
