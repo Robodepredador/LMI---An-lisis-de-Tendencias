@@ -6,6 +6,14 @@
   <title>LMI-U · Mercado Laboral Inteligente</title>
   <meta name="description" content="Pregúntale al mercado laboral antes de decidir. Habilidades, salarios y tendencias en lenguaje simple." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script>
+    // Antes de pintar: sin esto hay un destello de tema claro al recargar.
+    try {
+      var g = localStorage.getItem('lmi-tema');
+      var oscuro = g === 'oscuro' || (!g && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (oscuro) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />

@@ -3,6 +3,7 @@ import { CONSULTAS_GRATIS, useApp } from '../store.js';
 import { getTenant } from '../data/tenant.js';
 import { proximaRenovacion, vigenciaCreditos } from '../data/contenido.js';
 import ModalPlanes from '../components/ModalPlanes.jsx';
+import InterruptorTema from '../components/InterruptorTema.jsx';
 
 // El medidor de consumo. Es lo que traduce el plan a algo que el usuario
 // entiende de un vistazo, así que vive en un solo sitio.
@@ -134,6 +135,7 @@ export default function AppShell() {
             </span>
           </button>
         </div>
+        <InterruptorTema className="lado__item" />
       </aside>
 
       <main className="app-shell__main">

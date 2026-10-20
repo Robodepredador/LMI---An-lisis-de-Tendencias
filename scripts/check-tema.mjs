@@ -86,4 +86,39 @@ assert.ok(contraste(t('--accent-apagado-fg'), t('--accent-apagado')) >= 4.5,
 assert.ok(contraste(t('--sobre-accent-tenue'), t('--accent')) >= 4.5,
   'las etiquetas de paso sobre indigo deben pasar AA (hoy #C9C4FF da 3.81)');
 
+// ── Tema oscuro ──────────────────────────────────────────────────────
+// La paridad se exige sobre tokens de COLOR. Fuentes, radios y escala
+// tipográfica no cambian con el tema y viven solo en :root.
+const esColor = (v) => /^(#[0-9a-fA-F]{3,6}|rgba?\()/.test(v.trim());
+function coloresDe(selector) {
+  const b = bloque(selector);
+  return [...b.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)]
+    .filter((m) => esColor(m[2]))
+    .map((m) => m[1])
+    .sort();
+}
+
+assert.ok(css.includes('[data-theme="dark"]'), 'tokens.css debe declarar [data-theme="dark"]');
+assert.deepEqual(coloresDe(':root'), coloresDe('[data-theme="dark"]'),
+  'cada token de color claro necesita su contraparte oscura');
+
+const o = lector('[data-theme="dark"]');
+assert.ok(contraste(o('--text-secondary'), o('--bg-surface')) >= 4.5,
+  'texto secundario sobre tarjeta oscura debe pasar AA');
+assert.ok(contraste(o('--accent-fg'), o('--accent')) >= 4.5,
+  'en oscuro el acento es lima y su texto debe pasar AA');
+assert.ok(contraste(o('--linea'), o('--bg-surface')) >= 1.2,
+  'la linea divisoria debe distinguirse del fondo oscuro');
+assert.ok(contraste(o('--text-primary'), o('--bg-page')) >= 4.5,
+  'el texto principal sobre el fondo oscuro debe pasar AA');
+assert.ok(contraste(o('--borde-campo'), o('--bg-surface')) >= 3,
+  'el borde de campo tambien debe cumplir 1.4.11 en oscuro');
+for (const d of ['--dato-1', '--dato-2', '--dato-3', '--dato-4'])
+  assert.ok(contraste(o(d), o('--bg-surface')) >= 3,
+    `${d} debe distinguirse de la tarjeta oscura`);
+
+// Review Focus #4: sin esto hay un destello de tema claro al recargar
+assert.match(leer('index.html'), /localStorage[\s\S]*lmi-tema[\s\S]*data-theme/,
+  'index.html necesita el script sincrono anti-destello antes de la hoja de estilos');
+
 console.log('check-tema: OK');

@@ -123,3 +123,49 @@
   --shadow-modal:   var(--sombra-modal);
   --shadow-hero:    var(--sombra-panel);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Tema oscuro
+   El sistema de diseño define la paleta pero el prototipo aprobado no la
+   usa en ninguna pantalla: esto es diseño derivado del claro, no portado.
+   En oscuro la acción pasa a lima y el resalte a índigo claro.
+   ═══════════════════════════════════════════════════════════ */
+
+[data-theme="dark"] {
+  --bg-page:        #0F0E29;
+  --bg-surface:     #17153A;
+  --bg-elevated:    #221F52;
+  --bg-noche:       #221F52;   /* en oscuro se eleva, no se funde con el fondo */
+  --bg-overlay:     rgba(5, 4, 16, .7);
+
+  --text-primary:   #F4F3FF;
+  --text-secondary: #B3AEE0;
+  --sobre-noche:    #D6D3F5;
+
+  --accent:          #C6F24E;
+  --accent-fg:       #17153A;
+  --accent-hover:    #D7F76E;
+  --accent-apagado:    #2E2A66;
+  --accent-apagado-fg: #B3AEE0;
+  --sobre-accent:        #17153A;
+  --sobre-accent-tenue:  #2F3A0E;
+
+  --resalte:     #8A80FF;
+  --resalte-fg:  #0F0E29;
+
+  --linea:        #2E2A66;
+  --borde-campo:  #6F68A8;
+  --borde-noche:  #3A3470;
+
+  --dato-1: #8A80FF;
+  --dato-2: #B3AEE0;
+  --dato-3: #FFA06B;
+  --dato-4: #C6F24E;
+
+  --alerta:     #FF8A6E;
+  --alerta-bg:  #43201A;
+  --alerta-fg:  #FFB5A0;
+
+  --estrella:    #FFB020;
+  --lumi-linea:  #F4F3FF;   /* el contorno se invierte o Lumi desaparece */
+}

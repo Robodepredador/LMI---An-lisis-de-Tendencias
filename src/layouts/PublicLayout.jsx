@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../store.js';
 import { getTenant } from '../data/tenant.js';
+import InterruptorTema from '../components/InterruptorTema.jsx';
 
 // "Cómo funciona", "Planes" y "Para universidades" apuntan a secciones de la
 // landing. Si ya estamos en ella basta con desplazar; si no, hay que llegar
@@ -58,6 +59,7 @@ export default function PublicLayout() {
             </button>
           ) : (
             <>
+              <InterruptorTema />
               <Link to="/login" style={{ color: 'var(--text-primary)' }}>Iniciar sesión</Link>
               <Link to="/registro" className="btn btn--claro solo-desktop">Crear cuenta</Link>
             </>
