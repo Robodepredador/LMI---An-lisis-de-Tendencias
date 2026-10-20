@@ -6,11 +6,15 @@ export const CONSULTAS_GRATIS = 3;
 
 const periodoActual = () => new Date().toISOString().slice(0, 7); // 'YYYY-MM'
 
+// Los cuatro tramos que el registro aprobado ofrece. El indice es lo que se
+// guarda; el texto es lo que Lumi repite en su consejo.
+export const CICLOS = ['1ro – 2do', '3ro – 4to', '5to – 6to', '7mo o más'];
+
 const iniciales = (nombre) =>
   nombre.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
 const estadoInicial = {
-  usuario: null,          // { email, nombre, iniciales, rol, areas, ciudades, tipo }
+  usuario: null,          // { email, nombre, iniciales, rol, ciclo, carrera, areas, ciudades, tipo }
   cuentas: {},            // email -> { clave, perfil }  — el "servidor de cuentas" del navegador
   tenant: 'LMI-U',
   docenteOpcion: null,    // 'A' | 'B' — cuál vista docente eligió
@@ -45,10 +49,11 @@ export const useApp = create(
       },
 
       // ── Cuentas ───────────────────────────────────────────────────
-      registrar: ({ email, clave, nombre }) => {
+      registrar: ({ email, clave, nombre, ciclo = 2, carrera = null, ...extra }) => {
         const e = email.trim().toLowerCase();
         if (get().cuentas[e]) return { ok: false, error: 'Ya existe una cuenta con este correo.' };
-        const perfil = { email: e, nombre, iniciales: iniciales(nombre), rol: 'Estudiante', areas: [], ciudades: [], tipo: 'personal' };
+        const perfil = { email: e, nombre, iniciales: iniciales(nombre), rol: 'Estudiante',
+          ciclo, carrera, areas: [], ciudades: [], tipo: 'personal', ...extra };
         set((s) => ({ cuentas: { ...s.cuentas, [e]: { clave, perfil } }, usuario: perfil }));
         return { ok: true };
       },

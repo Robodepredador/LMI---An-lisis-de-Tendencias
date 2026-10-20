@@ -32,7 +32,7 @@ const roles = ROLES.map((r) => {
   const skills = new Set(habilidades.map((h) => h.k));
 
   return {
-    id: r.id, nombre: r.n, area: r.a, nivel: r.niv,
+    id: r.id, nombre: r.n, area: r.a, nivel: r.niv, tip: r.tip,
     sinonimos: r.sin,
     ofertas: r.ofertas,
     habilidades,

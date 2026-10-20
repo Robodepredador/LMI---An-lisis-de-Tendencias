@@ -23,6 +23,7 @@
    "nombre": "Analista de Datos junior",
    "area": "Datos y Analítica",
    "nivel": "junior",
+   "tip": "un curso corto de SQL y Power BI",
    "sinonimos": [
     "analista de data",
     "data analyst",
@@ -114,6 +115,7 @@
    "nombre": "Analista de BI junior",
    "area": "Datos y Analítica",
    "nivel": "junior",
+   "tip": "DAX y algo de Power BI",
    "sinonimos": [
     "business intelligence",
     "analista bi",
@@ -204,6 +206,7 @@
    "nombre": "Data Scientist junior",
    "area": "Datos y Analítica",
    "nivel": "junior",
+   "tip": "Machine learning, y despues Pandas",
    "sinonimos": [
     "científico de datos",
     "data science"
@@ -284,6 +287,7 @@
    "nombre": "Ingeniero de Datos",
    "area": "Datos y Analítica",
    "nivel": "semi-senior",
+   "tip": "un proyecto que use Cloud (AWS/Azure) y Airflow",
    "sinonimos": [
     "data engineer",
     "ingeniero de data"
@@ -363,6 +367,7 @@
    "nombre": "Analista de Datos semi-senior",
    "area": "Datos y Analítica",
    "nivel": "semi-senior",
+   "tip": "un curso corto de Python y Power BI",
    "sinonimos": [
     "analista de datos ssr",
     "analista datos senior"
@@ -438,6 +443,7 @@
    "nombre": "Analista Financiero",
    "area": "Finanzas",
    "nivel": "junior",
+   "tip": "Power BI y algo de SAP",
    "sinonimos": [
     "analista de finanzas",
     "finanzas corporativas"
@@ -526,6 +532,7 @@
    "nombre": "Analista de Riesgos",
    "area": "Finanzas",
    "nivel": "junior",
+   "tip": "SQL, y despues Modelos de riesgo",
    "sinonimos": [
     "riesgo crediticio",
     "gestión de riesgos",
@@ -607,6 +614,7 @@
    "nombre": "Analista de Inversiones",
    "area": "Finanzas",
    "nivel": "junior",
+   "tip": "un proyecto que use Python y Inglés avanzado",
    "sinonimos": [
     "inversiones",
     "portafolio",
@@ -681,6 +689,7 @@
    "nombre": "Asistente Contable",
    "area": "Finanzas",
    "nivel": "junior",
+   "tip": "un curso corto de SAP y NIIF",
    "sinonimos": [
     "auxiliar contable",
     "contabilidad"
@@ -760,6 +769,7 @@
    "nombre": "Analista de Créditos",
    "area": "Finanzas",
    "nivel": "junior",
+   "tip": "Normativa SBS y algo de Atención al cliente",
    "sinonimos": [
     "créditos",
     "evaluación crediticia"
@@ -831,6 +841,7 @@
    "nombre": "Analista de Marketing Digital",
    "area": "Marketing",
    "nivel": "junior",
+   "tip": "Looker Studio, y despues Meta Ads",
    "sinonimos": [
     "marketing digital",
     "performance marketing"
@@ -918,6 +929,7 @@
    "nombre": "Community Manager",
    "area": "Marketing",
    "nivel": "junior",
+   "tip": "un proyecto que use Meta Ads y Analítica de redes",
    "sinonimos": [
     "redes sociales",
     "social media"
@@ -999,6 +1011,7 @@
    "nombre": "Especialista SEO/SEM",
    "area": "Marketing",
    "nivel": "semi-senior",
+   "tip": "un curso corto de Semrush o Ahrefs y SEO técnico",
    "sinonimos": [
     "seo",
     "sem",
@@ -1072,6 +1085,7 @@
    "nombre": "Analista de Investigación de Mercados",
    "area": "Marketing",
    "nivel": "junior",
+   "tip": "Presentación de hallazgos y algo de Estadística",
    "sinonimos": [
     "investigación de mercado",
     "market research",
@@ -1145,6 +1159,7 @@
    "nombre": "Analista de Procesos",
    "area": "Ingeniería Industrial",
    "nivel": "junior",
+   "tip": "Power BI, y despues Lean y Six Sigma",
    "sinonimos": [
     "mejora continua",
     "procesos",
@@ -1229,6 +1244,7 @@
    "nombre": "Analista de Logística",
    "area": "Ingeniería Industrial",
    "nivel": "junior",
+   "tip": "un proyecto que use Indicadores logísticos y SAP MM/WM",
    "sinonimos": [
     "supply chain",
     "cadena de suministro",
@@ -1312,6 +1328,7 @@
    "nombre": "Analista de Calidad",
    "area": "Ingeniería Industrial",
    "nivel": "junior",
+   "tip": "un curso corto de HACCP y Auditorías internas",
    "sinonimos": [
     "aseguramiento de calidad",
     "iso",
@@ -1389,6 +1406,7 @@
    "nombre": "Jefe de Producción",
    "area": "Ingeniería Industrial",
    "nivel": "semi-senior",
+   "tip": "Lean y Six Sigma y algo de Seguridad industrial",
    "sinonimos": [
     "supervisor de producción",
     "planta"
@@ -1461,6 +1479,7 @@
    "nombre": "Asistente Legal",
    "area": "Derecho",
    "nivel": "junior",
+   "tip": "Excel, y despues Investigación jurídica",
    "sinonimos": [
     "auxiliar legal",
     "practicante de derecho",
@@ -1536,6 +1555,7 @@
    "nombre": "Abogado Corporativo junior",
    "area": "Derecho",
    "nivel": "junior",
+   "tip": "un proyecto que use Cumplimiento normativo y Inglés intermedio",
    "sinonimos": [
     "abogado corporativo",
     "derecho corporativo",
@@ -1610,6 +1630,7 @@
    "nombre": "Analista de Cumplimiento",
    "area": "Derecho",
    "nivel": "junior",
+   "tip": "un curso corto de Prevención LAFT y Inglés intermedio",
    "sinonimos": [
     "compliance",
     "cumplimiento normativo",
@@ -1683,6 +1704,7 @@
    "nombre": "Abogado Laboral junior",
    "area": "Derecho",
    "nivel": "junior",
+   "tip": "SUNAFIL y algo de Negociación colectiva",
    "sinonimos": [
     "derecho laboral",
     "abogado laboralista"
@@ -1748,6 +1770,7 @@
    "nombre": "Desarrollador Backend junior",
    "area": "Sistemas",
    "nivel": "junior",
+   "tip": "Cloud (AWS/Azure), y despues Docker",
    "sinonimos": [
     "backend",
     "programador backend",
@@ -1837,6 +1860,7 @@
    "nombre": "Desarrollador Frontend junior",
    "area": "Sistemas",
    "nivel": "junior",
+   "tip": "un proyecto que use TypeScript y React",
    "sinonimos": [
     "frontend",
     "programador frontend",
@@ -1924,6 +1948,7 @@
    "nombre": "Analista de Soporte TI",
    "area": "Sistemas",
    "nivel": "junior",
+   "tip": "un curso corto de SQL básico y Active Directory",
    "sinonimos": [
     "soporte técnico",
     "mesa de ayuda",
@@ -2004,6 +2029,7 @@
    "nombre": "Analista QA",
    "area": "Sistemas",
    "nivel": "junior",
+   "tip": "Automatización con Selenium y algo de Pruebas de API",
    "sinonimos": [
     "qa",
     "tester",
@@ -2079,6 +2105,7 @@
    "nombre": "Analista de Ciberseguridad junior",
    "area": "Sistemas",
    "nivel": "junior",
+   "tip": "SIEM, y despues Gestión de vulnerabilidades",
    "sinonimos": [
     "ciberseguridad",
     "seguridad informática",
@@ -2154,6 +2181,7 @@
    "nombre": "Psicólogo Organizacional",
    "area": "Psicología",
    "nivel": "junior",
+   "tip": "un proyecto que use Gestión del desempeño y Clima y cultura",
    "sinonimos": [
     "psicología organizacional",
     "psicólogo laboral"
@@ -2230,6 +2258,7 @@
    "nombre": "Analista de Selección",
    "area": "Psicología",
    "nivel": "junior",
+   "tip": "un curso corto de Employer branding y LinkedIn Recruiter",
    "sinonimos": [
     "reclutamiento",
     "selección de personal",
@@ -2313,6 +2342,7 @@
    "nombre": "Psicólogo Clínico junior",
    "area": "Psicología",
    "nivel": "junior",
+   "tip": "Terapia cognitivo-conductual y algo de Intervención breve",
    "sinonimos": [
     "psicología clínica",
     "terapeuta",
@@ -2379,6 +2409,7 @@
    "nombre": "Analista de Clima y Cultura",
    "area": "Psicología",
    "nivel": "junior",
+   "tip": "Power BI, y despues Comunicación interna",
    "sinonimos": [
     "clima laboral",
     "cultura organizacional",
@@ -2453,6 +2484,7 @@
    "nombre": "Asistente Administrativo",
    "area": "Administración",
    "nivel": "junior",
+   "tip": "un proyecto que use Facturación y Office 365",
    "sinonimos": [
     "auxiliar administrativo",
     "asistente de gerencia",
@@ -2536,6 +2568,7 @@
    "nombre": "Analista de Recursos Humanos",
    "area": "Administración",
    "nivel": "junior",
+   "tip": "un curso corto de Indicadores de RRHH y Legislación laboral",
    "sinonimos": [
     "rrhh",
     "recursos humanos",
@@ -2619,6 +2652,7 @@
    "nombre": "Coordinador de Operaciones",
    "area": "Administración",
    "nivel": "semi-senior",
+   "tip": "Mejora de procesos y algo de Indicadores operativos",
    "sinonimos": [
     "operaciones",
     "jefe de operaciones",
@@ -2698,6 +2732,7 @@
    "nombre": "Analista Comercial",
    "area": "Administración",
    "nivel": "junior",
+   "tip": "Power BI, y despues CRM (Salesforce o HubSpot)",
    "sinonimos": [
     "análisis comercial",
     "inteligencia comercial",

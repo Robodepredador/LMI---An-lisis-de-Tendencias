@@ -120,3 +120,13 @@ assert.equal(guardado.state.tenant, 'Universidad Andina del Sur');
 assert.ok(!('registrar' in guardado.state), 'las acciones no se serializan, solo el estado');
 
 console.log('✓ store: autenticación, cobro, compra, renovación, cuentas demo y persistencia');
+
+// ── Perfil: ciclo y carrera ──────────────────────────────────────────
+// El consejo de Lumi depende del ciclo; si no se guarda, la burbuja miente.
+s().salir();
+assert.equal(s().registrar({ email: 'vale@demo.pe', clave: 'secreta1', nombre: 'Valeria Quispe', ciclo: 2, carrera: 'Marketing' }).ok, true);
+assert.equal(s().usuario.ciclo, 2, 'el ciclo se guarda en el perfil');
+assert.equal(s().usuario.carrera, 'Marketing', 'la carrera se guarda en el perfil');
+s().salir();
+assert.equal(s().entrar({ email: 'vale@demo.pe', clave: 'secreta1' }).ok, true);
+assert.equal(s().usuario.ciclo, 2, 'el ciclo sobrevive a cerrar y volver a entrar');
