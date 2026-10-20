@@ -44,3 +44,22 @@ export const rotulo = (fila) => `${fila.pct}%`;
 
 export const etiquetaDelta = (n) =>
   (n > 0 ? `+${n} pts` : n < 0 ? `−${Math.abs(n)} pts` : 'sin cambio');
+
+// Las diez celdas de la cuadrícula: llenas primero, sin huecos intercalados.
+export const celdasDe = (fila) =>
+  Array.from({ length: 10 }, (_, i) => i < fila.deCada10);
+
+// Geometría de la franja salarial, en porcentaje del ancho.
+//
+// Los extremos del eje son relleno (P25×0.7 y P75×1.25) y NO se rotulan con
+// cifras: en el prototipo se leían como el sueldo mínimo y máximo del mercado,
+// y no son ningún dato.
+export function bandaDe(p25, med, p75) {
+  const lo = p25 * 0.7;
+  const hi = p75 * 1.25;
+  const span = hi - lo;
+  if (!(span > 0)) return { bandL: 0, bandW: 100, medL: 50 };
+  const pc = (v) => +(((v - lo) / span) * 100).toFixed(1);
+  const bandL = pc(p25);
+  return { bandL, bandW: +(pc(p75) - bandL).toFixed(1), medL: pc(med) };
+}

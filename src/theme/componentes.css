@@ -828,3 +828,56 @@
 }
 .interruptor-tema:hover { border-color: var(--borde-campo); }
 .interruptor-tema.lado__item { width: auto; justify-content: flex-start; gap: 10px; }
+
+/* ── Cuadrícula de puntos ── */
+.puntos { display: flex; flex-direction: column; gap: 12px; }
+.puntos__sub { font-size: var(--tipo-sm); color: var(--text-secondary); }
+.puntos__fila {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto 92px;
+  gap: 12px; align-items: center; font-size: var(--tipo-base);
+}
+.puntos__nombre { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.puntos__fila--on .puntos__nombre { font-weight: 700; }
+.puntos__marca {
+  font-size: var(--tipo-xs); font-weight: 600; color: var(--accent);
+}
+.puntos__celdas { display: flex; gap: 4px; }
+.puntos__celda {
+  width: 14px; height: 14px; border-radius: var(--radio-sm);
+  background: var(--linea);
+}
+.puntos__celda--on { background: var(--dato-2); }
+.puntos__fila--on .puntos__celda--on { background: var(--dato-1); }
+.puntos__cifra {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+}
+
+/* ── Franja salarial ── */
+.franja { display: flex; flex-direction: column; gap: 14px; }
+.franja__cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.franja__caja {
+  background: var(--bg-elevated); border-radius: var(--radio-lg); padding: 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.franja__caja strong { font-family: var(--font-display); font-size: var(--tipo-2xl); }
+.franja__caja--on { background: var(--resalte); color: var(--resalte-fg); }
+.franja__eti { font-size: var(--tipo-xs); color: var(--text-secondary); }
+.franja__caja--on .franja__eti { color: inherit; font-weight: 600; }
+.franja__pista { position: relative; height: 36px; }
+.franja__pista::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 15px;
+  height: 6px; border-radius: var(--radio-full); background: var(--linea);
+}
+.franja__rango {
+  position: absolute; top: 8px; height: 20px;
+  border-radius: var(--radio-full); background: var(--dato-2); opacity: .45;
+}
+.franja__mediana {
+  position: absolute; top: 0; height: 36px; width: 6px; margin-left: -3px;
+  border-radius: var(--radio-full); background: var(--text-primary);
+}
+.franja__nota { font-size: var(--tipo-sm); color: var(--text-secondary); }
+
+/* ── Insignias de delta ── */
+.insignia--sube { background: var(--resalte); color: var(--resalte-fg); }
+.insignia--baja { background: var(--alerta-bg); color: var(--alerta-fg); }

@@ -54,3 +54,48 @@ const justas = { habilidades: [
 assert.equal(filasDe(justas).length, 4, 'con 4 habilidades no se inventa una quinta fila');
 
 console.log(`check-graficos: filas OK (${catalogo.roles.length} roles)`);
+
+// ── Rótulos: regresión de la contradicción del prototipo ─────────────
+const { rotulo, celdasDe, bandaDe } = await import('../src/lib/habilidades.js');
+for (const rol of catalogo.roles) {
+  const f = filasDe(rol);
+  for (let i = 1; i < f.length; i++) {
+    if (f[i - 1].pct !== f[i].pct) {
+      assert.notEqual(rotulo(f[i - 1]), rotulo(f[i]),
+        `${rol.id}: ${f[i-1].k} (${f[i-1].pct}%) y ${f[i].k} (${f[i].pct}%) no pueden mostrar el mismo rotulo`);
+    }
+  }
+}
+
+// ── Celdas de la cuadrícula ──────────────────────────────────────────
+for (const rol of catalogo.roles) {
+  for (const fila of filasDe(rol)) {
+    const c = celdasDe(fila);
+    assert.equal(c.length, 10, `${rol.id}/${fila.k}: la cuadricula es de 10 celdas`);
+    assert.equal(c.filter(Boolean).length, fila.deCada10,
+      `${rol.id}/${fila.k}: las celdas llenas deben coincidir con deCada10`);
+    assert.deepEqual(c, [...c].sort((a, b) => b - a),
+      `${rol.id}/${fila.k}: las llenas van primero, sin huecos intercalados`);
+  }
+}
+assert.equal(celdasDe({ pct: 0, deCada10: 0 }).filter(Boolean).length, 0, '0% no llena ninguna celda');
+assert.equal(celdasDe({ pct: 100, deCada10: 10 }).filter(Boolean).length, 10, '100% llena las diez');
+
+// ── Franja salarial ──────────────────────────────────────────────────
+for (const rol of catalogo.roles) {
+  const { p25, med, p75 } = rol.salario;
+  if (!med) continue;
+  const b = bandaDe(p25, med, p75);
+  for (const k of ['bandL', 'bandW', 'medL']) {
+    assert.ok(b[k] >= 0 && b[k] <= 100, `${rol.id}: ${k} fuera de 0-100 (${b[k]})`);
+  }
+  assert.ok(b.medL >= b.bandL && b.medL <= b.bandL + b.bandW,
+    `${rol.id}: la mediana cae fuera de la franja`);
+  assert.ok(b.bandW > 0, `${rol.id}: la franja no puede tener ancho cero`);
+}
+// Un rol donde los tres percentiles coinciden no debe dividir por cero.
+const plano = bandaDe(3000, 3000, 3000);
+assert.ok(Number.isFinite(plano.medL) && Number.isFinite(plano.bandW),
+  'percentiles iguales no pueden producir NaN');
+
+console.log('check-graficos: celdas y franja OK');
