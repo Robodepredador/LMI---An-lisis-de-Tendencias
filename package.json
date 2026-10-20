@@ -11,7 +11,8 @@
     "catalogo": "node scripts/build-catalogo.mjs",
     "check": "node scripts/check-store.mjs",
     "check:chat": "node scripts/check-chat.mjs",
-    "verify": "node scripts/build-catalogo.mjs && node scripts/check-store.mjs && node scripts/check-chat.mjs"
+    "verify": "node scripts/build-catalogo.mjs && node scripts/check-tema.mjs && node scripts/check-store.mjs",
+    "check:tema": "node scripts/check-tema.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.27.0",

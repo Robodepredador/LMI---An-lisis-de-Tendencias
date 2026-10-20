@@ -1,0 +1,125 @@
+/* ═══════════════════════════════════════════════════════════
+   LMI-U · Tokens · sistema de diseño v2 "Impulso"
+   Único archivo con colores literales. Todo lo demás usa var().
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Superficies ── */
+  --bg-page:        #F7F7FC;
+  --bg-surface:     #FFFFFF;
+  --bg-elevated:    #F3F2FF;
+  --bg-noche:       #17153A;   /* tarjetas noche dentro del tema claro */
+  --bg-overlay:     rgba(15, 14, 41, .55);
+
+  /* ── Texto ── */
+  --text-primary:   #17153A;
+  --text-secondary: #55527A;
+  --sobre-noche:    #D6D3F5;   /* texto sobre --bg-noche */
+
+  /* ── Acción ── */
+  --accent:          #4B3BFF;
+  --accent-fg:       #FFFFFF;
+  --accent-hover:    #3326D9;
+  /* Deshabilitado: el prototipo ponía blanco sobre #C9C4FF (1.64:1) y el
+     botón primario era ilegible en login y en los 4 pasos del registro.
+     Mismo lavanda, texto oscuro: 7.82:1. */
+  --accent-apagado:    #C9C4FF;
+  --accent-apagado-fg: #2E2A66;
+  --sobre-accent:        #FFFFFF;   /* texto fuerte sobre índigo */
+  --sobre-accent-tenue:  #E4E1FF;   /* párrafo sobre índigo · 4.90:1 */
+
+  /* ── Resalte ── */
+  --resalte:     #C6F24E;
+  --resalte-fg:  #2F3A0E;
+
+  /* ── Líneas y bordes ── */
+  --linea:        #EEEDF8;
+  /* #E4E2F3 daba 1.27:1: los campos se veían sin borde. 3.15:1 cumple 1.4.11. */
+  --borde-campo:  #928BC0;
+  --borde-noche:  #2E2A66;
+
+  /* ── Rampa de datos ──
+     1 es la serie destacada. 2 es el resto en la cuadrícula de puntos.
+     3 y 4 completan el gráfico de líneas: cuatro tonos distintos, porque
+     en el prototipo tres de las cuatro series compartían el mismo lavanda
+     y la leyenda no servía para nada. */
+  --dato-1: #4B3BFF;
+  --dato-2: #5F5A86;
+  --dato-3: #A8521F;
+  --dato-4: #5A7D0C;
+
+  /* ── Alerta ──
+     Coral es fondo y acento, nunca texto: sobre blanco da 2.82:1. */
+  --alerta:     #FF6B4A;
+  --alerta-bg:  #FFE6DF;
+  --alerta-fg:  #B23A1E;
+
+  /* ── Varios ── */
+  --estrella:    #C77A05;   /* #FFB020 daba 1.83:1 sobre blanco */
+  --lumi-linea:  #17153A;   /* contorno de la mascota */
+
+  /* ── Tipografía ── */
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body:    'Onest', system-ui, sans-serif;
+
+  --tipo-xs:   12px;
+  --tipo-sm:   13px;
+  --tipo-base: 15px;
+  --tipo-lg:   17px;
+  --tipo-xl:   20px;
+  --tipo-2xl:  24px;
+  --tipo-3xl:  34px;
+  --tipo-4xl:  46px;
+  --tipo-5xl:  64px;
+
+  /* ── Radios ── */
+  --radio-sm:   8px;
+  --radio-md:   14px;
+  --radio-lg:   16px;
+  --radio-xl:   20px;
+  --radio-2xl:  24px;
+  --radio-3xl:  28px;
+  --radio-full: 999px;
+
+  /* ── Sombra ── solo en el CTA primario ── */
+  --sombra-cta:   0 8px 24px rgba(75, 59, 255, .3);
+  --sombra-panel: 0 6px 24px rgba(23, 21, 58, .08);
+  --sombra-modal: 0 20px 60px rgba(15, 14, 41, .35);
+
+  /* ── Movimiento ── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 200ms;
+}
+
+/* ── Compatibilidad temporal ──
+   Los nombres del tema v1 siguen vivos en el JSX (182 referencias) hasta que
+   las tareas 11-13 y 15 reskinean cada pantalla. Sin esto la app queda rota a
+   mitad del plan. La Task 15 borra este bloque. */
+:root {
+  --bg-primary:     var(--bg-page);
+  --bg-sidebar:     var(--bg-surface);
+  --text-muted:     var(--text-secondary);
+  --text-dim:       var(--text-secondary);
+  --text-dark:      var(--text-primary);
+  --border-subtle:  var(--linea);
+  --border-light:   var(--linea);
+  --border-visible: var(--borde-campo);
+  --border-card:    var(--linea);
+  --success:        var(--resalte);
+  --success-bg:     var(--bg-elevated);
+  --success-fg:     var(--resalte-fg);
+  --error:          var(--alerta);
+  --error-bg:       var(--alerta-bg);
+  --error-border:   var(--alerta);
+  --error-fg:       var(--alerta-fg);
+  --font-mono:      var(--font-body);
+  --radius-sm:      var(--radio-sm);
+  --radius-md:      var(--radio-md);
+  --radius-lg:      var(--radio-lg);
+  --radius-xl:      var(--radio-xl);
+  --radius-2xl:     var(--radio-2xl);
+  --radius-full:    var(--radio-full);
+  --shadow-card:    var(--sombra-panel);
+  --shadow-modal:   var(--sombra-modal);
+  --shadow-hero:    var(--sombra-panel);
+}

@@ -1,63 +1,8 @@
-/* ═══════════════════════════════════════════════════════════
-   LMI-U · Global Styles & Design Tokens
-   ═══════════════════════════════════════════════════════════ */
+@import './tokens.css';
 
-:root {
-  /* ── Background ── */
-  --bg-primary:    #12110f;
-  --bg-elevated:   #1a1916;
-  --bg-surface:    #1f1d1a;
-  --bg-sidebar:    #0e0d0c;
-  --bg-overlay:    rgba(8,7,6,.7);
-  --bg-page:       #e9e6df;
+/* LMI-U · reset, utilidades y animaciones. Los tokens viven en tokens.css. */
 
-  /* ── Text ── */
-  --text-primary:  #f2efe9;
-  --text-secondary:#bdb7ac;
-  --text-muted:    #a9a398;
-  --text-dim:      #8a857b;
-  --text-dark:     #17120a;
 
-  /* ── Accent (LMI-U brand) ── */
-  --accent:        oklch(0.78 0.14 60);
-
-  /* ── Borders ── */
-  --border-subtle: rgba(242,239,233,.08);
-  --border-light:  rgba(242,239,233,.14);
-  --border-visible:rgba(242,239,233,.16);
-  --border-card:   rgba(242,239,233,.09);
-
-  /* ── Semantic ── */
-  --success:       oklch(0.8 0.11 175);
-  --success-bg:    oklch(0.8 0.11 175 / .16);
-  --success-fg:    oklch(0.85 0.1 175);
-  --error:         oklch(0.68 0.15 28);
-  --error-bg:      oklch(0.65 0.15 28 / .08);
-  --error-border:  oklch(0.65 0.15 28 / .45);
-  --error-fg:      oklch(0.8 0.13 28);
-
-  /* ── Typography ── */
-  --font-display:  'Newsreader', Georgia, serif;
-  --font-body:     'Schibsted Grotesk', system-ui, sans-serif;
-  --font-mono:     'JetBrains Mono', monospace;
-
-  /* ── Radii ── */
-  --radius-sm:     8px;
-  --radius-md:     12px;
-  --radius-lg:     16px;
-  --radius-xl:     18px;
-  --radius-2xl:    20px;
-  --radius-full:   999px;
-
-  /* ── Shadows ── */
-  --shadow-card:   0 2px 6px rgba(0,0,0,.12), 0 20px 50px rgba(0,0,0,.14);
-  --shadow-modal:  0 20px 60px rgba(0,0,0,.5);
-  --shadow-hero:   0 30px 80px rgba(0,0,0,.4);
-
-  /* ── Transitions ── */
-  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
-  --duration:      200ms;
-}
 
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -70,7 +15,7 @@
 
 body {
   margin: 0;
-  background: var(--bg-primary);
+  background: var(--bg-page);
   font-family: var(--font-body);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -87,7 +32,7 @@ p { margin: 0; }
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(242,239,233,.12); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--borde-campo); border-radius: 3px; }
 
 /* ── Utilities ── */
 .mono { font-family: var(--font-mono); }
