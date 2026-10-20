@@ -44,9 +44,9 @@
 .btn {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 14px;
-  padding: 12px 20px;
-  border-radius: var(--radio-md);
+  font-size: var(--tipo-base);
+  padding: 14px 24px;
+  border-radius: var(--radio-full);
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-primary);
@@ -79,11 +79,27 @@
 }
 .btn--acento {
   background: var(--accent);
-  color: var(--text-primary);
+  color: var(--accent-fg);
+  box-shadow: var(--sombra-cta);
 }
 .btn--acento:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background: var(--accent-hover);
 }
+/* Formulario incompleto: mismo lavanda del prototipo, pero con texto oscuro.
+   Blanco sobre #C9C4FF daba 1.64:1 y el botón era ilegible en login y en los
+   cuatro pasos del registro. */
+.btn--acento:disabled,
+.btn--acento.btn--apagado {
+  background: var(--accent-apagado);
+  color: var(--accent-apagado-fg);
+  box-shadow: none;
+  opacity: 1;
+}
+.btn--resalte {
+  background: var(--resalte);
+  color: var(--resalte-fg);
+}
+.btn--resalte:hover:not(:disabled) { filter: brightness(1.06); }
 .btn--claro {
   background: var(--text-primary);
   color: var(--bg-page);
@@ -113,10 +129,13 @@
 /* ── Formularios ── */
 .campo { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--text-secondary); }
 .campo input, .campo select {
-  padding: 13px 14px;
-  border-radius: var(--radio-md);
-  border: 1px solid var(--linea);
-  background: var(--bg-elevated);
+  padding: 14px 16px;
+  border-radius: var(--radio-sm);
+  /* 1.5px sobre --borde-campo: con #E4E2F3 a 1px el campo daba 1.27:1 y se
+     veía sin borde, incumpliendo WCAG 1.4.11. */
+  border: 1.5px solid var(--borde-campo);
+  background: var(--bg-surface);
+  color: var(--text-primary);
   outline: none;
   font-size: 15px;
   transition: border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
@@ -919,3 +938,47 @@
 }
 .consejo__eti { font-size: var(--tipo-sm); font-weight: 800; }
 .consejo__burbuja p { margin: 0; font-size: var(--tipo-lg); line-height: 1.55; }
+
+/* ── Registro de 4 pasos ── */
+.registro { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); min-height: 100%; }
+.registro__lado {
+  background: var(--accent); color: var(--sobre-accent);
+  padding: 48px; display: flex; flex-direction: column; gap: 24px;
+}
+.registro__pasos { display: flex; flex-direction: column; gap: 10px; }
+.registro__paso {
+  display: flex; align-items: center; gap: 12px;
+  font-size: var(--tipo-base); font-weight: 600; color: var(--sobre-accent-tenue);
+}
+.registro__paso--on, .registro__paso--hecho { color: var(--sobre-accent); }
+.registro__punto {
+  width: 30px; height: 30px; border-radius: var(--radio-full);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--tipo-sm); font-weight: 800; flex-shrink: 0;
+  background: color-mix(in srgb, var(--sobre-accent) 18%, transparent);
+  color: var(--sobre-accent);
+}
+.registro__paso--on .registro__punto { background: var(--sobre-accent); color: var(--accent); }
+.registro__paso--hecho .registro__punto { background: var(--resalte); color: var(--resalte-fg); }
+.registro__lumi { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; }
+.registro__burbuja {
+  position: relative; max-width: 340px; margin-left: 70px;
+  background: var(--bg-surface); color: var(--text-primary);
+  border: 3px solid var(--lumi-linea); border-radius: var(--radio-3xl);
+  padding: 16px 20px; font-size: var(--tipo-lg); line-height: 1.5;
+}
+.registro__burbuja strong { display: block; font-size: var(--tipo-sm); color: var(--accent); margin-bottom: 4px; }
+.registro__form {
+  padding: 48px; display: flex; flex-direction: column; justify-content: center;
+  gap: 18px; max-width: 680px; width: 100%; margin: 0 auto;
+}
+.registro__barra { height: 8px; background: var(--bg-elevated); border-radius: var(--radio-full); overflow: hidden; }
+.registro__barra > span { display: block; height: 100%; background: var(--accent); transition: width .4s var(--ease-out); }
+.registro__pie { display: flex; gap: 12px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.registro__ayuda { font-size: var(--tipo-sm); color: var(--text-secondary); min-height: 1.3em; }
+.registro__terminos { display: flex; align-items: center; gap: 12px; font-size: var(--tipo-base); cursor: pointer; }
+.registro__terminos input { width: 20px; height: 20px; accent-color: var(--accent); }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip--opcion { cursor: pointer; border: 0; background: var(--bg-elevated); color: var(--text-primary); font-weight: 600; }
+.chip--on { background: var(--accent); color: var(--accent-fg); }

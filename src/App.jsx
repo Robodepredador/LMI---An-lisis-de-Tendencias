@@ -9,7 +9,6 @@ import Landing from './pages/Landing.jsx';
 import Mascota from './pages/_dev/Mascota.jsx';
 import Registro from './pages/Registro.jsx';
 import Login from './pages/Login.jsx';
-import Onboarding from './pages/Onboarding.jsx';
 import Chat from './pages/Chat.jsx';
 import Planes from './pages/Planes.jsx';
 import Checkout from './pages/Checkout.jsx';
@@ -79,7 +78,6 @@ export default function App() {
         <Route path="/metodologia" element={<Navigate to="/#metodologia" replace />} />
         <Route path="/registro" element={<SoloInvitados><Registro /></SoloInvitados>} />
         <Route path="/login" element={<SoloInvitados><Login /></SoloInvitados>} />
-        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="*" element={<NoEncontrado />} />
       </Route>
 

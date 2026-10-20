@@ -130,3 +130,38 @@ assert.equal(s().usuario.carrera, 'Marketing', 'la carrera se guarda en el perfi
 s().salir();
 assert.equal(s().entrar({ email: 'vale@demo.pe', clave: 'secreta1' }).ok, true);
 assert.equal(s().usuario.ciclo, 2, 'el ciclo sobrevive a cerrar y volver a entrar');
+
+// ── El perfil del registro llega a las sugerencias ───────────────────
+// El prototipo pedía la carrera "para darte datos a tu medida" y luego la
+// ignoraba: las preguntas de ejemplo estaban fijas en el código.
+const { sugerenciasPara } = await import('../src/lib/consultar.js');
+const { areasDePerfil, ciudadDeRegistro } = await import('../src/data/taxonomia.js');
+
+s().salir();
+s().registrar({
+  email: 'perfil@demo.pe', clave: 'secreta1', nombre: 'Valeria Quispe',
+  ciclo: 2, carrera: 'Ing. de Sistemas',
+  areas: areasDePerfil({ carrera: 'Ing. de Sistemas', intereses: ['Programación'] }),
+  ciudades: [ciudadDeRegistro('Arequipa')],
+});
+
+const u = s().usuario;
+assert.ok(u.areas.length > 0, 'el registro guarda las areas derivadas de la carrera');
+assert.deepEqual(u.ciudades, ['Arequipa'], 'el registro guarda la ciudad elegida');
+
+const sug = sugerenciasPara(u);
+assert.ok(sug.length > 0, 'un perfil con carrera produce sugerencias');
+assert.ok(sug.some((x) => /Arequipa/.test(x.q)), 'las sugerencias usan la ciudad del perfil');
+
+// Una carrera distinta tiene que dar preguntas distintas, o la carrera no sirve.
+s().salir();
+s().registrar({
+  email: 'otra@demo.pe', clave: 'secreta1', nombre: 'Ana Torres',
+  ciclo: 1, carrera: 'Derecho',
+  areas: areasDePerfil({ carrera: 'Derecho', intereses: [] }), ciudades: ['Lima'],
+});
+const sug2 = sugerenciasPara(s().usuario);
+assert.notDeepEqual(sug.map((x) => x.q), sug2.map((x) => x.q),
+  'dos carreras distintas no pueden producir las mismas preguntas');
+
+console.log('✓ perfil del registro conectado a las sugerencias');

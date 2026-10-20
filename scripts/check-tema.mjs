@@ -127,7 +127,11 @@ assert.match(leer('index.html'), /localStorage[\s\S]*lmi-tema[\s\S]*data-theme/,
 const compCompleto = leer('src/theme/componentes.css');
 // @media print se exime: el papel no tiene tema, y forzar tokens ahí
 // imprimiría el fondo oscuro.
-const comp = compCompleto.replace(/@media\s+print\s*\{[\s\S]*?\n\}/g, '');
+const comp = compCompleto
+  .replace(/@media\s+print\s*\{[\s\S]*?\n\}/g, '')
+  // Un hex dentro de un comentario no es un color que el tema no pueda
+  // cambiar: casi siempre es la explicación de por qué se dejó de usar.
+  .replace(/\/\*[\s\S]*?\*\//g, '');
 const literales = [...comp.matchAll(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)/g)].map((m) => m[0]);
 assert.deepEqual(literales, [],
   `componentes.css no debe llevar colores literales: ${literales.join(', ')}`);

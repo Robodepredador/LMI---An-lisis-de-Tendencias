@@ -1,4 +1,4 @@
-import catalogo from '../data/catalogo.json';
+import catalogo from '../data/catalogo.json' with { type: 'json' };
 
 export const MIN_MUESTRA = catalogo.minMuestra;
 
