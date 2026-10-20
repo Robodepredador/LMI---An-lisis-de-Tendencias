@@ -57,3 +57,35 @@ assert.deepEqual(areasDePerfil({ carrera: 'Marketing', intereses: ['Datos y anal
   ['Datos y Analítica', 'Marketing'], 'el perfil combina carrera e intereses sin repetir');
 
 console.log('check-datos: taxonomia OK');
+
+// ── Rigs de Lumi ─────────────────────────────────────────────────────
+// Las ilustraciones ya venían articuladas: cada parte móvil tiene su clase.
+// Si una se pierde al portarlas a JSX, la animación de esa pose desaparece
+// sin que nada falle a gritos.
+const lumi = readFileSync(new URL('../src/mascota/Lumi.jsx', import.meta.url), 'utf8');
+
+const RIGS = {
+  saluda:  ['shadow', 'float', 'bulb', 'arm', 'bar', 'b2', 'b3', 'eyes'],
+  piensa:  ['shadow', 'float', 'head', 'bulb', 'eyes', 'lids', 'hand'],
+  celebra: ['shadow', 'cf', 'c2', 'c3', 'c4', 'jump', 'la', 'ra', 'bulb'],
+  alerta:  ['shake', 'bulb', 'eyes', 'drop'],
+};
+
+const clasesEnArchivo = new Set(
+  [...lumi.matchAll(/className="([^"]+)"/g)].flatMap((m) => m[1].split(' ')),
+);
+
+for (const [pose, clases] of Object.entries(RIGS)) {
+  assert.ok(lumi.includes(pose + ':'), `falta la pose ${pose}`);
+  for (const c of clases) {
+    assert.ok(clasesEnArchivo.has(c), `${pose} perdio la clase ${c} del rig`);
+  }
+}
+
+// El contorno #17153A es exactamente el color de la tarjeta noche: literal,
+// Lumi desaparece en el footer y en todo el tema oscuro.
+assert.ok(!/#17153A/i.test(lumi),
+  'el contorno debe salir de var(--lumi-linea), no de un literal');
+assert.ok(lumi.includes('var(--lumi-linea)'), 'el contorno usa el token');
+
+console.log('check-datos: rigs de Lumi OK');
