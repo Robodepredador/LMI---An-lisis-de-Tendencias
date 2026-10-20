@@ -206,7 +206,7 @@
    "nombre": "Data Scientist junior",
    "area": "Datos y Analítica",
    "nivel": "junior",
-   "tip": "Machine learning, y despues Pandas",
+   "tip": "Machine learning, y después Pandas",
    "sinonimos": [
     "científico de datos",
     "data science"
@@ -532,7 +532,7 @@
    "nombre": "Analista de Riesgos",
    "area": "Finanzas",
    "nivel": "junior",
-   "tip": "SQL, y despues Modelos de riesgo",
+   "tip": "SQL, y después Modelos de riesgo",
    "sinonimos": [
     "riesgo crediticio",
     "gestión de riesgos",
@@ -841,7 +841,7 @@
    "nombre": "Analista de Marketing Digital",
    "area": "Marketing",
    "nivel": "junior",
-   "tip": "Looker Studio, y despues Meta Ads",
+   "tip": "Looker Studio, y después Meta Ads",
    "sinonimos": [
     "marketing digital",
     "performance marketing"
@@ -1159,7 +1159,7 @@
    "nombre": "Analista de Procesos",
    "area": "Ingeniería Industrial",
    "nivel": "junior",
-   "tip": "Power BI, y despues Lean y Six Sigma",
+   "tip": "Power BI, y después Lean y Six Sigma",
    "sinonimos": [
     "mejora continua",
     "procesos",
@@ -1479,7 +1479,7 @@
    "nombre": "Asistente Legal",
    "area": "Derecho",
    "nivel": "junior",
-   "tip": "Excel, y despues Investigación jurídica",
+   "tip": "Excel, y después Investigación jurídica",
    "sinonimos": [
     "auxiliar legal",
     "practicante de derecho",
@@ -1770,7 +1770,7 @@
    "nombre": "Desarrollador Backend junior",
    "area": "Sistemas",
    "nivel": "junior",
-   "tip": "Cloud (AWS/Azure), y despues Docker",
+   "tip": "Cloud (AWS/Azure), y después Docker",
    "sinonimos": [
     "backend",
     "programador backend",
@@ -2105,7 +2105,7 @@
    "nombre": "Analista de Ciberseguridad junior",
    "area": "Sistemas",
    "nivel": "junior",
-   "tip": "SIEM, y despues Gestión de vulnerabilidades",
+   "tip": "SIEM, y después Gestión de vulnerabilidades",
    "sinonimos": [
     "ciberseguridad",
     "seguridad informática",
@@ -2409,7 +2409,7 @@
    "nombre": "Analista de Clima y Cultura",
    "area": "Psicología",
    "nivel": "junior",
-   "tip": "Power BI, y despues Comunicación interna",
+   "tip": "Power BI, y después Comunicación interna",
    "sinonimos": [
     "clima laboral",
     "cultura organizacional",
@@ -2732,7 +2732,7 @@
    "nombre": "Analista Comercial",
    "area": "Administración",
    "nivel": "junior",
-   "tip": "Power BI, y despues CRM (Salesforce o HubSpot)",
+   "tip": "Power BI, y después CRM (Salesforce o HubSpot)",
    "sinonimos": [
     "análisis comercial",
     "inteligencia comercial",

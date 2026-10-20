@@ -32,7 +32,7 @@ export const ROLES = [
   { id: 'data-scientist-jr', n: 'Data Scientist junior', a: 'Datos y Analítica', niv: 'junior',
     sin: ['científico de datos', 'data science'], ofertas: 389, decl: 218, sal: [3800, 4800, 6200],
     hab: [['Python', 91, 7], ['Estadística', 84, 3], ['SQL', 77, 5], ['Machine learning', 72, 21], ['Inglés intermedio', 64, 6], ['Pandas', 59, 12]],
-    tip: 'Machine learning, y despues Pandas' },
+    tip: 'Machine learning, y después Pandas' },
   { id: 'ingeniero-datos', n: 'Ingeniero de Datos', a: 'Datos y Analítica', niv: 'semi-senior',
     sin: ['data engineer', 'ingeniero de data'], ofertas: 296, decl: 160, sal: [4200, 5600, 7400],
     hab: [['SQL', 88, 4], ['Python', 79, 9], ['ETL', 74, 13], ['Cloud (AWS/Azure)', 66, 24], ['Spark', 41, 15], ['Airflow', 33, 18]],
@@ -50,7 +50,7 @@ export const ROLES = [
   { id: 'analista-riesgos', n: 'Analista de Riesgos', a: 'Finanzas', niv: 'junior',
     sin: ['riesgo crediticio', 'gestión de riesgos', 'risk analyst'], ofertas: 488, decl: 278, sal: [3100, 3900, 5000],
     hab: [['Excel avanzado', 88, 0], ['Modelos de riesgo', 62, 9], ['SQL', 57, 22], ['Normativa SBS', 48, 4], ['SAS o R', 34, -6]],
-    tip: 'SQL, y despues Modelos de riesgo' },
+    tip: 'SQL, y después Modelos de riesgo' },
   { id: 'analista-inversiones', n: 'Analista de Inversiones', a: 'Finanzas', niv: 'junior',
     sin: ['inversiones', 'portafolio', 'equity research'], ofertas: 214, decl: 120, sal: [3600, 4600, 6000],
     hab: [['Excel avanzado', 94, 0], ['Valorización', 71, 5], ['Inglés avanzado', 68, 8], ['Bloomberg', 39, 3], ['Python', 27, 15]],
@@ -68,7 +68,7 @@ export const ROLES = [
   { id: 'analista-marketing-digital', n: 'Analista de Marketing Digital', a: 'Marketing', niv: 'junior',
     sin: ['marketing digital', 'performance marketing'], ofertas: 892, decl: 491, sal: [2400, 3100, 4100],
     hab: [['Google Analytics', 82, 6], ['Meta Ads', 77, 11], ['Google Ads', 71, 8], ['Excel', 58, 0], ['SEO', 49, 4], ['Looker Studio', 37, 19]],
-    tip: 'Looker Studio, y despues Meta Ads' },
+    tip: 'Looker Studio, y después Meta Ads' },
   { id: 'community-manager', n: 'Community Manager', a: 'Marketing', niv: 'junior',
     sin: ['redes sociales', 'social media'], ofertas: 1147, decl: 665, sal: [1800, 2300, 3000],
     hab: [['Gestión de redes', 91, 1], ['Creación de contenido', 84, 7], ['Canva y diseño básico', 66, 5], ['Meta Ads', 52, 13], ['Analítica de redes', 44, 9]],
@@ -86,7 +86,7 @@ export const ROLES = [
   { id: 'analista-procesos', n: 'Analista de Procesos', a: 'Ingeniería Industrial', niv: 'junior',
     sin: ['mejora continua', 'procesos', 'lean'], ofertas: 741, decl: 430, sal: [2600, 3300, 4300],
     hab: [['Excel avanzado', 86, 0], ['Mapeo de procesos', 81, 4], ['Lean y Six Sigma', 74, 11], ['Power BI', 41, 21], ['AutoCAD', 29, -4]],
-    tip: 'Power BI, y despues Lean y Six Sigma' },
+    tip: 'Power BI, y después Lean y Six Sigma' },
   { id: 'analista-logistica', n: 'Analista de Logística', a: 'Ingeniería Industrial', niv: 'junior',
     sin: ['supply chain', 'cadena de suministro', 'almacén'], ofertas: 968, decl: 523, sal: [2300, 3000, 3900],
     hab: [['Excel avanzado', 89, 0], ['Gestión de inventarios', 77, 3], ['Indicadores logísticos', 64, 8], ['SAP MM/WM', 58, 7], ['Negociación con proveedores', 42, 2]],
@@ -104,7 +104,7 @@ export const ROLES = [
   { id: 'asistente-legal', n: 'Asistente Legal', a: 'Derecho', niv: 'junior',
     sin: ['auxiliar legal', 'practicante de derecho', 'asistente de abogado'], ofertas: 824, decl: 470, sal: [1600, 2100, 2700],
     hab: [['Redacción de documentos', 89, 1], ['Gestión de expedientes', 82, 2], ['Investigación jurídica', 71, 3], ['Excel', 46, 4]],
-    tip: 'Excel, y despues Investigación jurídica' },
+    tip: 'Excel, y después Investigación jurídica' },
   { id: 'abogado-corporativo-jr', n: 'Abogado Corporativo junior', a: 'Derecho', niv: 'junior',
     sin: ['abogado corporativo', 'derecho corporativo', 'legal corporativo'], ofertas: 412, decl: 239, sal: [2900, 3800, 5000],
     hab: [['Contratos', 91, 3], ['Derecho societario', 84, 2], ['Inglés intermedio', 57, 9], ['Cumplimiento normativo', 52, 11], ['Due diligence', 48, 6]],
@@ -122,7 +122,7 @@ export const ROLES = [
   { id: 'desarrollador-backend-jr', n: 'Desarrollador Backend junior', a: 'Sistemas', niv: 'junior',
     sin: ['backend', 'programador backend', 'desarrollador java', 'desarrollador node'], ofertas: 1038, decl: 561, sal: [3000, 3900, 5200],
     hab: [['Java o Node.js', 88, 5], ['SQL', 84, 2], ['APIs REST', 81, 7], ['Git', 79, 3], ['Docker', 47, 18], ['Cloud (AWS/Azure)', 43, 22]],
-    tip: 'Cloud (AWS/Azure), y despues Docker' },
+    tip: 'Cloud (AWS/Azure), y después Docker' },
   { id: 'desarrollador-frontend-jr', n: 'Desarrollador Frontend junior', a: 'Sistemas', niv: 'junior',
     sin: ['frontend', 'programador frontend', 'desarrollador react'], ofertas: 794, decl: 437, sal: [2800, 3600, 4800],
     hab: [['JavaScript', 93, 1], ['HTML y CSS', 91, 0], ['React', 78, 12], ['Git', 76, 3], ['TypeScript', 54, 23], ['Figma', 38, 7]],
@@ -138,7 +138,7 @@ export const ROLES = [
   { id: 'analista-ciberseguridad-jr', n: 'Analista de Ciberseguridad junior', a: 'Sistemas', niv: 'junior',
     sin: ['ciberseguridad', 'seguridad informática', 'security analyst', 'soc'], ofertas: 258, decl: 150, sal: [3500, 4500, 5800],
     hab: [['Gestión de vulnerabilidades', 81, 17], ['Redes y firewalls', 76, 4], ['Inglés intermedio', 67, 5], ['ISO 27001', 63, 8], ['SIEM', 54, 21]],
-    tip: 'SIEM, y despues Gestión de vulnerabilidades' },
+    tip: 'SIEM, y después Gestión de vulnerabilidades' },
 
   // ── Psicología ─────────────────────────────────────────────────────
   { id: 'psicologo-organizacional', n: 'Psicólogo Organizacional', a: 'Psicología', niv: 'junior',
@@ -156,7 +156,7 @@ export const ROLES = [
   { id: 'analista-clima-cultura', n: 'Analista de Clima y Cultura', a: 'Psicología', niv: 'junior',
     sin: ['clima laboral', 'cultura organizacional', 'engagement'], ofertas: 187, decl: 107, sal: [2400, 3100, 4000],
     hab: [['Análisis de clima', 88, 4], ['Diseño de encuestas', 84, 3], ['Excel avanzado', 71, 0], ['Comunicación interna', 66, 5], ['Power BI', 34, 18]],
-    tip: 'Power BI, y despues Comunicación interna' },
+    tip: 'Power BI, y después Comunicación interna' },
 
   // ── Administración ─────────────────────────────────────────────────
   { id: 'asistente-administrativo', n: 'Asistente Administrativo', a: 'Administración', niv: 'junior',
@@ -174,7 +174,7 @@ export const ROLES = [
   { id: 'analista-comercial', n: 'Analista Comercial', a: 'Administración', niv: 'junior',
     sin: ['análisis comercial', 'inteligencia comercial', 'trade'], ofertas: 703, decl: 387, sal: [2300, 3000, 3900],
     hab: [['Excel avanzado', 91, 0], ['Análisis de ventas', 84, 3], ['CRM (Salesforce o HubSpot)', 56, 15], ['Negociación', 48, 2], ['Power BI', 44, 20]],
-    tip: 'Power BI, y despues CRM (Salesforce o HubSpot)' },
+    tip: 'Power BI, y después CRM (Salesforce o HubSpot)' },
 ];
 
 export const CURSOS = [

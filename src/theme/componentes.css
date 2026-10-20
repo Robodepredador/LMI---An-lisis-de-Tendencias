@@ -896,3 +896,26 @@
   font-family: var(--font-body); font-weight: 500;
 }
 .tendencia__nombre--on { font-weight: 700; }
+
+/* ── Ficha de resultado ── */
+.ficha {
+  background: var(--bg-surface); border-radius: var(--radio-xl);
+  padding: 26px; display: flex; flex-direction: column; gap: 16px;
+  border: 1px solid var(--linea);
+}
+.ficha__eti { font-size: var(--tipo-sm); font-weight: 600; color: var(--accent); }
+.ficha__titular {
+  font-family: var(--font-display); font-size: var(--tipo-2xl);
+  font-weight: 700; line-height: 1.2; letter-spacing: -.01em;
+}
+.ficha__texto { margin: 0; font-size: var(--tipo-lg); line-height: 1.6; color: var(--text-secondary); }
+
+/* ── Consejo de Lumi ── */
+.consejo { display: flex; align-items: flex-end; gap: 14px; }
+.consejo__burbuja {
+  flex: 1; background: var(--resalte); color: var(--resalte-fg);
+  border: 3px solid var(--lumi-linea); border-radius: var(--radio-3xl);
+  padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;
+}
+.consejo__eti { font-size: var(--tipo-sm); font-weight: 800; }
+.consejo__burbuja p { margin: 0; font-size: var(--tipo-lg); line-height: 1.55; }

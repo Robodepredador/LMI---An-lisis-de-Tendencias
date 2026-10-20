@@ -133,3 +133,46 @@ const tope = serieDe([{ k: 'X', pct: 100, tendencia: -5, destacada: true }]);
 assert.ok(tope[0].desde <= 100, 'el punto de partida no se sale del eje');
 
 console.log('check-graficos: tendencia OK');
+
+// ── Prosa de la pantalla de resultado ────────────────────────────────
+// titular, explicacion y consejo se plantillan aquí, no los escribe el modelo:
+// la arquitectura del proyecto es que ninguna cifra en pantalla pase por él, y
+// el respaldo local tiene que poder reproducirlos sin API.
+const { titular, explicacion, consejo } = await import('../src/lib/prosa.js');
+const TEMAS = ['habilidades', 'salarios', 'tendencia'];
+
+for (const rol of catalogo.roles) {
+  const filas = filasDe(rol);
+  for (const tema of TEMAS) {
+    const t = titular(rol, tema, filas);
+    assert.ok(t && t.length > 10, `${rol.id}/${tema}: titular vacio`);
+    assert.ok(!/\+0 pts|\+-|undefined|NaN/.test(t), `${rol.id}/${tema}: titular mal formado "${t}"`);
+
+    // Review Focus #2 en la prosa: no se puede decir que algo creció si nada creció.
+    const crecio = [...rol.habilidades].sort(porCrecimiento)[0];
+    if (crecio.tendencia <= 0) {
+      assert.ok(!/creci[oó]|sube|m[aá]s creci/.test(t.toLowerCase()),
+        `${rol.id}/${tema}: dice que crecio algo que no crecio ("${t}")`);
+    }
+
+    const e = explicacion(rol, tema, filas, 'Lima');
+    assert.ok(!/ {2}|undefined|NaN/.test(e), `${rol.id}/${tema}: explicacion mal formada "${e}"`);
+    assert.ok(e.trim() === e, `${rol.id}/${tema}: la explicacion tiene espacios sueltos en los bordes`);
+  }
+}
+
+// El consejo varía por tema: en el prototipo la burbuja repetía texto idéntico
+// en cada turno del hilo porque solo dependía del ciclo y del rol.
+const rol0 = catalogo.roles[0];
+assert.notEqual(consejo(rol0, 2, 'habilidades'), consejo(rol0, 2, 'salarios'),
+  'el consejo debe variar por tema');
+assert.notEqual(consejo(rol0, 0, 'habilidades'), consejo(rol0, 3, 'habilidades'),
+  'el consejo debe variar por ciclo');
+for (let c = 0; c < 4; c++) {
+  for (const tema of TEMAS) {
+    const s = consejo(rol0, c, tema);
+    assert.ok(s && !/undefined|NaN/.test(s), `consejo(${c}, ${tema}) mal formado: "${s}"`);
+  }
+}
+
+console.log('check-graficos: prosa OK');

@@ -2,7 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../store.js';
 import { consultar, cursosDe, rol, salarioDe, sugerenciasPara, MIN_MUESTRA } from '../lib/consultar.js';
-import { CompareTable, CourseCards, SalaryChart, SkillBars } from '../viz/graficos.jsx';
+import { CompareTable, CourseCards } from '../viz/graficos.jsx';
+import Puntos from '../viz/Puntos.jsx';
+import Franja from '../viz/Franja.jsx';
+import Tendencia from '../viz/Tendencia.jsx';
+import Lumi from '../mascota/Lumi.jsx';
+import { filasDe } from '../lib/habilidades.js';
+import { consejo, explicacion, titular } from '../lib/prosa.js';
+import { CICLOS } from '../store.js';
 import Modal from '../components/Modal.jsx';
 import ContenidoMetodologia from '../components/metodologia.jsx';
 import { fmt, ventanaAnalisis } from '../data/contenido.js';
@@ -31,7 +38,7 @@ const Burbuja = ({ children }) => (
 );
 
 // ── Una respuesta del asistente ──────────────────────────────────────
-function Respuesta({ consulta, onPreguntar, onMetodologia }) {
+function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
   const { resultado: r, costo } = consulta;
   // El historial vive en localStorage y puede venir de una versión anterior del
   // esquema: un registro raro no debe tumbar la página entera.
@@ -120,14 +127,38 @@ function Respuesta({ consulta, onPreguntar, onMetodologia }) {
       )}
 
       {r.intent === 'comparar' && roles.length > 1 && <CompareTable roles={roles} />}
-      {r.intent === 'salarios' && <SalaryChart roles={roles} ciudad={r.ciudad} />}
       {r.intent === 'cursos' && cursos.length > 0 && <CourseCards cursos={cursos} />}
-      {!['comparar', 'salarios', 'cursos'].includes(r.intent) && roles.map((x) => <SkillBars key={x.id} rol={x} />)}
+
+      {!['comparar', 'cursos'].includes(r.intent) && roles.map((x) => {
+        const filas = filasDe(x);
+        const tema = r.intent === 'salarios' ? 'salarios' : r.intent === 'tendencia' ? 'tendencia' : 'habilidades';
+        const sal = salarioDe(x, r.ciudad);
+        return (
+          <section key={x.id} className="ficha">
+            <span className="ficha__eti">{ETIQUETA[r.intent]} · {x.nombre} · {sal.ambito}</span>
+            <strong className="ficha__titular">{titular(x, tema, filas)}</strong>
+            <p className="ficha__texto">{explicacion(x, tema, filas, sal.ambito)}</p>
+            {tema === 'salarios' && sal.cifras && <Franja {...sal.cifras} />}
+            {tema === 'tendencia' && <Tendencia filas={filas} />}
+            {tema === 'habilidades' && <Puntos filas={filas} />}
+          </section>
+        );
+      })}
+
+      {roles[0] && (
+        <div className="consejo">
+          <Lumi pose="piensa" alto={118} />
+          <div className="consejo__burbuja">
+            <span className="consejo__eti">Lumi piensa… · {CICLOS[ciclo]} ciclo</span>
+            <p>{consejo(roles[0], ciclo, r.intent === 'salarios' ? 'salarios' : r.intent === 'tendencia' ? 'tendencia' : 'habilidades')}</p>
+          </div>
+        </div>
+      )}
 
       <div className="fila animate-fade" style={{ justifyContent: 'space-between', gap: 10, animationDelay: '150ms' }}>
         <span className="mono" style={{ fontSize: 12, color: 'var(--text-dim)' }}>
           {r.intent === 'salarios' ? `${fmt(muestra)} ofertas con salario declarado` : `${fmt(roles.reduce((s, x) => s + x.ofertas, 0))} ofertas`}
-          {' · '}{r.ciudad ?? 'todo el país'} · {ventanaAnalisis()} · <button className="enlace" onClick={onMetodologia}>Metodología</button>
+          {' · '}{r.ciudad ?? 'todo el país'} · {ventanaAnalisis()} · <button className="enlace" onClick={onMetodologia}>Ver metodología ↗</button>
         </span>
         <button className="chip" onClick={() => window.print()}>Exportar PDF</button>
       </div>
@@ -240,7 +271,7 @@ export default function Chat({ encabezado }) {
           {visibles.map((c) => (
             <div key={c.id} className="pila" style={{ gap: 28 }}>
               <Burbuja>{c.pregunta}</Burbuja>
-              <Respuesta consulta={c} onPreguntar={enviar} onMetodologia={() => setVerMetodologia(true)} />
+              <Respuesta consulta={c} onPreguntar={enviar} onMetodologia={() => setVerMetodologia(true)} ciclo={usuario?.ciclo ?? 2} />
             </div>
           ))}
 
