@@ -89,3 +89,31 @@ assert.ok(!/#17153A/i.test(lumi),
 assert.ok(lumi.includes('var(--lumi-linea)'), 'el contorno usa el token');
 
 console.log('check-datos: rigs de Lumi OK');
+
+// ── Animaciones de Lumi ──────────────────────────────────────────────
+const lumiCss = readFileSync(new URL('../src/mascota/lumi.css', import.meta.url), 'utf8');
+
+// Cada pose hace lo que su ilustración representa, según el catálogo de la
+// mascota: saluda flota y agita la lupa, piensa inclina la cabeza y golpea el
+// mentón, celebra salta y lanza confeti, alerta tiembla y suda.
+const KEYFRAMES = [
+  'flota', 'ladea', 'golpea', 'parpadea', 'mira', 'brilla',
+  'saluda-brazo', 'barras', 'salta', 'confeti', 'tiembla', 'gotea',
+];
+for (const k of KEYFRAMES) {
+  assert.ok(lumiCss.includes(`@keyframes ${k}`), `falta el keyframe ${k}`);
+}
+
+// Review Focus #5: reducir movimiento tiene que parar TODO, no casi todo.
+const i = lumiCss.indexOf('prefers-reduced-motion');
+assert.ok(i > 0, 'falta el bloque de reducir movimiento');
+const reduce = lumiCss.slice(i);
+for (const c of ['float', 'head', 'hand', 'eyes', 'lids', 'bulb', 'arm', 'bar',
+                 'jump', 'la', 'ra', 'cf', 'shake', 'drop', 'shadow']) {
+  assert.ok(reduce.includes(`.${c}`), `${c} debe detenerse con reducir movimiento`);
+}
+
+// El logo es la marca: no se anima en ninguna parte.
+assert.ok(!/\.lumi-logo[^{]*\{[^}]*animation/.test(lumiCss), 'el logo no se anima');
+
+console.log('check-datos: animaciones de Lumi OK');

@@ -6,6 +6,7 @@ import { getTenant } from './data/tenant.js';
 import PublicLayout from './layouts/PublicLayout.jsx';
 import AppShell from './layouts/AppShell.jsx';
 import Landing from './pages/Landing.jsx';
+import Mascota from './pages/_dev/Mascota.jsx';
 import Registro from './pages/Registro.jsx';
 import Login from './pages/Login.jsx';
 import Onboarding from './pages/Onboarding.jsx';
@@ -71,6 +72,7 @@ export default function App() {
     <Routes>
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Landing />} />
+        <Route path="/_dev/mascota" element={<Mascota />} />
         {/* La metodología dejó de ser pantalla propia: en la landing es una
             sección y en la app un diálogo. La ruta vieja sigue viva para que
             los enlaces compartidos aterricen donde corresponde. */}
