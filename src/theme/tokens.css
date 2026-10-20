@@ -94,38 +94,6 @@
   --duration: 200ms;
 }
 
-/* ── Compatibilidad temporal ──
-   Los nombres del tema v1 siguen vivos en el JSX (182 referencias) hasta que
-   las tareas 11-13 y 15 reskinean cada pantalla. Sin esto la app queda rota a
-   mitad del plan. La Task 15 borra este bloque. */
-:root {
-  --bg-primary:     var(--bg-page);
-  --bg-sidebar:     var(--bg-surface);
-  --text-muted:     var(--text-secondary);
-  --text-dim:       var(--text-secondary);
-  --text-dark:      var(--text-primary);
-  --border-subtle:  var(--linea);
-  --border-light:   var(--linea);
-  --border-visible: var(--borde-campo);
-  --border-card:    var(--linea);
-  --success:        var(--resalte);
-  --success-bg:     var(--bg-elevated);
-  --success-fg:     var(--resalte-fg);
-  --error:          var(--alerta);
-  --error-bg:       var(--alerta-bg);
-  --error-border:   var(--alerta);
-  --error-fg:       var(--alerta-fg);
-  --font-mono:      var(--font-body);
-  --radius-sm:      var(--radio-sm);
-  --radius-md:      var(--radio-md);
-  --radius-lg:      var(--radio-lg);
-  --radius-xl:      var(--radio-xl);
-  --radius-2xl:     var(--radio-2xl);
-  --radius-full:    var(--radio-full);
-  --shadow-card:    var(--sombra-panel);
-  --shadow-modal:   var(--sombra-modal);
-  --shadow-hero:    var(--sombra-panel);
-}
 
 /* ═══════════════════════════════════════════════════════════
    Tema oscuro

@@ -14,7 +14,7 @@ const Bloque = ({ titulo, extra, children }) => (
 );
 
 const Vacio = ({ children }) => (
-  <span style={{ fontSize: 13.5, color: 'var(--text-dim)', lineHeight: 1.5 }}>{children}</span>
+  <span style={{ fontSize: 13.5, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{children}</span>
 );
 
 export default function Cuenta() {
@@ -39,7 +39,7 @@ export default function Cuenta() {
         <span className="avatar" style={{ width: 48, height: 48, fontSize: 16 }} aria-hidden="true">{usuario.iniciales}</span>
         <div className="pila" style={{ gap: 2 }}>
           <h1 className="display" style={{ margin: 0, fontSize: 28 }}>{usuario.nombre}</h1>
-          <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>{usuario.email} · {usuario.rol}</span>
+          <span style={{ fontSize: 13.5, color: 'var(--text-secondary)' }}>{usuario.email} · {usuario.rol}</span>
         </div>
       </div>
 
@@ -53,11 +53,11 @@ export default function Cuenta() {
       >
         <div className="tarjeta" style={{ padding: 18, gap: 6 }}>
           <strong style={{ fontSize: 15 }}>{resumenPlan.t}</strong>
-          <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>{resumenPlan.d}</span>
+          <span style={{ fontSize: 13.5, color: 'var(--text-secondary)' }}>{resumenPlan.d}</span>
         </div>
       </Bloque>
 
-      <Bloque titulo="Consumo" extra={<span style={{ fontSize: 12.5, color: 'var(--text-dim)' }}>{usadasMes} usadas este mes</span>}>
+      <Bloque titulo="Consumo" extra={<span style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>{usadasMes} usadas este mes</span>}>
         {consultas.length === 0 ? (
           <Vacio>Todavía no has hecho consultas.</Vacio>
         ) : (
@@ -67,10 +67,10 @@ export default function Cuenta() {
                 key={c.id}
                 to={`/chat/${c.id}`}
                 className="fila"
-                style={{ justifyContent: 'space-between', gap: 12, padding: '13px 18px', borderTop: i === 0 ? 0 : '1px solid var(--border-subtle)', color: 'inherit' }}
+                style={{ justifyContent: 'space-between', gap: 12, padding: '13px 18px', borderTop: i === 0 ? 0 : '1px solid var(--linea)', color: 'inherit' }}
               >
                 <span className="truncate" style={{ fontSize: 13.5, minWidth: 0 }}>{c.pregunta}</span>
-                <span className="mono" style={{ fontSize: 12, color: c.costo ? 'var(--text-muted)' : 'var(--success-fg)', whiteSpace: 'nowrap' }}>
+                <span className="mono" style={{ fontSize: 12, color: c.costo ? 'var(--text-secondary)' : 'var(--resalte-fg)', whiteSpace: 'nowrap' }}>
                   {c.costo ? '1 consulta' : 'sin costo'}
                 </span>
               </Link>
@@ -85,10 +85,10 @@ export default function Cuenta() {
         ) : (
           <div className="tarjeta" style={{ padding: 0, gap: 0, overflow: 'hidden' }}>
             {pagos.map((p, i) => (
-              <div key={p.id} className="fila" style={{ justifyContent: 'space-between', gap: 12, padding: '13px 18px', borderTop: i === 0 ? 0 : '1px solid var(--border-subtle)' }}>
+              <div key={p.id} className="fila" style={{ justifyContent: 'space-between', gap: 12, padding: '13px 18px', borderTop: i === 0 ? 0 : '1px solid var(--linea)' }}>
                 <span className="pila" style={{ gap: 2, minWidth: 0 }}>
                   <span style={{ fontSize: 13.5 }}>{p.concepto}</span>
-                  <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                     {fechaCorta(p.ts)} · {METODOS_PAGO.find((m) => m.id === p.metodo)?.k ?? p.metodo}
                   </span>
                 </span>
@@ -102,7 +102,7 @@ export default function Cuenta() {
         )}
       </Bloque>
 
-      <div className="fila" style={{ gap: 10, borderTop: '1px solid var(--border-subtle)', paddingTop: 24, flexWrap: 'wrap' }}>
+      <div className="fila" style={{ gap: 10, borderTop: '1px solid var(--linea)', paddingTop: 24, flexWrap: 'wrap' }}>
         <button
           className="btn btn--claro"
           onClick={() => { resetearIntentos(); ir('/chat'); }}

@@ -36,8 +36,8 @@ export default function Confirmacion() {
           plan === 'creditos' ? ['Válidos hasta', vigenciaCreditos()] : ['Se renueva', 'cada mes'],
           ['Total', `S/ ${pago.monto}`],
         ].map(([k, v], i) => (
-          <div key={k} className="fila" style={{ justifyContent: 'space-between', gap: 12, padding: '11px 0', borderTop: i === 0 ? 0 : '1px solid var(--border-subtle)' }}>
-            <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>{k}</span>
+          <div key={k} className="fila" style={{ justifyContent: 'space-between', gap: 12, padding: '11px 0', borderTop: i === 0 ? 0 : '1px solid var(--linea)' }}>
+            <span style={{ fontSize: 13.5, color: 'var(--text-secondary)' }}>{k}</span>
             <span style={{ fontSize: 13.5 }}>{v}</span>
           </div>
         ))}

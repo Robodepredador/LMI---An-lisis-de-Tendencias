@@ -23,7 +23,7 @@ export default function DocenteChat() {
       </div>
       <GapTable brechas={brechas.slice(0, 6)} />
       <div className="fila" style={{ justifyContent: 'space-between', gap: 10 }}>
-        <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-dim)' }}>
+        <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>
           Malla de {carrera} cargada por la Escuela · {ventanaAnalisis()}
         </span>
         <button className="chip" onClick={() => window.print()}>Exportar para comité curricular</button>

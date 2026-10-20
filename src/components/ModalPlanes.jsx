@@ -44,12 +44,12 @@ export default function ModalPlanes() {
                 <span className="fila" style={{ gap: 8 }}>
                   <strong style={{ fontSize: 15 }}>{p.k}</strong>
                   {p.tag && (
-                    <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radius-full)', background: 'var(--accent)', color: 'var(--text-dark)', fontWeight: 600 }}>
+                    <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--text-primary)', fontWeight: 600 }}>
                       {p.tag}
                     </span>
                   )}
                 </span>
-                <small style={{ color: 'var(--text-muted)' }}>{p.d}</small>
+                <small style={{ color: 'var(--text-secondary)' }}>{p.d}</small>
               </span>
               <span className="display" style={{ fontSize: 24, whiteSpace: 'nowrap' }}>{p.precio}</span>
             </button>
@@ -65,7 +65,7 @@ export default function ModalPlanes() {
           </button>
         </div>
 
-        <span className="mono" style={{ fontSize: 12, color: 'var(--text-dim)', textAlign: 'center', lineHeight: 1.45 }}>
+        <span className="mono" style={{ fontSize: 12, color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.45 }}>
           Créditos válidos por 12 meses · Plan Pro sin permanencia ni penalidades
         </span>
       </div>

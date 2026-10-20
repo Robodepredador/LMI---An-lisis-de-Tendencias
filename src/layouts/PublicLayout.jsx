@@ -39,7 +39,7 @@ export default function PublicLayout() {
           <span className="marca__mono" aria-hidden="true">{tenant.mono}</span>
           <span className="pila" style={{ alignItems: 'flex-start', lineHeight: 1.15 }}>
             <strong style={{ fontSize: 15, fontWeight: 600 }}>{tenant.name}</strong>
-            {tenant.powered && <span style={{ fontSize: 10.5, color: 'var(--text-dim)' }}>con tecnología LMI-U</span>}
+            {tenant.powered && <span style={{ fontSize: 10.5, color: 'var(--text-secondary)' }}>con tecnología LMI-U</span>}
           </span>
         </button>
 
@@ -74,20 +74,20 @@ export default function PublicLayout() {
       <footer
         className="seccion"
         style={{
-          borderTop: '1px solid var(--border-subtle)',
+          borderTop: '1px solid var(--linea)',
           paddingBlock: 28,
           marginTop: 'auto',
         }}
       >
         <div className="fila" style={{ justifyContent: 'space-between', gap: 16 }}>
-          <span style={{ fontSize: 13, color: 'var(--text-dim)' }}>
+          <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
             © {new Date().getFullYear()} {tenant.name} · Inteligencia de mercado laboral en Perú
           </span>
           <div className="fila" style={{ gap: 20, fontSize: 13 }}>
-            <button className="enlace" onClick={() => irA('metodologia')} style={{ color: 'var(--text-muted)' }}>
+            <button className="enlace" onClick={() => irA('metodologia')} style={{ color: 'var(--text-secondary)' }}>
               Metodología
             </button>
-            <button className="enlace" onClick={() => irA('planes')} style={{ color: 'var(--text-muted)' }}>
+            <button className="enlace" onClick={() => irA('planes')} style={{ color: 'var(--text-secondary)' }}>
               Planes
             </button>
           </div>

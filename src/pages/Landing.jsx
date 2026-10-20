@@ -46,12 +46,12 @@ export default function Landing() {
             <button className="btn btn--acento btn--grande" onClick={() => ir('/registro')}>Prueba gratis · 3 consultas</button>
             <button className="btn btn--linea" onClick={() => ir('/login')}>Ya tengo cuenta</button>
           </div>
-          <span style={{ fontSize: 13, color: 'var(--text-dim)' }}>Sin tarjeta. Sin suscripción.</span>
+          <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Sin tarjeta. Sin suscripción.</span>
         </div>
 
-        <div className="tarjeta" style={{ flex: '1 1 420px', minWidth: 0, borderRadius: 'var(--radius-2xl)', padding: 24, boxShadow: 'var(--shadow-hero)' }}>
+        <div className="tarjeta" style={{ flex: '1 1 420px', minWidth: 0, borderRadius: 'var(--radio-2xl)', padding: 24, boxShadow: 'var(--sombra-panel)' }}>
           <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-            <span className="mono" style={{ fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.04em' }}>DEMO EN VIVO</span>
+            <span className="mono" style={{ fontSize: 11, color: 'var(--text-secondary)', letterSpacing: '0.04em' }}>DEMO EN VIVO</span>
             <div className="fila" style={{ gap: 6 }}>
               {DEMO_ROLES.map((dr) => (
                 <button
@@ -61,9 +61,9 @@ export default function Landing() {
                   style={{
                     fontSize: 12,
                     padding: '4px 10px',
-                    borderColor: rolId === dr.id ? 'var(--accent)' : 'var(--border-subtle)',
+                    borderColor: rolId === dr.id ? 'var(--accent)' : 'var(--linea)',
                     background: rolId === dr.id ? 'var(--accent)' : 'rgba(242, 239, 233, 0.04)',
-                    color: rolId === dr.id ? 'var(--text-dark)' : 'var(--text-muted)',
+                    color: rolId === dr.id ? 'var(--text-primary)' : 'var(--text-secondary)',
                     fontWeight: rolId === dr.id ? 600 : 400,
                   }}
                   onClick={() => setRolId(dr.id)}
@@ -90,7 +90,7 @@ export default function Landing() {
                 </span>
               </div>
             ))}
-            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-dim)' }}>
+            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>
               n = {fmt(rolActual.porCiudad?.Lima?.n ?? rolActual.salario.n)} ofertas · Lima · {ventanaAnalisis()}
             </span>
           </div>
@@ -123,18 +123,18 @@ export default function Landing() {
       <section id="planes" className="seccion seccion--pantalla pila" style={{ gap: 24, justifyContent: 'center' }}>
         <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
           <h2 className="display display--pag" style={{ margin: 0 }}>Planes</h2>
-          <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>Exportar a PDF está incluido en todos.</span>
+          <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Exportar a PDF está incluido en todos.</span>
         </div>
         <div className="rejilla">
           {PLANES.map((p) => (
             <div key={p.id} className={`tarjeta${p.destacado ? ' tarjeta--destacada' : ''}`}>
               <div className="fila" style={{ justifyContent: 'space-between' }}>
                 <strong style={{ fontSize: 16, fontWeight: 600 }}>{p.name}</strong>
-                {p.tag && <span className="mono" style={{ fontSize: 11, padding: '4px 8px', borderRadius: 'var(--radius-full)', background: 'var(--accent)', color: 'var(--text-dark)' }}>{p.tag}</span>}
+                {p.tag && <span className="mono" style={{ fontSize: 11, padding: '4px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--text-primary)' }}>{p.tag}</span>}
               </div>
               <div className="fila" style={{ alignItems: 'baseline', gap: 6 }}>
                 <span className="display" style={{ fontSize: 46, lineHeight: 1 }}>{p.price}</span>
-                <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>{p.unit}</span>
+                <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>{p.unit}</span>
               </div>
               <ul className="pila" style={{ gap: 10, fontSize: 14, color: 'var(--text-secondary)' }}>
                 {p.items.map((i) => (

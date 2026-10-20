@@ -19,7 +19,7 @@ export default function Planes() {
             <Link to="/chat" className="btn btn--linea" style={{ padding: '6px 14px', fontSize: 13, gap: 6 }}>
               ← Volver al chat
             </Link>
-            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-dim)' }}>PLANES Y TARIFAS</span>
+            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>PLANES Y TARIFAS</span>
           </div>
 
           <div className="pila" style={{ gap: 6 }}>
@@ -29,7 +29,7 @@ export default function Planes() {
                 Tu pregunta «<strong style={{ color: 'var(--text-primary)' }}>{pendiente}</strong>» quedó guardada y se responderá apenas elijas una opción.
               </span>
             ) : (
-              <span style={{ fontSize: 14.5, color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>
                 Selecciona la opción de créditos o suscripción que mejor se adapte a tus consultas.
               </span>
             )}
@@ -50,12 +50,12 @@ export default function Planes() {
                   <span className="fila" style={{ gap: 8 }}>
                     <strong style={{ fontSize: 15.5 }}>{p.k}</strong>
                     {p.tag && (
-                      <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radius-full)', background: 'var(--accent)', color: 'var(--text-dark)', fontWeight: 600 }}>
+                      <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--text-primary)', fontWeight: 600 }}>
                         {p.tag}
                       </span>
                     )}
                   </span>
-                  <small style={{ color: 'var(--text-muted)' }}>{p.d}</small>
+                  <small style={{ color: 'var(--text-secondary)' }}>{p.d}</small>
                 </span>
                 <span className="display" style={{ fontSize: 24, whiteSpace: 'nowrap' }}>{p.precio}</span>
               </button>
@@ -63,7 +63,7 @@ export default function Planes() {
           </div>
 
           <div className="pila" style={{ gap: 8, marginTop: 8 }}>
-            <span style={{ fontSize: 13, color: 'var(--text-dim)', lineHeight: 1.5 }}>
+            <span style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
               • <strong>Créditos:</strong> Válidos por 12 meses. No vencen mientras uses la plataforma.<br />
               • <strong>Plan Pro:</strong> Renovación mensual automática. Cancela en cualquier momento sin penalidad.
             </span>
@@ -72,7 +72,7 @@ export default function Planes() {
 
         {/* ── Columna 2: Resumen del Plan Seleccionado ── */}
         <aside className="pasarela__resumen-card animate-fade-up">
-          <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-dim)', letterSpacing: '.06em' }}>
+          <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)', letterSpacing: '.06em' }}>
             RESUMEN DE SELECCIÓN
           </span>
 
@@ -80,7 +80,7 @@ export default function Planes() {
             <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
               <div className="pila" style={{ gap: 4 }}>
                 <strong style={{ fontSize: 17 }}>{elegido.k}</strong>
-                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{elegido.d}</span>
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{elegido.d}</span>
               </div>
               <span className="display" style={{ fontSize: 22, whiteSpace: 'nowrap' }}>{elegido.precio}</span>
             </div>
@@ -102,7 +102,7 @@ export default function Planes() {
             </div>
           </div>
 
-          <div className="pasarela__desglose" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 14 }}>
+          <div className="pasarela__desglose" style={{ borderTop: '1px solid var(--linea)', paddingTop: 14 }}>
             <div className="pasarela__desglose-fila">
               <strong style={{ fontSize: 16, color: 'var(--text-primary)' }}>Total</strong>
               <strong className="display" style={{ fontSize: 26, color: 'var(--text-primary)' }}>
@@ -120,7 +120,7 @@ export default function Planes() {
             </Link>
           </div>
 
-          <div className="pila" style={{ gap: 8, borderTop: '1px solid var(--border-subtle)', paddingTop: 14 }}>
+          <div className="pila" style={{ gap: 8, borderTop: '1px solid var(--linea)', paddingTop: 14 }}>
             <div className="pasarela__seguridad">
               <span>🔒</span>
               <span>Pasarela 100% segura con Yape, Plin y tarjetas</span>

@@ -43,22 +43,22 @@ function Medidor({ compacto }) {
 
   if (compacto) {
     return (
-      <button className="btn" style={{ padding: '7px 10px', fontSize: 12, border: '1px solid var(--border-light)' }} onClick={abrirModalPlanes}>
+      <button className="btn" style={{ padding: '7px 10px', fontSize: 12, border: '1px solid var(--linea)' }} onClick={abrirModalPlanes}>
         <span className="mono">{m.corto}</span>
       </button>
     );
   }
 
   return (
-    <div className="pila" style={{ padding: 14, borderRadius: 'var(--radius-lg)', background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', gap: 10 }}>
+    <div className="pila" style={{ padding: 14, borderRadius: 'var(--radio-lg)', background: 'var(--bg-elevated)', border: '1px solid var(--linea)', gap: 10 }}>
       <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
         <span style={{ fontSize: 13, fontWeight: 600 }}>{m.titulo}</span>
-        <span className="mono" style={{ fontSize: 12, color: 'var(--text-muted)' }}>{m.num}</span>
+        <span className="mono" style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{m.num}</span>
       </div>
       {m.barra !== null && (
         <div className="barra" style={{ height: 6 }}><span style={{ width: `${m.barra}%` }} /></div>
       )}
-      <span style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.4 }}>{m.nota}</span>
+      <span style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.4 }}>{m.nota}</span>
       {m.cta && (
         <button
           className="enlace"
@@ -92,14 +92,14 @@ export default function AppShell() {
           <span className="marca__mono" aria-hidden="true">{tenant.mono}</span>
           <span className="pila" style={{ alignItems: 'flex-start', lineHeight: 1.15 }}>
             <strong style={{ fontSize: 15, fontWeight: 600 }}>{tenant.name}</strong>
-            {tenant.powered && <span style={{ fontSize: 10.5, color: 'var(--text-dim)' }}>con tecnología LMI-U</span>}
+            {tenant.powered && <span style={{ fontSize: 10.5, color: 'var(--text-secondary)' }}>con tecnología LMI-U</span>}
           </span>
         </button>
 
         {!esDocente && (
           <button
             className="btn btn--linea"
-            style={{ borderRadius: 'var(--radius-md)', background: 'var(--bg-elevated)', textAlign: 'left' }}
+            style={{ borderRadius: 'var(--radio-md)', background: 'var(--bg-elevated)', textAlign: 'left' }}
             onClick={() => { nuevaConsulta(); ir('/chat'); }}
           >
             + Nueva consulta
@@ -108,15 +108,13 @@ export default function AppShell() {
 
         {esDocente && (
           <div className="pila" style={{ gap: 2 }}>
-            <NavLink to="/docente" end className={({ isActive }) => `lado__item${isActive ? ' lado__item--on' : ''}`}>Chat ampliado</NavLink>
-            <NavLink to="/docente/panel" className={({ isActive }) => `lado__item${isActive ? ' lado__item--on' : ''}`}>Panel de carrera</NavLink>
           </div>
         )}
 
         <div className="pila" style={{ gap: 2, minHeight: 0, overflow: 'auto' }}>
-          <span className="mono" style={{ fontSize: 11, color: 'var(--text-dim)', padding: '0 10px 8px', letterSpacing: '.04em' }}>HISTORIAL</span>
+          <span className="mono" style={{ fontSize: 11, color: 'var(--text-secondary)', padding: '0 10px 8px', letterSpacing: '.04em' }}>HISTORIAL</span>
           {consultas.length === 0 && (
-            <span style={{ padding: '4px 10px', fontSize: 13, color: 'var(--text-dim)', lineHeight: 1.45 }}>Tus consultas aparecerán aquí.</span>
+            <span style={{ padding: '4px 10px', fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.45 }}>Tus consultas aparecerán aquí.</span>
           )}
           {consultas.slice(0, 12).map((c) => (
             <Link key={c.id} to={`/chat/${c.id}`} className={`lado__item${pathname === `/chat/${c.id}` ? ' lado__item--on' : ''}`}>
@@ -127,11 +125,11 @@ export default function AppShell() {
 
         <div className="pila" style={{ marginTop: 'auto', gap: 10 }}>
           <Medidor />
-          <button className="fila" style={{ gap: 10, padding: '8px 6px', borderRadius: 'var(--radius-md)', background: 'none', border: 0, color: 'inherit', cursor: 'pointer', textAlign: 'left' }} onClick={() => ir('/cuenta')}>
+          <button className="fila" style={{ gap: 10, padding: '8px 6px', borderRadius: 'var(--radio-md)', background: 'none', border: 0, color: 'inherit', cursor: 'pointer', textAlign: 'left' }} onClick={() => ir('/cuenta')}>
             <span className="avatar" aria-hidden="true">{usuario.iniciales}</span>
             <span className="pila" style={{ lineHeight: 1.25, minWidth: 0 }}>
               <span style={{ fontSize: 13.5, fontWeight: 500 }}>{usuario.nombre}</span>
-              <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>{usuario.rol}</span>
+              <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{usuario.rol}</span>
             </span>
           </button>
         </div>

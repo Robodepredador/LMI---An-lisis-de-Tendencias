@@ -51,7 +51,7 @@ function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
         <p className="display" style={{ margin: 0, fontSize: 'clamp(1.15rem,2.4vw,1.4rem)', lineHeight: 1.3 }}>
           Solo puedo responder sobre el mercado laboral peruano: habilidades, salarios, roles y brechas de formación.
         </p>
-        <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>Esta consulta no se descontó.</span>
+        <span style={{ fontSize: 13.5, color: 'var(--text-secondary)' }}>Esta consulta no se descontó.</span>
       </article>
     );
   }
@@ -79,7 +79,7 @@ function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
             </div>
           </>
         )}
-        <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>Esta consulta no se descontó.</span>
+        <span style={{ fontSize: 13.5, color: 'var(--text-secondary)' }}>Esta consulta no se descontó.</span>
       </article>
     );
   }
@@ -88,8 +88,8 @@ function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
     const s = salarioDe(roles[0], r.ciudad);
     return (
       <article className="pila animate-fade-up" style={{ gap: 14 }}>
-        <div className="mono fila animate-fade" style={{ gap: 8, fontSize: 11.5, color: 'var(--text-dim)' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--text-dim)' }} />
+        <div className="mono fila animate-fade" style={{ gap: 8, fontSize: 11.5, color: 'var(--text-secondary)' }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--text-secondary)' }} />
           SIN DATOS SUFICIENTES · NO SE COBRÓ
         </div>
         <p className="display animate-fade-up" style={{ margin: 0, fontSize: 'clamp(1.15rem,2.4vw,1.4rem)', lineHeight: 1.3, animationDelay: '40ms' }}>
@@ -103,7 +103,7 @@ function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
             Ver habilidades
           </button>
         </div>
-        <span className="mono animate-fade" style={{ fontSize: 12, color: 'var(--text-dim)', animationDelay: '120ms' }}>
+        <span className="mono animate-fade" style={{ fontSize: 12, color: 'var(--text-secondary)', animationDelay: '120ms' }}>
           <button className="enlace" onClick={onMetodologia}>Por qué exigimos un mínimo de muestra</button>
         </span>
       </article>
@@ -115,7 +115,7 @@ function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
 
   return (
     <article className="pila animate-fade-up" style={{ gap: 18 }}>
-      <div className="mono fila animate-fade" style={{ gap: 8, fontSize: 11.5, color: 'var(--text-dim)' }}>
+      <div className="mono fila animate-fade" style={{ gap: 8, fontSize: 11.5, color: 'var(--text-secondary)' }}>
         <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }} />
         {ETIQUETA[r.intent]} · {costo === 1 ? '1 CONSULTA' : 'SIN COSTO'}
       </div>
@@ -156,7 +156,7 @@ function Respuesta({ consulta, onPreguntar, onMetodologia, ciclo = 2 }) {
       )}
 
       <div className="fila animate-fade" style={{ justifyContent: 'space-between', gap: 10, animationDelay: '150ms' }}>
-        <span className="mono" style={{ fontSize: 12, color: 'var(--text-dim)' }}>
+        <span className="mono" style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
           {r.intent === 'salarios' ? `${fmt(muestra)} ofertas con salario declarado` : `${fmt(roles.reduce((s, x) => s + x.ofertas, 0))} ofertas`}
           {' · '}{r.ciudad ?? 'todo el país'} · {ventanaAnalisis()} · <button className="enlace" onClick={onMetodologia}>Ver metodología ↗</button>
         </span>
@@ -246,7 +246,7 @@ export default function Chat({ encabezado }) {
             <div className="pila" style={{ gap: 28, paddingTop: 'clamp(8px, 4vw, 48px)' }}>
               <div className="pila" style={{ gap: 10 }}>
                 <h1 className="display display--pag" style={{ margin: 0 }}>Hola, {usuario.nombre.split(' ')[0]}.</h1>
-                <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, color: 'var(--text-muted)', maxWidth: 540 }}>
+                <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, color: 'var(--text-secondary)', maxWidth: 540 }}>
                   Pregunta lo que quieras sobre el mercado laboral de{' '}
                   <span style={{ color: 'var(--text-primary)' }}>{usuario.areas?.[0] ?? 'cualquier área'}</span> en{' '}
                   <span style={{ color: 'var(--text-primary)' }}>{usuario.ciudades?.[0] ?? 'Perú'}</span>.
@@ -277,7 +277,7 @@ export default function Chat({ encabezado }) {
 
           {cargando && (
             <div className="pila animate-fade" style={{ gap: 12 }}>
-              <div className="mono fila" style={{ gap: 8, fontSize: 11.5, color: 'var(--text-dim)' }}>
+              <div className="mono fila" style={{ gap: 8, fontSize: 11.5, color: 'var(--text-secondary)' }}>
                 <span className="latido" /> CONSULTANDO EL CATÁLOGO
               </div>
               <div className="pila" style={{ gap: 10 }}>
@@ -290,8 +290,8 @@ export default function Chat({ encabezado }) {
           {error && (
             <div className="pila animate-fade-up" style={{ gap: 28 }}>
               <Burbuja>{error.pregunta}</Burbuja>
-              <div className="fila animate-scale" style={{ gap: 14, alignItems: 'flex-start', padding: 18, borderRadius: 'var(--radius-lg)', border: '1px solid var(--error-border)', background: 'var(--error-bg)' }}>
-                <span style={{ flex: 'none', width: 22, height: 22, borderRadius: '50%', background: 'var(--error)', color: 'var(--text-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13 }}>!</span>
+              <div className="fila animate-scale" style={{ gap: 14, alignItems: 'flex-start', padding: 18, borderRadius: 'var(--radio-lg)', border: '1px solid var(--alerta)', background: 'var(--alerta-bg)' }}>
+                <span style={{ flex: 'none', width: 22, height: 22, borderRadius: '50%', background: 'var(--alerta)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13 }}>!</span>
                 <div className="pila" style={{ gap: 8 }}>
                   <strong style={{ fontSize: 15, fontWeight: 600 }}>No pudimos completar la consulta</strong>
                   <span style={{ fontSize: 14, lineHeight: 1.5, color: 'var(--text-secondary)' }}>{error.mensaje} No se descontó ninguna consulta.</span>
@@ -360,7 +360,7 @@ function Composer({ texto, setTexto, enviar, cargando, bloqueado }) {
         />
         <button type="submit" className="composer__enviar" disabled={cargando || !texto.trim()} aria-label="Enviar pregunta">↑</button>
       </form>
-      <span style={{ fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.4 }}>{nota}</span>
+      <span style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.4 }}>{nota}</span>
     </div>
   );
 }

@@ -6,8 +6,8 @@ import { salarioDe } from '../lib/consultar.js';
 import AnimarNumero from '../components/AnimarNumero.jsx';
 
 const Panel = ({ titulo, children }) => (
-  <div className="pila animate-fade-up" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: 20, gap: 14 }}>
-    {titulo && <span style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{titulo}</span>}
+  <div className="pila animate-fade-up" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--linea)', borderRadius: 'var(--radio-lg)', padding: 20, gap: 14 }}>
+    {titulo && <span style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>{titulo}</span>}
     {children}
   </div>
 );
@@ -48,7 +48,7 @@ export function SkillBars({ rol }) {
           </span>
           <span
             className="mono animate-fade"
-            style={{ fontSize: 11.5, fontWeight: 500, color: 'var(--success-fg)', animationDelay: `${200 + i * 45}ms` }}
+            style={{ fontSize: 11.5, fontWeight: 500, color: 'var(--resalte-fg)', animationDelay: `${200 + i * 45}ms` }}
           >
             {h.tendencia > 0 ? `▲ +${h.tendencia} pts` : ''}
           </span>
@@ -70,15 +70,15 @@ export function CompareTable({ roles }) {
 
   return (
     <div className="pila animate-fade-up" style={{ gap: 10 }}>
-      <div style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', overflow: 'auto' }}>
+      <div style={{ background: 'var(--bg-elevated)', border: '1px solid var(--linea)', borderRadius: 'var(--radio-lg)', overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13.5, minWidth: 440 }}>
           <thead>
-            <tr style={{ textAlign: 'left', color: 'var(--text-muted)', fontSize: 12.5 }}>
+            <tr style={{ textAlign: 'left', color: 'var(--text-secondary)', fontSize: 12.5 }}>
               <th style={{ padding: '14px 16px', fontWeight: 500 }}>Habilidad</th>
               {roles.map((r) => (
                 <th key={r.id} style={{ padding: '14px 12px', fontWeight: 500, textAlign: 'right' }}>
                   {r.nombre}
-                  <div className="mono" style={{ fontSize: 11, color: 'var(--text-dim)', fontWeight: 400 }}>n={fmt(r.ofertas)}</div>
+                  <div className="mono" style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 400 }}>n={fmt(r.ofertas)}</div>
                 </th>
               ))}
             </tr>
@@ -95,7 +95,7 @@ export function CompareTable({ roles }) {
                         display: 'inline-block', minWidth: 52, padding: '5px 8px', borderRadius: 8, fontSize: 13,
                         fontWeight: v >= ALTA_DEMANDA ? 600 : 400,
                         background: v >= ALTA_DEMANDA ? 'var(--accent)' : 'transparent',
-                        color: v >= ALTA_DEMANDA ? 'var(--text-dark)' : 'var(--text-secondary)',
+                        color: v >= ALTA_DEMANDA ? 'var(--text-primary)' : 'var(--text-secondary)',
                         transition: 'all 0.35s ease',
                       }}
                     >
@@ -114,7 +114,7 @@ export function CompareTable({ roles }) {
           </tbody>
         </table>
       </div>
-      <span style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>
+      <span style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>
         Recuadro relleno = alta demanda ({ALTA_DEMANDA} % o más de las ofertas). “—” = no aparece entre las más pedidas.
       </span>
     </div>
@@ -149,7 +149,7 @@ function SalaryRow({ r, s, e }) {
         <span>{r.nombre}</span>
         <span className="mono" style={{ fontSize: 13, fontWeight: 500 }}>
           S/ <AnimarNumero valor={s.cifras.med} formatear={fmt} />{' '}
-          <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>· n={s.n}</span>
+          <span style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>· n={s.n}</span>
         </span>
       </div>
       <div style={{ position: 'relative', height: 14, borderRadius: 7, background: 'rgba(242,239,233,.06)' }}>
@@ -179,7 +179,7 @@ function SalaryRow({ r, s, e }) {
           }}
         />
       </div>
-      <div className="mono" style={{ position: 'relative', height: 14, fontSize: 11.5, color: 'var(--text-muted)' }}>
+      <div className="mono" style={{ position: 'relative', height: 14, fontSize: 11.5, color: 'var(--text-secondary)' }}>
         <span style={{ position: 'absolute', left: `${p25}%`, transition: 'all 0.4s ease' }}>
           S/ <AnimarNumero valor={s.cifras.p25} formatear={fmt} />
         </span>
@@ -205,7 +205,7 @@ export function SalaryChart({ roles, ciudad }) {
       {datos.map(({ rol: r, s }) => (
         <SalaryRow key={r.id} r={r} s={s} e={e} />
       ))}
-      <div className="mono fila" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--border-subtle)', paddingTop: 10, fontSize: 11, color: 'var(--text-dim)' }}>
+      <div className="mono fila" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--linea)', paddingTop: 10, fontSize: 11, color: 'var(--text-secondary)' }}>
         {e.marcas.map((m) => <span key={m}>S/ {fmt(m)}</span>)}
       </div>
     </Panel>
@@ -223,7 +223,7 @@ export function CourseCards({ cursos }) {
           style={{
             padding: 18,
             gap: 10,
-            borderRadius: 'var(--radius-lg)',
+            borderRadius: 'var(--radio-lg)',
             transition: 'all var(--duration) var(--ease-out)',
             cursor: 'pointer',
             animationDelay: `${idx * 75}ms`,
@@ -235,14 +235,14 @@ export function CourseCards({ cursos }) {
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.borderColor = 'var(--border-card)';
+            e.currentTarget.style.borderColor = 'var(--linea)';
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
           <span className="mono" style={{ fontSize: 11, color: 'var(--accent)' }}>{c.skill.toUpperCase()}</span>
           <strong style={{ fontSize: 14.5, fontWeight: 600, lineHeight: 1.35 }}>{c.t}</strong>
-          <span style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{c.p}</span>
-          <div className="fila mono" style={{ gap: 10, fontSize: 11.5, color: 'var(--text-dim)', marginTop: 'auto' }}>
+          <span style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>{c.p}</span>
+          <div className="fila mono" style={{ gap: 10, fontSize: 11.5, color: 'var(--text-secondary)', marginTop: 'auto' }}>
             {c.meta.map((m) => <span key={m}>{m}</span>)}
           </div>
         </div>
@@ -266,8 +266,8 @@ export function GapTable({ brechas }) {
             className="mono animate-fade"
             style={{
               fontSize: 11, padding: '3px 8px', borderRadius: 6, whiteSpace: 'nowrap',
-              background: b.enMalla ? 'var(--success-bg)' : 'oklch(0.7 0.15 28 / .18)',
-              color: b.enMalla ? 'var(--success-fg)' : 'var(--error-fg)',
+              background: b.enMalla ? 'var(--bg-elevated)' : 'oklch(0.7 0.15 28 / .18)',
+              color: b.enMalla ? 'var(--resalte-fg)' : 'var(--alerta-fg)',
               transition: 'all 0.3s ease',
               animationDelay: `${200 + i * 40}ms`,
             }}

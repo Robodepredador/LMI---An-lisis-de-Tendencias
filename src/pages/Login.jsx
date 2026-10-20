@@ -27,7 +27,7 @@ export default function Login() {
       <div className="pila animate-fade-up" style={{ width: '100%', maxWidth: 420, gap: 22 }}>
         <div className="pila" style={{ gap: 6 }}>
           <h1 className="display" style={{ margin: 0, fontSize: 38 }}>Inicia sesión</h1>
-          <span style={{ fontSize: 14.5, color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>
             Ingresa a tu cuenta para consultar el mercado laboral.
           </span>
         </div>
@@ -46,7 +46,7 @@ export default function Login() {
           <button type="submit" className="btn btn--acento btn--grande btn--bloque" style={{ marginTop: 4 }}>
             Entrar
           </button>
-          <span style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'center' }}>
+          <span style={{ fontSize: 13, color: 'var(--text-secondary)', textAlign: 'center' }}>
             ¿No tienes cuenta? <Link to="/registro">Créala gratis</Link>
           </span>
         </form>
@@ -62,7 +62,7 @@ export default function Login() {
               onClick={() => { entrarDemo(c.id); ir('/chat'); }}
             >
               <strong style={{ fontSize: 14.5 }}>{c.etiqueta}</strong>
-              <small style={{ color: 'var(--text-muted)' }}>{c.detalle}</small>
+              <small style={{ color: 'var(--text-secondary)' }}>{c.detalle}</small>
             </button>
           ))}
         </div>

@@ -62,12 +62,12 @@ export default function Checkout() {
             >
               ← Volver
             </button>
-            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-dim)' }}>PASARELA DE PAGO SEGURA</span>
+            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>PASARELA DE PAGO SEGURA</span>
           </div>
 
           <div className="pila" style={{ gap: 6 }}>
             <h1 className="display" style={{ margin: 0, fontSize: 32 }}>Finalizar compra</h1>
-            <span style={{ fontSize: 14.5, color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>
               Elige tu método de pago preferido para activar tus consultas laborales.
             </span>
           </div>
@@ -90,7 +90,7 @@ export default function Checkout() {
                   <span className="radio" data-on={metodo === m.id} aria-hidden="true" />
                   <span className="pila" style={{ gap: 3, flex: 1, minWidth: 0 }}>
                     <strong style={{ fontSize: 14.5 }}>{m.k}</strong>
-                    <small style={{ color: 'var(--text-muted)' }}>{m.d}</small>
+                    <small style={{ color: 'var(--text-secondary)' }}>{m.d}</small>
                   </span>
                 </button>
               ))}
@@ -106,7 +106,7 @@ export default function Checkout() {
             {error && <div className="aviso-error animate-scale" role="alert">{error}</div>}
 
             {metodo === 'tarjeta' && (
-              <div className="pila animate-fade" style={{ gap: 14, background: 'var(--bg-elevated)', padding: 20, borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-subtle)' }}>
+              <div className="pila animate-fade" style={{ gap: 14, background: 'var(--bg-elevated)', padding: 20, borderRadius: 'var(--radio-lg)', border: '1px solid var(--linea)' }}>
                 <label className="campo">
                   Número de tarjeta {marca && <span style={{ color: 'var(--accent)', fontWeight: 600 }}>· {marca}</span>}
                   <input
@@ -143,7 +143,7 @@ export default function Checkout() {
             )}
 
             {metodo === 'yape' && (
-              <div className="pila animate-fade" style={{ gap: 14, background: 'var(--bg-elevated)', padding: 20, borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-subtle)' }}>
+              <div className="pila animate-fade" style={{ gap: 14, background: 'var(--bg-elevated)', padding: 20, borderRadius: 'var(--radio-lg)', border: '1px solid var(--linea)' }}>
                 <label className="campo">
                   Celular asociado a tu cuenta Yape
                   <input
@@ -154,7 +154,7 @@ export default function Checkout() {
                     autoComplete="tel"
                   />
                 </label>
-                <span style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.45 }}>
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.45 }}>
                   Te enviaremos una solicitud de confirmación a tu app Yape para autorizar el pago.
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function Checkout() {
         {/* ── Columna 2: Resumen del Pedido (Order Summary) ── */}
         <aside className="pasarela__resumen-card animate-fade-up">
           <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-dim)', letterSpacing: '.06em' }}>
+            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)', letterSpacing: '.06em' }}>
               RESUMEN DE COMPRA
             </span>
             <button
@@ -202,19 +202,19 @@ export default function Checkout() {
             <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
               <div className="pila" style={{ gap: 4 }}>
                 <strong style={{ fontSize: 16 }}>{elegido.k}</strong>
-                <span style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{elegido.d}</span>
+                <span style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>{elegido.d}</span>
               </div>
               <span className="display" style={{ fontSize: 20, whiteSpace: 'nowrap' }}>{elegido.precio}</span>
             </div>
             {elegido.tag && (
-              <span className="mono" style={{ alignSelf: 'flex-start', fontSize: 10.5, padding: '2px 8px', borderRadius: 'var(--radius-full)', background: 'var(--accent)', color: 'var(--text-dark)', fontWeight: 600 }}>
+              <span className="mono" style={{ alignSelf: 'flex-start', fontSize: 10.5, padding: '2px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--text-primary)', fontWeight: 600 }}>
                 {elegido.tag}
               </span>
             )}
           </div>
 
           {pendiente && (
-            <div style={{ padding: '12px 14px', borderRadius: 'var(--radius-md)', background: 'color-mix(in oklch, var(--accent) 12%, transparent)', border: '1px solid color-mix(in oklch, var(--accent) 30%, transparent)', fontSize: 13, lineHeight: 1.45 }}>
+            <div style={{ padding: '12px 14px', borderRadius: 'var(--radio-md)', background: 'color-mix(in oklch, var(--accent) 12%, transparent)', border: '1px solid color-mix(in oklch, var(--accent) 30%, transparent)', fontSize: 13, lineHeight: 1.45 }}>
               💬 <strong style={{ color: 'var(--accent)' }}>Tu pregunta guardada:</strong> «{pendiente}» se responderá en el chat al confirmar.
             </div>
           )}
@@ -228,7 +228,7 @@ export default function Checkout() {
               <span>IGV (18%)</span>
               <span className="mono">S/ {igv}</span>
             </div>
-            <div className="pasarela__desglose-fila" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 12, marginTop: 4 }}>
+            <div className="pasarela__desglose-fila" style={{ borderTop: '1px solid var(--linea)', paddingTop: 12, marginTop: 4 }}>
               <strong style={{ fontSize: 16, color: 'var(--text-primary)' }}>Total a pagar</strong>
               <strong className="display" style={{ fontSize: 28, color: 'var(--text-primary)' }}>
                 S/ {elegido.monto}
@@ -245,7 +245,7 @@ export default function Checkout() {
             {procesando ? 'Procesando pago seguro…' : `Confirmar y pagar S/ ${elegido.monto}`}
           </button>
 
-          <div className="pila" style={{ gap: 8, borderTop: '1px solid var(--border-subtle)', paddingTop: 14 }}>
+          <div className="pila" style={{ gap: 8, borderTop: '1px solid var(--linea)', paddingTop: 14 }}>
             <div className="pasarela__seguridad">
               <span>🔒</span>
               <span>Conexión cifrada SSL con procesamiento seguro</span>
