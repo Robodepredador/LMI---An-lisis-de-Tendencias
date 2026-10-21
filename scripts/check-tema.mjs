@@ -143,6 +143,42 @@ const radios = [...comp.matchAll(/border-radius:\s*([^;]+);/g)]
 assert.deepEqual(radios.filter((r) => !ESCALA_RADIOS.includes(r)), [],
   `todos los radios deben salir de la escala o de un token: ${radios.join(', ')}`);
 
+// ── Escala tipográfica ───────────────────────────────────────────────
+// El sistema declara nueve pasos. Un px suelto en la capa de componentes es
+// un tamaño que nadie decidió: el modal de planes tenía 14, 14.5 y 10.5.
+const ESCALA_TIPO = [12, 13, 15, 17, 20, 24, 34, 46, 64];
+const tamanos = [...comp.matchAll(/font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1]));
+const fuera = [...new Set(tamanos.filter((t) => !ESCALA_TIPO.includes(t)))];
+assert.deepEqual(fuera, [],
+  `tamanos de letra fuera de la escala declarada: ${fuera.join(', ')}px`);
+
+// ── Jerarquía de superficies ─────────────────────────────────────────
+// fondo / tarjeta / elevado tienen que ser tres niveles distinguibles. Si dos
+// coinciden, una tarjeta dentro de otra desaparece — que es lo que pasaba con
+// las opciones del modal de planes sobre la caja del modal.
+for (const sel of [':root', '[data-theme="dark"]']) {
+  const l = lector(sel);
+  const niveles = ['--bg-page', '--bg-surface', '--bg-elevated'].map(l);
+  assert.equal(new Set(niveles).size, 3,
+    `${sel}: fondo, tarjeta y elevado deben ser tres colores distintos (${niveles.join(', ')})`);
+}
+
+// Un contenedor y lo que va dentro no pueden pintarse con el mismo token: la
+// tarjeta de dentro desaparece. Pasaba en el modal de planes, donde la caja y
+// cada opción eran las dos --bg-elevated.
+const fondoDe = (selector) => {
+  const i = comp.indexOf(selector + ' {');
+  assert.notEqual(i, -1, `componentes.css debe declarar ${selector}`);
+  const cuerpo = comp.slice(i, comp.indexOf('}', i));
+  return cuerpo.match(/background:\s*var\((--[\w-]+)\)/)?.[1] ?? null;
+};
+for (const [fuera, dentro] of [['.modal__caja', '.opcion'], ['.tarjeta', '.nota']]) {
+  const [a, b] = [fondoDe(fuera), fondoDe(dentro)];
+  if (a && b) {
+    assert.notEqual(a, b, `${dentro} no puede usar el mismo fondo que ${fuera} (${a}): se funde con su contenedor`);
+  }
+}
+
 // ── Pureza del JSX ───────────────────────────────────────────────────
 // La prueba anterior solo miraba componentes.css, y por ahí se colaron dos
 // literales de la paleta v1 que dejaban ilegible la pregunta del estudiante.

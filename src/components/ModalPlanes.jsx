@@ -20,11 +20,11 @@ export default function ModalPlanes() {
     <Modal abierto={modalPlanes} onCerrar={cerrarModalPlanes} titulo="Elige cómo seguir">
       <div className="pila" style={{ gap: 20 }}>
         {pendiente ? (
-          <p style={{ margin: 0, fontSize: 14.5, color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+          <p style={{ margin: 0, fontSize: 'var(--tipo-base)', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
             Tu pregunta «<strong style={{ color: 'var(--text-primary)' }}>{pendiente}</strong>» quedó guardada y se responderá apenas elijas una opción.
           </p>
         ) : (
-          <p style={{ margin: 0, fontSize: 14.5, color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+          <p style={{ margin: 0, fontSize: 'var(--tipo-base)', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
             Elige el plan que mejor se adapte a tus necesidades para seguir consultando el mercado laboral.
           </p>
         )}
@@ -42,16 +42,16 @@ export default function ModalPlanes() {
               <span className="radio" data-on={pack === p.id} aria-hidden="true" />
               <span className="pila" style={{ gap: 4, flex: 1, minWidth: 0 }}>
                 <span className="fila" style={{ gap: 8 }}>
-                  <strong style={{ fontSize: 15 }}>{p.k}</strong>
+                  <strong style={{ fontSize: 'var(--tipo-base)' }}>{p.k}</strong>
                   {p.tag && (
-                    <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--accent-fg)', fontWeight: 600 }}>
+                    <span className="mono" style={{ fontSize: 'var(--tipo-xs)', padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--accent-fg)', fontWeight: 600 }}>
                       {p.tag}
                     </span>
                   )}
                 </span>
                 <small style={{ color: 'var(--text-secondary)' }}>{p.d}</small>
               </span>
-              <span className="display" style={{ fontSize: 24, whiteSpace: 'nowrap' }}>{p.precio}</span>
+              <span className="display" style={{ fontSize: 'var(--tipo-2xl)', whiteSpace: 'nowrap' }}>{p.precio}</span>
             </button>
           ))}
         </div>
@@ -65,7 +65,7 @@ export default function ModalPlanes() {
           </button>
         </div>
 
-        <span className="mono" style={{ fontSize: 12, color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.45 }}>
+        <span className="mono" style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.45 }}>
           Créditos válidos por 12 meses · Plan Pro sin permanencia ni penalidades
         </span>
       </div>
