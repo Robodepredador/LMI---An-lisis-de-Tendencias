@@ -39,7 +39,7 @@ export default function Login() {
   const cuentasValidas = CUENTAS_DEMO.filter((c) => c.perfil?.tipo !== 'docente');
 
   return (
-    <div className="centrado" style={{ padding: '48px 24px', background: 'var(--bg-page)', minHeight: 'calc(100vh - 72px)' }}>
+    <div className="centrado" style={{ padding: '48px 24px', background: 'var(--bg-page)', minHeight: '100svh' }}>
       <div
         className="pila animate-fade-up"
         style={{
@@ -53,10 +53,10 @@ export default function Login() {
           boxShadow: 'var(--sombra-panel)',
         }}
       >
-        <div className="fila" style={{ alignItems: 'center', gap: 10 }}>
+        <Link to="/" className="fila" style={{ alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }} aria-label="Volver al inicio de LMI-U">
           <LumiLogo alto={34} />
           <strong style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800 }}>LMI-U</strong>
-        </div>
+        </Link>
 
         <div className="pila" style={{ gap: 4 }}>
           <h1 className="display" style={{ margin: 0, fontSize: 32, letterSpacing: '-0.02em' }}>Inicia sesión</h1>

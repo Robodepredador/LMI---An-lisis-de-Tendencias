@@ -41,9 +41,15 @@ export default function PublicLayout() {
   const { pathname } = useLocation();
   const volverALaApp = () => ir(usuario?.tipo === 'docente' ? '/docente' : '/chat');
 
+  // La landing trae su propia barra y su propio pie. Login y registro van
+  // desnudos: son pantallas de una sola tarea, y la navegación de marketing
+  // ahí solo invita a abandonarla. El resto (404) sí conserva el cromo.
+  const esAuth = pathname === '/login' || pathname === '/registro';
+  const conCromo = pathname !== '/' && !esAuth;
+
   return (
     <div className="pila" style={{ minHeight: '100vh' }}>
-      {pathname !== '/' && (
+      {conCromo && (
         <nav className="nav">
           <button className="marca" onClick={() => ir('/')} aria-label={`Ir al inicio de ${tenant.name}`}>
             <span className="marca__mono" aria-hidden="true">{tenant.mono}</span>
@@ -82,7 +88,7 @@ export default function PublicLayout() {
         <Outlet />
       </main>
 
-      {pathname !== '/' && (
+      {conCromo && (
         <footer
           className="seccion"
           style={{

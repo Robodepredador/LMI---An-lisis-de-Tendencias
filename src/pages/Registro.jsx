@@ -4,7 +4,7 @@ import { CICLOS, useApp } from '../store.js';
 import {
   CARRERAS, CIUDADES_REGISTRO, INTERESES, areasDePerfil, ciudadDeRegistro,
 } from '../data/taxonomia.js';
-import Lumi from '../mascota/Lumi.jsx';
+import Lumi, { LumiLogo } from '../mascota/Lumi.jsx';
 
 const CORREO_OK = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -98,6 +98,12 @@ export default function Registro() {
   return (
     <div className="registro">
       <aside className="registro__lado">
+        {/* Sin barra de navegación, la marca es lo único que ancla la pantalla
+            y la única salida de vuelta al inicio. */}
+        <Link to="/" className="registro__marca" aria-label="Volver al inicio de LMI-U">
+          <LumiLogo alto={34} />
+          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-xl)', fontWeight: 800 }}>LMI-U</strong>
+        </Link>
         <div className="registro__pasos">
           {PASOS.map((p, i) => (
             <div key={p} className={`registro__paso${i === paso ? ' registro__paso--on' : ''}${i < paso ? ' registro__paso--hecho' : ''}`}>

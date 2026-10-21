@@ -1545,3 +1545,9 @@
   .comparativa-card { padding: 26px; gap: 14px; }
   .sec-planes-proto__inner { gap: 20px; }
 }
+
+/* La marca de registro: única salida de vuelta al inicio sin barra. */
+.registro__marca {
+  display: flex; align-items: center; gap: 10px;
+  color: inherit; text-decoration: none; align-self: flex-start;
+}
