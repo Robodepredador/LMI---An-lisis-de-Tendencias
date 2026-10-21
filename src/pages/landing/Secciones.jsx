@@ -8,22 +8,26 @@ export function ConoceLumi() {
   const ir = useNavigate();
 
   return (
-    <section id="sec-lumi" className="sec-lumi-proto">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+    // La sección ocupa la pantalla para que el enlace del menú la centre, pero
+    // la tarjeta índigo se queda del alto de su contenido: estirada al 100%
+    // era un bloque de color enorme.
+    <section id="sec-lumi" className="sec-lumi-seccion">
+    <div className="sec-lumi-proto">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <span style={{ alignSelf: 'flex-start', fontSize: 14, fontWeight: 700, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--resalte)', color: 'var(--resalte-fg)' }}>
           Conoce a Lumi
         </span>
-        <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 50, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>
+        <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-3xl)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.04 }}>
           Tu analista del mercado laboral, en tu bolsillo.
         </h2>
         <p style={{ margin: 0, fontSize: 18, lineHeight: 1.55, color: 'var(--sobre-accent-tenue)', maxWidth: 520 }}>
           Lumi lee miles de ofertas cada semana y te cuenta lo que encontró en palabras simples. Siempre con la fuente a la mano.
         </p>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-          <Lumi pose="saluda" alto={250} />
+          <Lumi pose="saluda" alto={180} />
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div className="promesa-proto">
           <strong style={{ fontFamily: 'var(--font-display)', fontSize: 21, fontWeight: 800 }}>“Leo las ofertas por ti.”</strong>
           <span style={{ fontSize: 15, lineHeight: 1.5, color: 'var(--text-secondary)' }}>Computrabajo, Bumeran, LinkedIn y portales corporativos, sin duplicados.</span>
@@ -44,6 +48,7 @@ export function ConoceLumi() {
           Pregúntale a Lumi gratis
         </button>
       </div>
+    </div>
     </section>
   );
 }

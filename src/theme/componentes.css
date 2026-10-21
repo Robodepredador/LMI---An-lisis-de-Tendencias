@@ -1252,14 +1252,16 @@
 
 /* ── Hero ── */
 .hero-seccion {
+  min-height: calc(100svh - var(--nav-h));
+  align-content: center;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-  gap: 48px;
-  padding: 64px 24px;
+  gap: 56px;
+  padding: 48px 24px;
   align-items: center;
 }
 .hero-titulo {
@@ -1461,7 +1463,7 @@
    entera sin scrollear. Dos cosas lo impedían: el alto del contenido
    y que la barra pegajosa tapaba la cabecera (scroll-margin-top: 0).
    ═══════════════════════════════════════════════════════════ */
-.sec-lumi-proto,
+.sec-lumi-seccion,
 .sec-funciones-proto,
 .sec-casos-proto,
 .sec-planes-proto {
@@ -1473,20 +1475,21 @@
 
 /* Compresión para que el contenido quepa en una laptop de 768px de alto
    (≈690 útiles). Los números de antes están en el comentario de cada uno. */
-.sec-lumi-proto     { padding: 36px; gap: 28px; margin: 24px auto 16px; }   /* 56 / 40 / 40-24 */
+.sec-lumi-seccion   { display: flex; align-items: center; padding: 16px 24px; }
+.sec-lumi-proto     { padding: 28px 32px; gap: 24px; margin: 0 auto; }       /* 56 / 40 */
 .sec-funciones-proto { padding: 32px 24px; gap: 20px; --fn-pad: 24px; --fn-min: 200px; }  /* 48-56 / 32 / 36 / 280 */
 .sec-casos-proto     { padding: 24px; gap: 14px; }                            /* 80-40 / 32 */
 .sec-planes-proto    { padding: 24px 0; }                                    /* 80 */
 .sec-planes-proto__inner { gap: 14px; }                                      /* 32 */
 
 
-.promesa-proto      { padding: 14px 20px; gap: 4px; }                        /* 20-24 / 6 */
+.promesa-proto      { padding: 12px 18px; gap: 3px; }                        /* 20-24 / 6 */
 .caso-card-proto    { padding: 16px; gap: 8px; }                             /* 26 / 14 */
 .resena-card-proto  { padding: 14px; gap: 6px; }                             /* 24 / 12 */
 
 /* En pantallas altas no hace falta apretar tanto. */
 @media (min-height: 900px) {
-  .sec-lumi-proto      { padding: 48px; gap: 36px; }
+  .sec-lumi-proto      { padding: 40px 48px; gap: 36px; }
   .sec-funciones-proto,
   .sec-casos-proto     { padding: 48px 24px; gap: 28px; }
   .sec-funciones-proto { --fn-pad: 32px; --fn-min: 240px; }
