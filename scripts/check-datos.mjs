@@ -30,8 +30,14 @@ console.log(`check-datos: OK (${catalogo.roles.length} roles)`);
 const { CARRERAS, INTERESES, CIUDADES_REGISTRO, areasDe, areasDeIntereses, ciudadDeRegistro, areasDePerfil, TODO_PERU } =
   await import('../src/data/taxonomia.js');
 
-assert.equal(CARRERAS.length, 10, 'las 10 carreras del registro aprobado');
-assert.equal(INTERESES.length, 10, 'los 10 intereses del registro aprobado');
+// Mínimos, no cifras exactas: los usuarios pidieron más opciones y la lista
+// va a seguir creciendo. Lo que no puede crecer es la distancia entre lo que
+// se ofrece y lo que el catálogo sabe responder, y eso lo cubren los bucles
+// de abajo.
+assert.ok(CARRERAS.length >= 10, `pocas carreras en el registro (${CARRERAS.length})`);
+assert.ok(INTERESES.length >= 10, `pocos intereses en el registro (${INTERESES.length})`);
+assert.equal(new Set(CARRERAS).size, CARRERAS.length, 'hay carreras repetidas');
+assert.equal(new Set(INTERESES).size, INTERESES.length, 'hay intereses repetidos');
 
 for (const c of CARRERAS) {
   const a = areasDe(c);
