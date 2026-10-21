@@ -131,7 +131,7 @@ export default function Registro() {
           <>
             <h1 className="display display--pag" style={{ margin: 0 }}>Crea tu cuenta</h1>
             <button type="button" className="btn btn--linea btn--bloque"
-                    onClick={() => crear({ nombre: 'Camila Flores', email: 'camila.flores@gmail.com', clave: 'google-oauth' })}>
+              onClick={() => crear({ nombre: 'Camila Flores', email: 'camila.flores@gmail.com', clave: 'google-oauth' })}>
               Continuar con Google
             </button>
             <div className="separador">o con tu correo</div>
@@ -168,7 +168,7 @@ export default function Registro() {
           <>
             <h1 className="display display--pag" style={{ margin: 0 }}>¿Qué te interesa?</h1>
             <div className="campo">
-              Áreas que quieres explorar <span style={{ fontWeight: 400 }}>· elige todas las que quieras</span>
+              Áreas que quieres explorar: elige todas las que quieras<span style={{ fontWeight: 400 }}></span>
               <Chips opciones={INTERESES} elegido={f.intereses} onElegir={alternar} multiple />
             </div>
             <div className="campo">Tu objetivo ahora<Chips opciones={OBJETIVOS} elegido={f.objetivo} onElegir={(o) => set('objetivo', o)} /></div>
@@ -179,10 +179,6 @@ export default function Registro() {
           <>
             <h1 className="display display--pag" style={{ margin: 0 }}>¿Cómo nos conociste?</h1>
             <Chips opciones={FUENTES} elegido={f.fuente} onElegir={(o) => set('fuente', o)} />
-            <label className="campo">
-              Código de referido <span style={{ fontWeight: 400 }}>· opcional</span>
-              <input {...campo('referido')} placeholder="Ej. VALE-24" />
-            </label>
             <label className="registro__terminos">
               <input type="checkbox" checked={f.terminos} onChange={(e) => set('terminos', e.target.checked)} />
               Acepto los términos y la política de privacidad
@@ -192,13 +188,13 @@ export default function Registro() {
 
         <div className="registro__pie">
           <button type="button" className="btn btn--linea"
-                  onClick={() => (paso === 0 ? ir('/login') : (setPaso(paso - 1), setIntento(false)))}>
+            onClick={() => (paso === 0 ? ir('/login') : (setPaso(paso - 1), setIntento(false)))}>
             {paso === 0 ? 'Ya tengo cuenta' : '← Atrás'}
           </button>
           {/* Deshabilitado va en lavanda con texto oscuro: en el prototipo era
               blanco sobre lavanda y no se leía. */}
           <button type="button" className={`btn btn--acento btn--grande${listo ? '' : ' btn--apagado'}`}
-                  style={{ flex: 1 }} onClick={siguiente}>
+            style={{ flex: 1 }} onClick={siguiente}>
             {paso === 3 ? 'Crear cuenta y empezar' : 'Continuar'}
           </button>
         </div>

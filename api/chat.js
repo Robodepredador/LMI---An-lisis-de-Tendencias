@@ -51,7 +51,9 @@ async function generar(ai, peticion) {
   throw ultimo;
 }
 
-const INTENTS = ['habilidades', 'salarios', 'comparar', 'cursos', 'brechas', 'otro'];
+// 'tendencia' faltaba: el modelo no podia clasificar "¿que esta creciendo?",
+// devolvia 'otro' y el grafico de lineas no salia nunca por el camino normal.
+const INTENTS = ['habilidades', 'salarios', 'tendencia', 'comparar', 'cursos', 'brechas', 'otro'];
 
 // ── Índice sin cifras, para el paso de enrutado ──────────────────────
 const INDICE = catalogo.roles
@@ -74,6 +76,7 @@ Reglas:
 - fueraDeAlcance es true solo si la pregunta no trata de trabajo, carreras, sueldos
   ni habilidades (por ejemplo el clima o un chiste).
 - "comparar" requiere 2 o 3 roleIds.
+- "tendencia" si preguntan qué está creciendo, qué sube o qué se pide cada vez más.
 - ciudad solo si la persona la menciona; si no, null.`;
 
 const ESQUEMA_ENRUTAR = {

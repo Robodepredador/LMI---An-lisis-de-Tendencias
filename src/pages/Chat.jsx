@@ -16,6 +16,7 @@ import { fmt, ventanaAnalisis } from '../data/contenido.js';
 const ETIQUETA = {
   habilidades: 'HABILIDADES',
   salarios: 'SALARIOS',
+  tendencia: 'TENDENCIA',
   comparar: 'COMPARATIVA',
   cursos: 'CURSOS',
   brechas: 'BRECHAS',
@@ -41,6 +42,194 @@ const PREGUNTAS_DESTACADAS = [
   },
 ];
 
+
+// ── Un turno del hilo ────────────────────────────────────────────────
+// Antes la pantalla solo sabia pintar UNA consulta: cada seguimiento
+// reemplazaba la anterior en vez de continuarla. Ahora el hilo mapea esto.
+function Turno({ consulta, cicloUsuario, onMetodologia, onPreguntar }) {
+  const resultado = consulta?.resultado;
+  const roles = (resultado?.roleIds ?? []).map(rol).filter(Boolean);
+  const rolPrincipal = roles[0] || null;
+  const ciudad = resultado?.ciudad || 'Lima';
+  const esInsuficiente = resultado?.sinDatos
+    || (rolPrincipal && salarioDe(rolPrincipal, ciudad).n < MIN_MUESTRA && resultado?.intent === 'salarios');
+  const consultaActual = consulta;
+  const cicloLabel = CICLOS[cicloUsuario] || '5to – 6to';
+  const muestraTotal = roles.reduce((sum, r) => sum + (rolPrincipal ? salarioDe(r, ciudad).n : r.ofertas), 0);
+
+  return (
+    <div className="pila animate-fade-up" style={{ gap: 20 }}>
+            {/* Sin cabecera: el rol y la ciudad ya los dice la ficha de la
+                derecha, y "+ Nueva consulta" vive en la barra lateral. */}
+
+            {/* Pregunta del usuario (burbuja púrpura a la derecha) */}
+            <div
+              style={{
+                alignSelf: 'flex-end',
+                background: 'var(--accent)',
+                color: 'var(--accent-fg)',
+                borderRadius: '22px 22px 6px 22px',
+                padding: '14px 20px',
+                fontSize: 16,
+                maxWidth: 620,
+                lineHeight: 1.45,
+                boxShadow: '0 4px 14px rgba(75, 59, 255, 0.25)',
+              }}
+            >
+              {consultaActual.pregunta}
+            </div>
+
+            {/* CASO A: Muestra insuficiente */}
+            {esInsuficiente ? (
+              <div
+                style={{
+                  background: 'var(--bg-surface)',
+                  borderRadius: 'var(--radio-2xl)',
+                  padding: 32,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 14,
+                  maxWidth: 720,
+                  border: '1px solid var(--linea)',
+                }}
+              >
+                <div className="fila" style={{ alignItems: 'center', gap: 14 }}>
+                  <Lumi pose="alerta" alto={84} />
+                  <span style={{ fontSize: 13, fontWeight: 700, padding: '5px 12px', borderRadius: 999, background: 'var(--alerta-bg)', color: 'var(--alerta-fg)' }}>
+                    Muestra insuficiente
+                  </span>
+                </div>
+                <strong style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, lineHeight: 1.15 }}>
+                  Solo encontramos pocas ofertas para {rolPrincipal?.nombre || 'este rol'} en {ciudad}.
+                </strong>
+                <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+                  Con menos de {MIN_MUESTRA} ofertas la cifra no es estadísticamente confiable, así que no la mostramos y <strong style={{ color: 'var(--text-primary)' }}>no descontamos tu consulta</strong>. Prueba ampliando la región a todo el país.
+                </p>
+                <div className="fila" style={{ gap: 10, flexWrap: 'wrap', marginTop: 4 }}>
+                  <button
+                    type="button"
+                    className="btn btn--acento"
+                    onClick={() => onPreguntar(`¿Cuánto gana un ${rolPrincipal?.nombre || 'asistente'} en todo el país?`)}
+                  >
+                    Ver en todo el país
+                  </button>
+                  <button
+                    type="button"
+                    className="enlace"
+                    onClick={() => onMetodologia()}
+                    style={{ padding: '10px 14px', background: 'none', border: 0, cursor: 'pointer', fontSize: 14 }}
+                  >
+                    ¿Por qué exigimos mínimo 30 ofertas?
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* CASO B: Resultado OK (Diseño a 2 Columnas idéntico a los diseñadores) */
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20, alignItems: 'start' }}>
+                
+                {/* ── Columna Izquierda: Respuesta + Viñeta Cómic de Lumi ── */}
+                <div className="pila" style={{ gap: 16 }}>
+                  {/* Tarjeta de Respuesta */}
+                  <div style={{ background: 'var(--bg-surface)', borderRadius: 20, padding: 24, display: 'flex', flexDirection: 'column', gap: 10, border: '1px solid var(--linea)' }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
+                      Respuesta del analista
+                    </span>
+                    <p style={{ margin: 0, fontSize: 16, lineHeight: 1.65, color: 'var(--text-primary)' }}>
+                      {resultado?.insight || explicacion(rolPrincipal, resultado?.intent || 'habilidades', rolPrincipal ? filasDe(rolPrincipal) : [], ciudad)}
+                    </p>
+                  </div>
+
+                  {/* Viñeta estilo Cómic de Lumi */}
+                  {rolPrincipal && (
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, paddingTop: 10, position: 'relative' }}>
+                      <Lumi pose="saluda" alto={120} />
+                      <div style={{ position: 'relative', flex: 1, paddingBottom: 28 }}>
+                        <div
+                          style={{
+                            background: 'var(--resalte)',
+                            color: 'var(--resalte-fg)',
+                            border: '3px solid var(--lumi-linea)',
+                            borderRadius: 36,
+                            padding: '18px 22px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 6,
+                            boxShadow: '0 6px 20px rgba(23, 21, 58, 0.08)',
+                          }}
+                        >
+                          <span style={{ fontSize: 13, fontWeight: 800 }}>
+                            Lumi piensa… · {cicloLabel} ciclo
+                          </span>
+                          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55 }}>
+                            {consejo(rolPrincipal, cicloUsuario, resultado?.intent || 'habilidades')}
+                          </p>
+                        </div>
+                        {/* Conectores tipo burbuja cómic */}
+                        <span style={{ position: 'absolute', left: 4, bottom: 12, width: 22, height: 22, borderRadius: 999, background: 'var(--resalte)', border: '3px solid var(--lumi-linea)' }} />
+                        <span style={{ position: 'absolute', left: -10, bottom: -2, width: 13, height: 13, borderRadius: 999, background: 'var(--resalte)', border: '3px solid var(--lumi-linea)' }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* ── Columna Derecha: Tarjeta Analítica y Visualización ── */}
+                <div style={{ background: 'var(--bg-surface)', borderRadius: 20, padding: 26, display: 'flex', flexDirection: 'column', gap: 18, border: '1px solid var(--linea)' }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
+                    {ETIQUETA[resultado?.intent || 'habilidades']} · {rolPrincipal?.nombre || 'Rol'} · {ciudad}
+                  </span>
+
+                  <strong style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
+                    {rolPrincipal ? titular(rolPrincipal, resultado?.intent || 'habilidades', filasDe(rolPrincipal)) : 'Análisis del Mercado Laboral'}
+                  </strong>
+
+                  {/* Renderizado de visualizaciones */}
+                  {resultado?.intent === 'comparar' && roles.length > 1 && <CompareTable roles={roles} />}
+                  {resultado?.intent === 'cursos' && <CourseCards cursos={cursosDe(roles)} />}
+
+                  {rolPrincipal && !['comparar', 'cursos'].includes(resultado?.intent) && (
+                    <>
+                      {resultado?.intent === 'salarios' && salarioDe(rolPrincipal, ciudad).cifras && (
+                        <Franja {...salarioDe(rolPrincipal, ciudad).cifras} />
+                      )}
+                      {resultado?.intent === 'tendencia' && (
+                        <Tendencia filas={filasDe(rolPrincipal)} />
+                      )}
+                      {(!resultado?.intent || resultado?.intent === 'habilidades' || resultado?.intent === 'otro') && (
+                        <Puntos filas={filasDe(rolPrincipal)} />
+                      )}
+                    </>
+                  )}
+
+                  {/* Caja De dónde sale este dato */}
+                  <div style={{ background: 'var(--bg-elevated)', borderRadius: 16, padding: 16, display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
+                    <div className="fila" style={{ justifyContent: 'space-between' }}>
+                      <strong style={{ fontSize: 13.5 }}>De dónde sale este dato</strong>
+                      <button
+                        type="button"
+                        onClick={() => onMetodologia()}
+                        className="enlace"
+                        style={{ fontSize: 12.5, fontWeight: 600, background: 'none', border: 0, color: 'var(--accent)', cursor: 'pointer' }}
+                      >
+                        Ver muestra ↗
+                      </button>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0,1fr)', gap: '6px 14px', fontSize: 12.5 }}>
+                      <span style={{ color: 'var(--text-secondary)' }}>Muestra</span>
+                      <span>{fmt(muestraTotal)} ofertas únicas en {ciudad}</span>
+                      <span style={{ color: 'var(--text-secondary)' }}>Periodo</span>
+                      <span>{ventanaAnalisis()}</span>
+                      <span style={{ color: 'var(--text-secondary)' }}>Portales</span>
+                      <span>Computrabajo, Bumeran, LinkedIn</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+    </div>
+  );
+}
+
 export default function Chat() {
   const { consultaId } = useParams();
   const ir = useNavigate();
@@ -60,14 +249,18 @@ export default function Chat() {
   const [verMetodologia, setVerMetodologia] = useState(false);
   const [toastCredito, setToastCredito] = useState('');
 
-  // Consulta visible seleccionada del historial o la última generada
-  const consultaActual = consultaId
-    ? consultas.find((c) => c.id === consultaId)
-    : consultas[0] || null;
+  // El hilo visible: todas las consultas desde el último "+ Nueva consulta",
+  // de la más antigua a la más reciente. Antes se pintaba solo consultas[0],
+  // así que cada seguimiento reemplazaba al anterior en vez de continuarlo, y
+  // "+ Nueva consulta" no cambiaba nada en pantalla.
+  const hiloVisible = useApp((st) => st.hiloVisible);
+  const seleccionada = consultaId ? consultas.find((c) => c.id === consultaId) : null;
+  const hilo = seleccionada ? [seleccionada] : hiloVisible();
+  const ultima = hilo[hilo.length - 1] ?? null;
 
   // Estado reactivo: consulta inicial (vacío), cargando, o mostrando resultado
-  const isConsulta = !cargando && (!consultaActual || (consultas.length === 0 && !consultaId));
-  const isResultado = !cargando && !!consultaActual;
+  const isConsulta = !cargando && hilo.length === 0;
+  const isResultado = !cargando && hilo.length > 0;
 
   const timerRef = useRef([]);
   useEffect(() => {
@@ -104,6 +297,12 @@ export default function Chat() {
         setTimeout(() => setToastCredito(''), 5000);
       }
       if (consultaId) ir('/chat');
+      // El turno nuevo nace abajo del hilo: sin esto el seguimiento queda
+      // fuera de vista y parece que no pasó nada.
+      requestAnimationFrame(() => {
+        const h = document.querySelector('.hilo');
+        if (h) h.scrollTo({ top: h.scrollHeight, behavior: 'smooth' });
+      });
     } catch (err) {
       console.error('[Chat] Error:', err);
     } finally {
@@ -113,28 +312,25 @@ export default function Chat() {
 
   const nombreUsuario = (usuario?.nombre || 'Estudiante').split(' ')[0];
   const cicloUsuario = usuario?.ciclo ?? 2;
-  const cicloLabel = CICLOS[cicloUsuario] || '5to – 6to';
   const labelCreditos = plan === 'pro' || plan === 'institucional' ? 'Ilimitadas' : `${restante ?? 0} de 3`;
   const costLabel = plan === 'pro' ? 'incluida en Pro' : 'usa 1 crédito';
 
   // Datos para la visualización del resultado
-  const resultado = consultaActual?.resultado;
+  const resultado = ultima?.resultado;
   const roles = (resultado?.roleIds ?? []).map(rol).filter(Boolean);
   const rolPrincipal = roles[0];
   const ciudad = resultado?.ciudad || 'Lima';
-  const esInsuficiente = resultado?.sinDatos || (rolPrincipal && salarioDe(rolPrincipal, ciudad).n < MIN_MUESTRA && resultado?.intent === 'salarios');
 
-  const muestraTotal = roles.reduce((sum, r) => sum + (rolPrincipal ? salarioDe(r, ciudad).n : r.ofertas), 0);
 
   return (
-    <div className="hilo" style={{ background: 'var(--bg-page)', minHeight: 'calc(100vh - 72px)', display: 'flex', flexDirection: 'column' }}>
+    <div className="hilo" style={{ background: 'var(--bg-page)', minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
       <div className="hilo__interior" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 24, padding: '32px 40px', maxWidth: 1200, width: '100%', margin: '0 auto' }}>
         
         {/* ═══════════════════════════════════════════════════════════
             ESTADO 1: PANTALLA "CONSULTA" (Estado Inicial / Dashboard)
            ═══════════════════════════════════════════════════════════ */}
         {isConsulta && (
-          <div className="pila animate-fade-up" style={{ gap: 24 }}>
+          <div className="pila animate-fade-up" style={{ gap: 24, flex: 1 }}>
             <div className="fila" style={{ alignItems: 'center', gap: 18 }}>
               <Lumi pose="saluda" alto={96} />
               <div className="pila" style={{ gap: 4 }}>
@@ -338,173 +534,11 @@ export default function Chat() {
             ESTADO 3: PANTALLA "RESULTADO" (2 Columnas idéntico a Diseñadores)
            ═══════════════════════════════════════════════════════════ */}
         {isResultado && (
-          <div className="pila animate-fade-up" style={{ gap: 20 }}>
-            {/* Sin cabecera: el rol y la ciudad ya los dice la ficha de la
-                derecha, y "+ Nueva consulta" vive en la barra lateral. */}
-
-            {/* Pregunta del usuario (burbuja púrpura a la derecha) */}
-            <div
-              style={{
-                alignSelf: 'flex-end',
-                background: 'var(--accent)',
-                color: 'var(--accent-fg)',
-                borderRadius: '22px 22px 6px 22px',
-                padding: '14px 20px',
-                fontSize: 16,
-                maxWidth: 620,
-                lineHeight: 1.45,
-                boxShadow: '0 4px 14px rgba(75, 59, 255, 0.25)',
-              }}
-            >
-              {consultaActual.pregunta}
-            </div>
-
-            {/* CASO A: Muestra insuficiente */}
-            {esInsuficiente ? (
-              <div
-                style={{
-                  background: 'var(--bg-surface)',
-                  borderRadius: 'var(--radio-2xl)',
-                  padding: 32,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 14,
-                  maxWidth: 720,
-                  border: '1px solid var(--linea)',
-                }}
-              >
-                <div className="fila" style={{ alignItems: 'center', gap: 14 }}>
-                  <Lumi pose="alerta" alto={84} />
-                  <span style={{ fontSize: 13, fontWeight: 700, padding: '5px 12px', borderRadius: 999, background: 'var(--alerta-bg)', color: 'var(--alerta-fg)' }}>
-                    Muestra insuficiente
-                  </span>
-                </div>
-                <strong style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, lineHeight: 1.15 }}>
-                  Solo encontramos pocas ofertas para {rolPrincipal?.nombre || 'este rol'} en {ciudad}.
-                </strong>
-                <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-                  Con menos de {MIN_MUESTRA} ofertas la cifra no es estadísticamente confiable, así que no la mostramos y <strong style={{ color: 'var(--text-primary)' }}>no descontamos tu consulta</strong>. Prueba ampliando la región a todo el país.
-                </p>
-                <div className="fila" style={{ gap: 10, flexWrap: 'wrap', marginTop: 4 }}>
-                  <button
-                    type="button"
-                    className="btn btn--acento"
-                    onClick={() => enviar(`¿Cuánto gana un ${rolPrincipal?.nombre || 'asistente'} en todo el país?`)}
-                  >
-                    Ver en todo el país
-                  </button>
-                  <button
-                    type="button"
-                    className="enlace"
-                    onClick={() => setVerMetodologia(true)}
-                    style={{ padding: '10px 14px', background: 'none', border: 0, cursor: 'pointer', fontSize: 14 }}
-                  >
-                    ¿Por qué exigimos mínimo 30 ofertas?
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* CASO B: Resultado OK (Diseño a 2 Columnas idéntico a los diseñadores) */
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20, alignItems: 'start' }}>
-                
-                {/* ── Columna Izquierda: Respuesta + Viñeta Cómic de Lumi ── */}
-                <div className="pila" style={{ gap: 16 }}>
-                  {/* Tarjeta de Respuesta */}
-                  <div style={{ background: 'var(--bg-surface)', borderRadius: 20, padding: 24, display: 'flex', flexDirection: 'column', gap: 10, border: '1px solid var(--linea)' }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
-                      Respuesta del analista
-                    </span>
-                    <p style={{ margin: 0, fontSize: 16, lineHeight: 1.65, color: 'var(--text-primary)' }}>
-                      {resultado?.insight || explicacion(rolPrincipal, resultado?.intent || 'habilidades', rolPrincipal ? filasDe(rolPrincipal) : [], ciudad)}
-                    </p>
-                  </div>
-
-                  {/* Viñeta estilo Cómic de Lumi */}
-                  {rolPrincipal && (
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, paddingTop: 10, position: 'relative' }}>
-                      <Lumi pose="saluda" alto={120} />
-                      <div style={{ position: 'relative', flex: 1, paddingBottom: 28 }}>
-                        <div
-                          style={{
-                            background: 'var(--resalte)',
-                            color: 'var(--resalte-fg)',
-                            border: '3px solid var(--lumi-linea)',
-                            borderRadius: 36,
-                            padding: '18px 22px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 6,
-                            boxShadow: '0 6px 20px rgba(23, 21, 58, 0.08)',
-                          }}
-                        >
-                          <span style={{ fontSize: 13, fontWeight: 800 }}>
-                            Lumi piensa… · {cicloLabel} ciclo
-                          </span>
-                          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55 }}>
-                            {consejo(rolPrincipal, cicloUsuario, resultado?.intent || 'habilidades')}
-                          </p>
-                        </div>
-                        {/* Conectores tipo burbuja cómic */}
-                        <span style={{ position: 'absolute', left: 4, bottom: 12, width: 22, height: 22, borderRadius: 999, background: 'var(--resalte)', border: '3px solid var(--lumi-linea)' }} />
-                        <span style={{ position: 'absolute', left: -10, bottom: -2, width: 13, height: 13, borderRadius: 999, background: 'var(--resalte)', border: '3px solid var(--lumi-linea)' }} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* ── Columna Derecha: Tarjeta Analítica y Visualización ── */}
-                <div style={{ background: 'var(--bg-surface)', borderRadius: 20, padding: 26, display: 'flex', flexDirection: 'column', gap: 18, border: '1px solid var(--linea)' }}>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
-                    {ETIQUETA[resultado?.intent || 'habilidades']} · {rolPrincipal?.nombre || 'Rol'} · {ciudad}
-                  </span>
-
-                  <strong style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
-                    {rolPrincipal ? titular(rolPrincipal, resultado?.intent || 'habilidades', filasDe(rolPrincipal)) : 'Análisis del Mercado Laboral'}
-                  </strong>
-
-                  {/* Renderizado de visualizaciones */}
-                  {resultado?.intent === 'comparar' && roles.length > 1 && <CompareTable roles={roles} />}
-                  {resultado?.intent === 'cursos' && <CourseCards cursos={cursosDe(roles)} />}
-
-                  {rolPrincipal && !['comparar', 'cursos'].includes(resultado?.intent) && (
-                    <>
-                      {resultado?.intent === 'salarios' && salarioDe(rolPrincipal, ciudad).cifras && (
-                        <Franja {...salarioDe(rolPrincipal, ciudad).cifras} />
-                      )}
-                      {resultado?.intent === 'tendencia' && (
-                        <Tendencia filas={filasDe(rolPrincipal)} />
-                      )}
-                      {(!resultado?.intent || resultado?.intent === 'habilidades' || resultado?.intent === 'otro') && (
-                        <Puntos filas={filasDe(rolPrincipal)} />
-                      )}
-                    </>
-                  )}
-
-                  {/* Caja De dónde sale este dato */}
-                  <div style={{ background: 'var(--bg-elevated)', borderRadius: 16, padding: 16, display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
-                    <div className="fila" style={{ justifyContent: 'space-between' }}>
-                      <strong style={{ fontSize: 13.5 }}>De dónde sale este dato</strong>
-                      <button
-                        type="button"
-                        onClick={() => setVerMetodologia(true)}
-                        className="enlace"
-                        style={{ fontSize: 12.5, fontWeight: 600, background: 'none', border: 0, color: 'var(--accent)', cursor: 'pointer' }}
-                      >
-                        Ver muestra ↗
-                      </button>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0,1fr)', gap: '6px 14px', fontSize: 12.5 }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>Muestra</span>
-                      <span>{fmt(muestraTotal)} ofertas únicas en {ciudad}</span>
-                      <span style={{ color: 'var(--text-secondary)' }}>Periodo</span>
-                      <span>{ventanaAnalisis()}</span>
-                      <span style={{ color: 'var(--text-secondary)' }}>Portales</span>
-                      <span>Computrabajo, Bumeran, LinkedIn</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="pila" style={{ gap: 20, flex: 1 }}>
+            {hilo.map((c) => (
+              <Turno key={c.id} consulta={c} cicloUsuario={cicloUsuario}
+                     onMetodologia={() => setVerMetodologia(true)} onPreguntar={enviar} />
+            ))}
 
             {/* Toast flotante de crédito consumido */}
             {toastCredito && (

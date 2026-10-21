@@ -176,3 +176,41 @@ for (let c = 0; c < 4; c++) {
 }
 
 console.log('check-graficos: prosa OK');
+
+// ── Cada intención tiene etiqueta y pinta algo ───────────────────────
+// 'tendencia' faltaba en el enum de api/chat.js y en ETIQUETA: el gráfico de
+// líneas no salía nunca por el camino normal, y la cabecera quedaba con un
+// "·" huérfano delante del rol.
+const chat = readFileSync(new URL('../api/chat.js', import.meta.url), 'utf8');
+const pagina = readFileSync(new URL('../src/pages/Chat.jsx', import.meta.url), 'utf8');
+
+const INTENTS = chat.match(/const INTENTS = \[([^\]]+)\]/)[1]
+  .split(',').map((s) => s.trim().replace(/['"]/g, ''));
+const etiquetas = pagina.slice(pagina.indexOf('const ETIQUETA'), pagina.indexOf('};', pagina.indexOf('const ETIQUETA')));
+
+for (const i of INTENTS) {
+  assert.ok(etiquetas.includes(i + ':'), `ETIQUETA no tiene entrada para intent "${i}"`);
+}
+assert.ok(INTENTS.includes('tendencia'),
+  'api/chat.js debe poder clasificar "tendencia" o el grafico de lineas es inalcanzable');
+
+console.log('check-graficos: intenciones OK');
+
+// ── Las etiquetas del gráfico de tendencia no se pisan ───────────────
+// Van al extremo derecho, a la altura de cada serie. Cuando dos series
+// terminan cerca, los textos se montan: pasaba en 22 de 35 roles.
+const { posicionesDe, ALTO_ETIQUETA } = await import('../src/lib/tendencia.js');
+
+let apretados = 0;
+for (const rol of catalogo.roles) {
+  const ys = posicionesDe(serieDe(filasDe(rol))).map((p) => p.yEtiqueta).sort((a, b) => a - b);
+  for (let i = 1; i < ys.length; i++) {
+    const hueco = ys[i] - ys[i - 1];
+    if (hueco < ALTO_ETIQUETA - 0.01) apretados++;
+    assert.ok(hueco >= ALTO_ETIQUETA - 0.01,
+      `${rol.id}: dos etiquetas a ${hueco.toFixed(1)}px, hace falta ${ALTO_ETIQUETA}`);
+  }
+}
+assert.equal(apretados, 0, 'ninguna etiqueta puede quedar por debajo del alto minimo');
+
+console.log('check-graficos: etiquetas sin solape OK');

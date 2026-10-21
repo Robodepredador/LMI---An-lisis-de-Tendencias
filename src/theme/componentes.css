@@ -1570,3 +1570,4 @@
 }
 .registro__form .chips { gap: 6px; }
 .registro__form .chip--opcion { padding: 7px 12px; font-size: var(--tipo-sm); }
+.tendencia__guia-etiqueta { stroke: currentColor; stroke-width: 1; opacity: .45; }
