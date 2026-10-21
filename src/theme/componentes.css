@@ -1392,26 +1392,6 @@
   gap: 14px;
   background: var(--bg-surface);
 }
-.caso-foto-placeholder {
-  height: 160px;
-  border-radius: var(--radio-lg);
-  background: var(--bg-elevated);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--tipo-sm);
-  color: var(--text-secondary);
-}
-.sec-resenas-proto {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding: 40px 24px 80px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-}
 .resena-card-proto {
   background: var(--bg-page);
   border-radius: var(--radio-2xl);
@@ -1440,10 +1420,10 @@
 .plan-card-proto {
   background: var(--bg-surface);
   border-radius: var(--radio-3xl);
-  padding: 30px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 .plan-card-proto--destacado {
   border: 2.5px solid var(--accent);
@@ -1455,10 +1435,10 @@
 .comparativa-card {
   background: var(--bg-surface);
   border-radius: var(--radio-3xl);
-  padding: 30px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   overflow-x: auto;
 }
 .comparativa-grid {
@@ -1484,9 +1464,7 @@
 .sec-lumi-proto,
 .sec-funciones-proto,
 .sec-casos-proto,
-.sec-resenas-proto,
-.sec-planes-proto,
-.sec-comparativa-proto {
+.sec-planes-proto {
   scroll-margin-top: var(--nav-h);
   min-height: calc(100svh - var(--nav-h));
   align-content: center;
@@ -1497,24 +1475,14 @@
    (≈690 útiles). Los números de antes están en el comentario de cada uno. */
 .sec-lumi-proto     { padding: 36px; gap: 28px; margin: 24px auto 16px; }   /* 56 / 40 / 40-24 */
 .sec-funciones-proto { padding: 32px 24px; gap: 20px; --fn-pad: 24px; --fn-min: 200px; }  /* 48-56 / 32 / 36 / 280 */
-.sec-casos-proto     { padding: 32px 24px; gap: 20px; }                      /* 80-40 / 32 */
-.sec-resenas-proto   { padding: 32px 24px; }                                 /* 40-80 */
-.sec-planes-proto    { padding: 32px 0; }                                    /* 80 */
-.sec-planes-proto__inner { gap: 20px; }                                      /* 32 */
+.sec-casos-proto     { padding: 24px; gap: 14px; }                            /* 80-40 / 32 */
+.sec-planes-proto    { padding: 24px 0; }                                    /* 80 */
+.sec-planes-proto__inner { gap: 14px; }                                      /* 32 */
 
-.sec-comparativa-proto {
-  width: 100%;
-  background: var(--bg-page);
-  padding: 32px 24px;
-  display: flex;
-  flex-direction: column;
-}
-.sec-comparativa-proto .comparativa-card { max-width: 1200px; width: 100%; margin: 0 auto; }
 
 .promesa-proto      { padding: 14px 20px; gap: 4px; }                        /* 20-24 / 6 */
-.caso-card-proto    { padding: 20px; gap: 10px; }                            /* 26 / 14 */
-.caso-foto-placeholder { height: 104px; }                                    /* 160 */
-.resena-card-proto  { padding: 18px; gap: 8px; }                             /* 24 / 12 */
+.caso-card-proto    { padding: 16px; gap: 8px; }                             /* 26 / 14 */
+.resena-card-proto  { padding: 14px; gap: 6px; }                             /* 24 / 12 */
 
 /* En pantallas altas no hace falta apretar tanto. */
 @media (min-height: 900px) {
@@ -1522,6 +1490,55 @@
   .sec-funciones-proto,
   .sec-casos-proto     { padding: 48px 24px; gap: 28px; }
   .sec-funciones-proto { --fn-pad: 32px; --fn-min: 240px; }
-  .caso-foto-placeholder { height: 140px; }
   .promesa-proto       { padding: 18px 22px; }
+}
+
+/* ── Casos y reseñas en una sola sección ── */
+.rejilla-casos-proto {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;
+}
+.caso-quien { display: flex; align-items: center; gap: 10px; }
+.caso-dato {
+  font-size: var(--tipo-xs); font-weight: 700; padding: 5px 10px;
+  border-radius: var(--radio-full); background: var(--resalte); color: var(--resalte-fg);
+}
+.caso-nota {
+  font-size: var(--tipo-xs); font-weight: 600; padding: 5px 10px;
+  border-radius: var(--radio-full); background: var(--bg-elevated); color: var(--text-secondary);
+}
+.rejilla-resenas-proto {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;
+}
+.resena-resumen {
+  background: var(--bg-noche); color: var(--sobre-accent);
+  border-radius: var(--radio-2xl); padding: 18px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+/* ── Planes con la comparativa dentro ── */
+.rejilla-planes-proto {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;
+}
+.plan-card-proto__cabecera { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.plan-etiqueta {
+  font-size: var(--tipo-xs); font-weight: 700; padding: 4px 10px;
+  border-radius: var(--radio-full); background: var(--resalte); color: var(--resalte-fg);
+}
+.plan-card-proto__puntos {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 5px; font-size: var(--tipo-sm);
+}
+.plan-card-proto--destacado { border: 2px solid var(--accent); }
+.plan-card-proto--noche { background: var(--bg-noche); color: var(--sobre-noche); }
+.plan-card-proto--noche strong { color: var(--sobre-accent); }
+
+.comparativa-fila { padding: 7px 10px; border-top: 1px solid var(--linea); font-size: var(--tipo-sm); }
+.comparativa-otro { color: var(--text-secondary); }
+.comparativa-col--nuestra { background: var(--bg-elevated); color: var(--accent); padding: 7px 10px; }
+
+/* En pantallas altas, los planes recuperan aire. */
+@media (min-height: 900px) {
+  .plan-card-proto  { padding: 28px; gap: 14px; }
+  .comparativa-card { padding: 26px; gap: 14px; }
+  .sec-planes-proto__inner { gap: 20px; }
 }

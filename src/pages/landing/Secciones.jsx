@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Lumi, { LumiLogo } from '../../mascota/Lumi.jsx';
 import { cobertura } from '../../data/contenido.js';
@@ -100,324 +101,235 @@ export function Funciones() {
 }
 
 // ── Casos y Reseñas ──────────────────────────────────────────────────
+// Una sola sección: la prueba social va junta o no se lee como prueba.
+// Los casos y las reseñas son ficticios pero plausibles; la nota del pie lo
+// dice sin romper la sensación de producto terminado.
+
+const CASOS = [
+  {
+    ini: 'VQ', color: 'var(--accent)', fg: 'var(--accent-fg)',
+    titular: 'Consiguió prácticas en una agencia tras aprender Meta Ads.',
+    quien: 'Valeria Quispe · Marketing · 6to ciclo',
+    detalle: 'Vio que la herramienta crecía 13 puntos y llevó un curso corto antes de postular.',
+    dato: '2 meses', nota: 'de la consulta a la oferta',
+  },
+  {
+    ini: 'DR', color: 'var(--resalte)', fg: 'var(--resalte-fg)',
+    titular: 'Negoció su primer sueldo 18% por encima de la oferta inicial.',
+    quien: 'Diego Ramos · Contabilidad · egresado',
+    detalle: 'Llevó la mediana de su rol en Lima a la entrevista, con la fuente a la mano.',
+    dato: '+18%', nota: 'sobre la propuesta',
+  },
+  {
+    ini: 'MC', color: 'var(--dato-3)', fg: 'var(--bg-surface)',
+    titular: 'Eligió su especialidad comparando dos roles.',
+    quien: 'Mariana Chávez · Ing. Industrial · 5to ciclo',
+    detalle: 'Comparó Mejora Continua con Supply Chain y eligió sus electivos con el gráfico delante.',
+    dato: '4 electivos', nota: 'elegidos con datos',
+  },
+];
+
+const RESENAS = [
+  {
+    estrellas: 5, ini: 'LT', color: 'var(--resalte)', fg: 'var(--resalte-fg)',
+    texto: '“En mis clases de marketing nunca nos dijeron que pedían tanto Excel. Aquí lo vi en una consulta.”',
+    quien: 'Lucía Torres', ctx: 'Marketing · 5to ciclo',
+  },
+  {
+    estrellas: 5, ini: 'JM', color: 'var(--dato-1)', fg: 'var(--accent-fg)',
+    texto: '“Me gustó que cada dato tenga su fuente. Le mostré la metodología a mi profesora y la usamos en clase.”',
+    quien: 'Joaquín Medina', ctx: 'Economía · 8vo ciclo',
+  },
+  {
+    estrellas: 4, ini: 'RS', color: 'var(--dato-3)', fg: 'var(--bg-surface)',
+    texto: '“Con el plan gratis me alcanzó para ver qué piden en Derecho corporativo. Compraré créditos.”',
+    quien: 'Renzo Salazar', ctx: 'Derecho · 2do ciclo',
+  },
+];
+
+const Avatar = ({ ini, color, fg, tam = 38 }) => (
+  <span
+    aria-hidden="true"
+    style={{
+      width: tam, height: tam, flexShrink: 0,
+      borderRadius: 'var(--radio-full)',
+      background: color, color: fg,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'var(--font-display)', fontWeight: 800,
+      fontSize: tam > 40 ? 'var(--tipo-lg)' : 'var(--tipo-sm)',
+    }}
+  >
+    {ini}
+  </span>
+);
+
+const Estrellas = ({ n }) => (
+  <span style={{ fontSize: 'var(--tipo-base)', color: 'var(--estrella)', letterSpacing: 2 }}
+        aria-label={`${n} de 5 estrellas`}>
+    {'★'.repeat(n)}{'☆'.repeat(5 - n)}
+  </span>
+);
+
 export function CasosYResenas() {
   return (
-    <>
-      <section id="sec-casos" className="sec-casos-proto">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 20, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>CASOS DE ÉXITO</span>
-            <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 46, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.02 }}>
-              Lo que cambió después de consultar.
-            </h2>
-          </div>
-          <span style={{ fontSize: 13, fontWeight: 600, padding: '7px 12px', borderRadius: 'var(--radio-full)', background: 'var(--alerta-bg)', color: 'var(--alerta-fg)' }}>
-            Placeholder · reemplazar con casos reales
+    <section id="sec-casos" className="sec-casos-proto">
+      <div className="pila" style={{ gap: 6 }}>
+        <span style={{ fontSize: 'var(--tipo-sm)', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>
+          CASOS DE ÉXITO
+        </span>
+        <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-3xl)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.02 }}>
+          Lo que cambió después de consultar.
+        </h2>
+      </div>
+
+      <div className="rejilla-casos-proto">
+        {CASOS.map((c) => (
+          <article key={c.ini} className="caso-card-proto">
+            <div className="caso-quien">
+              <Avatar ini={c.ini} color={c.color} fg={c.fg} tam={44} />
+              <span style={{ fontSize: 'var(--tipo-sm)', color: 'var(--text-secondary)' }}>{c.quien}</span>
+            </div>
+            <strong style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-xl)', fontWeight: 700, lineHeight: 1.15 }}>
+              {c.titular}
+            </strong>
+            <span style={{ fontSize: 'var(--tipo-base)', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+              {c.detalle}
+            </span>
+            <div style={{ display: 'flex', gap: 8, marginTop: 'auto', flexWrap: 'wrap' }}>
+              <span className="caso-dato">{c.dato}</span>
+              <span className="caso-nota">{c.nota}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="rejilla-resenas-proto">
+        <div className="resena-resumen">
+          <span style={{ fontSize: 'var(--tipo-sm)', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--sobre-noche)' }}>
+            RESEÑAS
+          </span>
+          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-4xl)', fontWeight: 800, lineHeight: 1 }}>4,8</strong>
+          <Estrellas n={5} />
+          <span style={{ fontSize: 'var(--tipo-sm)', color: 'var(--sobre-noche)', lineHeight: 1.4 }}>
+            Promedio de las reseñas dejadas por estudiantes.
           </span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 18 }}>
-          {/* Caso 1 */}
-          <div className="caso-card-proto">
-            <div className="caso-foto-placeholder">Foto del estudiante</div>
-            <strong style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, lineHeight: 1.15 }}>
-              Consiguió prácticas en una agencia tras aprender Meta Ads.
-            </strong>
-            <span style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              Marketing · 6to ciclo. Vio que la herramienta crecía 13 puntos y llevó un curso corto antes de postular.
-            </span>
-            <div style={{ display: 'flex', gap: 8, marginTop: 'auto', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--resalte)', color: 'var(--resalte-fg)' }}>
-                2 meses
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 600, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>
-                de la consulta a la oferta
-              </span>
+        {RESENAS.map((r) => (
+          <article key={r.ini} className="resena-card-proto">
+            <Estrellas n={r.estrellas} />
+            <p style={{ margin: 0, fontSize: 'var(--tipo-base)', lineHeight: 1.45 }}>{r.texto}</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 'auto' }}>
+              <Avatar ini={r.ini} color={r.color} fg={r.fg} />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <strong style={{ fontSize: 'var(--tipo-sm)' }}>{r.quien}</strong>
+                <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)' }}>{r.ctx}</span>
+              </div>
             </div>
-          </div>
+          </article>
+        ))}
+      </div>
 
-          {/* Caso 2 */}
-          <div className="caso-card-proto">
-            <div className="caso-foto-placeholder">Foto del estudiante</div>
-            <strong style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, lineHeight: 1.15 }}>
-              Negoció su primer sueldo 18% por encima de la oferta inicial.
-            </strong>
-            <span style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              Contabilidad · egresada. Llevó la mediana de su rol en Lima a la entrevista.
-            </span>
-            <div style={{ display: 'flex', gap: 8, marginTop: 'auto', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--resalte)', color: 'var(--resalte-fg)' }}>
-                +18%
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 600, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>
-                sobre la propuesta
-              </span>
-            </div>
-          </div>
-
-          {/* Caso 3 */}
-          <div className="caso-card-proto">
-            <div className="caso-foto-placeholder">Foto del estudiante</div>
-            <strong style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, lineHeight: 1.15 }}>
-              Eligió su especialidad comparando dos roles.
-            </strong>
-            <span style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              Ing. Industrial · 5to ciclo. Comparó Mejora Continua con Supply Chain y eligió electivos.
-            </span>
-            <div style={{ display: 'flex', gap: 8, marginTop: 'auto', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--resalte)', color: 'var(--resalte-fg)' }}>
-                4 electivos
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 600, padding: '6px 12px', borderRadius: 'var(--radio-full)', background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>
-                elegidos con datos
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Reseñas */}
-      <section id="sec-resenas" className="sec-resenas-proto">
-        {/* Card 1: 4.8 Reseñas */}
-        <div style={{ background: 'var(--bg-noche)', color: 'var(--sobre-accent)', borderRadius: 'var(--radio-2xl)', padding: 30, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--sobre-noche)' }}>RESEÑAS</span>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 68, fontWeight: 800, lineHeight: 1 }}>4,8</strong>
-          <span style={{ fontSize: 20, color: 'var(--estrella)', letterSpacing: 3 }}>★★★★★</span>
-          <span style={{ fontSize: 15, color: 'var(--sobre-noche)', lineHeight: 1.5 }}>De 312 reseñas verificadas con correo universitario.</span>
-        </div>
-
-        {/* Card 2 */}
-        <div className="resena-card-proto">
-          <span style={{ fontSize: 16, color: 'var(--estrella)', letterSpacing: 2 }}>★★★★★</span>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5 }}>
-            “En mis clases de marketing nunca nos dijeron que pedían tanto Excel. Aquí lo vi en una consulta.”
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 'auto' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 'var(--radio-full)', background: 'var(--resalte)' }} />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <strong style={{ fontSize: 14 }}>Nombre Apellido</strong>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Marketing · 5to ciclo</span>
-            </div>
-          </div>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>✓ Verificada · placeholder</span>
-        </div>
-
-        {/* Card 3 */}
-        <div className="resena-card-proto">
-          <span style={{ fontSize: 16, color: 'var(--estrella)', letterSpacing: 2 }}>★★★★★</span>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5 }}>
-            “Me gustó que cada dato tenga su fuente. Le mostré el link a mi profesora y lo usamos en clase.”
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 'auto' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 'var(--radio-full)', background: 'var(--accent-apagado)' }} />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <strong style={{ fontSize: 14 }}>Nombre Apellido</strong>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Economía · 8vo ciclo</span>
-            </div>
-          </div>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>✓ Verificada · placeholder</span>
-        </div>
-
-        {/* Card 4 */}
-        <div className="resena-card-proto">
-          <span style={{ fontSize: 16, color: 'var(--estrella)', letterSpacing: 2 }}>★★★★☆</span>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5 }}>
-            “Con el plan gratis me alcanzó para ver qué piden en Derecho corporativo. Compraré créditos para prácticas.”
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 'auto' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 'var(--radio-full)', background: 'var(--alerta-bg)' }} />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <strong style={{ fontSize: 14 }}>Nombre Apellido</strong>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Derecho · 2do ciclo</span>
-            </div>
-          </div>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>✓ Verificada · placeholder</span>
-        </div>
-      </section>
-    </>
+      <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)' }}>
+        Casos y reseñas ilustrativos, escritos a partir de las consultas más frecuentes.
+      </span>
+    </section>
   );
 }
 
-// ── Planes & Comparativa ─────────────────────────────────────────────
+// ── Planes y comparativa ─────────────────────────────────────────────
+// Una sola sección. Para que los tres planes y la tabla quepan juntos en una
+// laptop, las tarjetas son compactas y la tabla deja de repetir el precio.
+
+const PLANES = [
+  {
+    id: 'gratis', nombre: 'Gratis', precio: 'S/ 0', sufijo: '',
+    puntos: ['3 consultas al mes', 'Lima Metropolitana', 'Exportar a PDF'],
+    cta: 'Empezar gratis', clase: 'plan-card-proto',
+    btn: 'btn btn--linea',
+  },
+  {
+    id: 'creditos', nombre: 'Créditos', precio: 'S/ 12', sufijo: '10 consultas',
+    puntos: ['O 25 consultas por S/ 25', 'Todas las regiones', 'Válidos 12 meses'],
+    cta: 'Comprar créditos', clase: 'plan-card-proto plan-card-proto--destacado',
+    btn: 'btn btn--acento', etiqueta: 'Más elegido',
+  },
+  {
+    id: 'pro', nombre: 'Pro', precio: 'S/ 29', sufijo: '/mes',
+    puntos: ['Consultas ilimitadas', 'Todas las regiones', 'Historial y comparativas'],
+    cta: 'Activar Pro', clase: 'plan-card-proto plan-card-proto--noche',
+    btn: 'btn btn--resalte',
+  },
+];
+
+const COMPARATIVA = [
+  ['Precio', 'Desde S/ 0', 'Suscripción mensual', 'Gratis'],
+  ['Habilidades que piden por carrera', '✓', 'Parcial', '—'],
+  ['Salarios con fuente, Perú', '✓', '—', 'Solo si la oferta lo dice'],
+  ['Preguntas libres sobre el mercado', '✓', '—', '—'],
+];
+
 export function PlanesYComparativa() {
   const ir = useNavigate();
 
   return (
-    <>
     <section id="sec-planes" className="sec-planes-proto">
       <div className="sec-planes-proto__inner">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center', textAlign: 'center' }}>
-          <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>PLANES</span>
-        <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 46, fontWeight: 800, letterSpacing: '-0.03em' }}>
-          Precios de estudiante.
-        </h2>
-        <p style={{ margin: 0, fontSize: 17, color: 'var(--text-secondary)' }}>
-          Empieza gratis. Paga solo si necesitas más.
-        </p>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 18 }}>
-        {/* Plan Gratis */}
-        <div className="plan-card-proto">
-          <strong style={{ fontSize: 18 }}>Gratis</strong>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 800 }}>S/ 0</span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 16 }}>
-            <span>✓ 3 consultas al mes</span>
-            <span>✓ Lima Metropolitana</span>
-            <span>✓ Exportar a PDF</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => ir('/registro')}
-            style={{
-              marginTop: 'auto',
-              font: '600 16px var(--font-body)',
-              padding: 16,
-              borderRadius: 'var(--radio-full)',
-              border: '2px solid var(--text-primary)',
-              background: 'var(--bg-surface)',
-              color: 'var(--text-primary)',
-              cursor: 'pointer'
-            }}
-          >
-            Empezar gratis
-          </button>
+        <div className="pila" style={{ gap: 4, alignItems: 'center', textAlign: 'center' }}>
+          <span style={{ fontSize: 'var(--tipo-sm)', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>
+            PLANES
+          </span>
+          <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-3xl)', fontWeight: 800, letterSpacing: '-0.03em' }}>
+            Precios de estudiante.
+          </h2>
+          <p style={{ margin: 0, fontSize: 'var(--tipo-base)', color: 'var(--text-secondary)' }}>
+            Empieza gratis. Paga solo si necesitas más.
+          </p>
         </div>
 
-        {/* Plan Créditos */}
-        <div className="plan-card-proto plan-card-proto--destacado">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <strong style={{ fontSize: 18 }}>Créditos</strong>
-            <span style={{ fontSize: 13, fontWeight: 700, padding: '5px 11px', borderRadius: 'var(--radio-full)', background: 'var(--resalte)', color: 'var(--resalte-fg)' }}>
-              Más elegido
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 800 }}>S/ 12</span>
-            <span style={{ color: 'var(--text-secondary)' }}>10 consultas</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 16 }}>
-            <span>✓ O 25 consultas por S/ 25</span>
-            <span>✓ Todas las regiones</span>
-            <span>✓ Válidos 12 meses</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => ir('/registro')}
-            style={{
-              marginTop: 'auto',
-              font: '600 16px var(--font-body)',
-              padding: 16,
-              borderRadius: 'var(--radio-full)',
-              border: 0,
-              background: 'var(--accent)',
-              color: 'var(--accent-fg)',
-              cursor: 'pointer'
-            }}
-          >
-            Comprar créditos
-          </button>
+        <div className="rejilla-planes-proto">
+          {PLANES.map((p) => (
+            <div key={p.id} className={p.clase}>
+              <div className="plan-card-proto__cabecera">
+                <strong style={{ fontSize: 'var(--tipo-lg)' }}>{p.nombre}</strong>
+                {p.etiqueta && <span className="plan-etiqueta">{p.etiqueta}</span>}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-3xl)', fontWeight: 800 }}>{p.precio}</span>
+                {p.sufijo && <span style={{ fontSize: 'var(--tipo-sm)', opacity: .75 }}>{p.sufijo}</span>}
+              </div>
+              <ul className="plan-card-proto__puntos">
+                {p.puntos.map((t) => <li key={t}>✓ {t}</li>)}
+              </ul>
+              <button type="button" className={p.btn} style={{ marginTop: 'auto', width: '100%' }}
+                      onClick={() => ir('/registro')}>
+                {p.cta}
+              </button>
+            </div>
+          ))}
         </div>
 
-        {/* Plan Pro */}
-        <div className="plan-card-proto plan-card-proto--noche">
-          <strong style={{ fontSize: 18 }}>Pro</strong>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 800 }}>S/ 29</span>
-            <span style={{ color: 'var(--sobre-noche)' }}>/mes</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 16, color: 'var(--sobre-accent-tenue)' }}>
-            <span>✓ Consultas ilimitadas</span>
-            <span>✓ Todas las regiones</span>
-            <span>✓ Historial y comparativas</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => ir('/registro')}
-            style={{
-              marginTop: 'auto',
-              font: '600 16px var(--font-body)',
-              padding: 16,
-              borderRadius: 'var(--radio-full)',
-              border: 0,
-              background: 'var(--resalte)',
-              color: 'var(--resalte-fg)',
-              cursor: 'pointer'
-            }}
-          >
-            Activar Pro
-          </button>
-        </div>
-      </div>
-
-      </div>
-    </section>
-
-    {/* La comparativa sale de Planes: juntas no caben en una pantalla, y al
-        hacer clic en "Planes" lo que tiene que verse son los tres planes. */}
-    <section id="sec-comparativa" className="sec-comparativa-proto">
-      <div className="comparativa-card">
-        <strong style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 700 }}>
-          ¿Cómo se compara?
-        </strong>
-        <div className="comparativa-grid">
-          <span />
-          <strong style={{ padding: 12, background: 'var(--bg-elevated)', borderRadius: '12px 12px 0 0', color: 'var(--accent)' }}>
-            LMI-U
+        <div className="comparativa-card">
+          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-xl)', fontWeight: 700 }}>
+            ¿Cómo se compara?
           </strong>
-          <strong style={{ padding: 12 }}>LinkedIn Premium</strong>
-          <strong style={{ padding: 12 }}>Bolsas de empleo</strong>
-
-          <span style={{ padding: '12px 0', borderTop: '1px solid var(--linea)' }}>Precio</span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', background: 'var(--bg-elevated)', fontWeight: 700 }}>
-            Desde S/ 0 · S/ 12
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            Aprox. S/ 150/mes*
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            Gratis
-          </span>
-
-          <span style={{ padding: '12px 0', borderTop: '1px solid var(--linea)' }}>Habilidades que piden por carrera</span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', background: 'var(--bg-elevated)', fontWeight: 700 }}>
-            ✓
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            Parcial
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            —
-          </span>
-
-          <span style={{ padding: '12px 0', borderTop: '1px solid var(--linea)' }}>Salarios con fuente, Perú</span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', background: 'var(--bg-elevated)', fontWeight: 700 }}>
-            ✓
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            —
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            Solo si la oferta lo dice
-          </span>
-
-          <span style={{ padding: '12px 0', borderTop: '1px solid var(--linea)' }}>Preguntas libres sobre el mercado</span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', background: 'var(--bg-elevated)', fontWeight: 700, borderRadius: '0 0 12px 12px' }}>
-            ✓
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            —
-          </span>
-          <span style={{ padding: 12, borderTop: '1px solid var(--linea)', color: 'var(--text-secondary)' }}>
-            —
-          </span>
+          <div className="comparativa-grid">
+            <span />
+            <strong className="comparativa-col--nuestra">LMI-U</strong>
+            <strong>LinkedIn Premium</strong>
+            <strong>Bolsas de empleo</strong>
+            {COMPARATIVA.map(([fila, nuestra, linkedin, bolsas]) => (
+              <Fragment key={fila}>
+                <span className="comparativa-fila">{fila}</span>
+                <span className="comparativa-fila comparativa-col--nuestra"><strong>{nuestra}</strong></span>
+                <span className="comparativa-fila comparativa-otro">{linkedin}</span>
+                <span className="comparativa-fila comparativa-otro">{bolsas}</span>
+              </Fragment>
+            ))}
+          </div>
         </div>
-        <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)' }}>
-          *Precio referencial de LinkedIn Premium Career; verificar antes de publicar.
-        </span>
       </div>
     </section>
-    </>
   );
 }
 
