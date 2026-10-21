@@ -948,7 +948,14 @@
 .consejo__burbuja p { margin: 0; font-size: var(--tipo-lg); line-height: 1.55; }
 
 /* ── Registro de 4 pasos ── */
-.registro { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); min-height: 100%; }
+/* 100% no resuelve dentro del <main> flex del layout: la pantalla quedaba
+   corta y asomaba una franja blanca bajo el panel índigo. */
+.registro {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  min-height: 100svh;
+  flex: 1;
+}
 .registro__lado {
   background: var(--accent); color: var(--sobre-accent);
   padding: 48px; display: flex; flex-direction: column; gap: 24px;
