@@ -58,7 +58,7 @@ export function Funciones() {
         </h2>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: 18 }}>
-        <div style={{ background: 'var(--accent)', color: 'var(--accent-fg)', borderRadius: 'var(--radio-3xl)', padding: 36, display: 'flex', flexDirection: 'column', gap: 14, minHeight: 280 }}>
+        <div style={{ background: 'var(--accent)', color: 'var(--accent-fg)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
           <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--sobre-accent-tenue)' }}>Habilidades</span>
           <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
             “Sabes qué aprender antes de tus prácticas.”
@@ -67,7 +67,7 @@ export function Funciones() {
             Qué porcentaje de ofertas pide cada herramienta para tu rol y qué está creciendo: redes, Excel, Power BI, SAP, Figma.
           </p>
         </div>
-        <div style={{ background: 'var(--resalte)', color: 'var(--resalte-fg)', borderRadius: 'var(--radio-3xl)', padding: 36, display: 'flex', flexDirection: 'column', gap: 14, minHeight: 280 }}>
+        <div style={{ background: 'var(--resalte)', color: 'var(--resalte-fg)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
           <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--resalte-fg)' }}>Salarios</span>
           <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
             “Negocia tu primer sueldo con datos, no con suposiciones.”
@@ -76,7 +76,7 @@ export function Funciones() {
             Rango y mediana por rol, ciudad y experiencia, solo con ofertas que declaran sueldo.
           </p>
         </div>
-        <div style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)', borderRadius: 'var(--radio-3xl)', padding: 36, display: 'flex', flexDirection: 'column', gap: 14, minHeight: 280 }}>
+        <div style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
           <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--text-secondary)' }}>Pregunta libre</span>
           <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
             “Pregunta como le preguntarías a un asesor de carrera.”
@@ -85,7 +85,7 @@ export function Funciones() {
             Escribe tu duda sobre el mercado o un puesto. Te respondemos con una explicación, el dato y ofertas reales de ejemplo.
           </p>
         </div>
-        <div style={{ background: 'var(--bg-noche)', color: 'var(--sobre-accent)', borderRadius: 'var(--radio-3xl)', padding: 36, display: 'flex', flexDirection: 'column', gap: 14, minHeight: 280 }}>
+        <div style={{ background: 'var(--bg-noche)', color: 'var(--sobre-accent)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
           <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--sobre-noche)' }}>Comparar y cerrar brechas</span>
           <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
             “Elige tu especialidad con evidencia.”
@@ -243,6 +243,7 @@ export function PlanesYComparativa() {
   const ir = useNavigate();
 
   return (
+    <>
     <section id="sec-planes" className="sec-planes-proto">
       <div className="sec-planes-proto__inner">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center', textAlign: 'center' }}>
@@ -349,7 +350,12 @@ export function PlanesYComparativa() {
         </div>
       </div>
 
-      {/* Comparativa */}
+      </div>
+    </section>
+
+    {/* La comparativa sale de Planes: juntas no caben en una pantalla, y al
+        hacer clic en "Planes" lo que tiene que verse son los tres planes. */}
+    <section id="sec-comparativa" className="sec-comparativa-proto">
       <div className="comparativa-card">
         <strong style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 700 }}>
           ¿Cómo se compara?
@@ -406,12 +412,12 @@ export function PlanesYComparativa() {
             —
           </span>
         </div>
-          <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-            *Precio referencial de LinkedIn Premium Career; verificar antes de publicar.
-          </span>
-        </div>
+        <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)' }}>
+          *Precio referencial de LinkedIn Premium Career; verificar antes de publicar.
+        </span>
       </div>
     </section>
+    </>
   );
 }
 

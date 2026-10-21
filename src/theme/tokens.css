@@ -89,6 +89,10 @@
   --sombra-sm:    0 1px 3px rgba(23, 21, 58, .12);
   --sombra-hover: 0 6px 18px rgba(23, 21, 58, .14);
 
+  /* Alto de la barra pegajosa de la landing. Las secciones lo descuentan
+     para caber en una pantalla y lo usan como scroll-margin. */
+  --nav-h: 76px;
+
   /* ── Movimiento ── */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration: 200ms;

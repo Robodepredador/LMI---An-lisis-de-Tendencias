@@ -1474,3 +1474,54 @@
 
 
 
+
+/* ═══════════════════════════════════════════════════════════
+   Una sección, una pantalla
+   Al hacer clic en un enlace del menú tiene que verse la sección
+   entera sin scrollear. Dos cosas lo impedían: el alto del contenido
+   y que la barra pegajosa tapaba la cabecera (scroll-margin-top: 0).
+   ═══════════════════════════════════════════════════════════ */
+.sec-lumi-proto,
+.sec-funciones-proto,
+.sec-casos-proto,
+.sec-resenas-proto,
+.sec-planes-proto,
+.sec-comparativa-proto {
+  scroll-margin-top: var(--nav-h);
+  min-height: calc(100svh - var(--nav-h));
+  align-content: center;
+  justify-content: center;
+}
+
+/* Compresión para que el contenido quepa en una laptop de 768px de alto
+   (≈690 útiles). Los números de antes están en el comentario de cada uno. */
+.sec-lumi-proto     { padding: 36px; gap: 28px; margin: 24px auto 16px; }   /* 56 / 40 / 40-24 */
+.sec-funciones-proto { padding: 32px 24px; gap: 20px; --fn-pad: 24px; --fn-min: 200px; }  /* 48-56 / 32 / 36 / 280 */
+.sec-casos-proto     { padding: 32px 24px; gap: 20px; }                      /* 80-40 / 32 */
+.sec-resenas-proto   { padding: 32px 24px; }                                 /* 40-80 */
+.sec-planes-proto    { padding: 32px 0; }                                    /* 80 */
+.sec-planes-proto__inner { gap: 20px; }                                      /* 32 */
+
+.sec-comparativa-proto {
+  width: 100%;
+  background: var(--bg-page);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+}
+.sec-comparativa-proto .comparativa-card { max-width: 1200px; width: 100%; margin: 0 auto; }
+
+.promesa-proto      { padding: 14px 20px; gap: 4px; }                        /* 20-24 / 6 */
+.caso-card-proto    { padding: 20px; gap: 10px; }                            /* 26 / 14 */
+.caso-foto-placeholder { height: 104px; }                                    /* 160 */
+.resena-card-proto  { padding: 18px; gap: 8px; }                             /* 24 / 12 */
+
+/* En pantallas altas no hace falta apretar tanto. */
+@media (min-height: 900px) {
+  .sec-lumi-proto      { padding: 48px; gap: 36px; }
+  .sec-funciones-proto,
+  .sec-casos-proto     { padding: 48px 24px; gap: 28px; }
+  .sec-funciones-proto { --fn-pad: 32px; --fn-min: 240px; }
+  .caso-foto-placeholder { height: 140px; }
+  .promesa-proto       { padding: 18px 22px; }
+}
