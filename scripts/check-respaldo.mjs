@@ -9,8 +9,6 @@ import { readFileSync } from 'node:fs';
 const catalogo = JSON.parse(readFileSync(new URL('../src/data/catalogo.json', import.meta.url), 'utf8'));
 const { resolverLocal } = await import('../src/lib/respaldo.js');
 
-const rol = (id) => catalogo.roles.find((r) => r.id === id);
-
 // ── Reconoce el rol por nombre y por sinónimo ────────────────────────
 for (const r of catalogo.roles) {
   const porNombre = resolverLocal(`¿Qué piden para ${r.nombre}?`);

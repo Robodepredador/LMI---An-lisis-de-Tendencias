@@ -50,7 +50,7 @@ export default function Planes() {
                   <span className="fila" style={{ gap: 8 }}>
                     <strong style={{ fontSize: 15.5 }}>{p.k}</strong>
                     {p.tag && (
-                      <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--text-primary)', fontWeight: 600 }}>
+                      <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--accent-fg)', fontWeight: 600 }}>
                         {p.tag}
                       </span>
                     )}

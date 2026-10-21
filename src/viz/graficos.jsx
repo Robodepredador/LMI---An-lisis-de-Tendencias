@@ -41,7 +41,7 @@ export function SkillBars({ rol }) {
     <Panel titulo="% de ofertas que piden cada habilidad">
       {rol.habilidades.map((h, i) => (
         <div key={i} className="barra-fila">
-          <span style={{ color: '#d8d3ca' }}>{h.k}</span>
+          <span style={{ color: 'var(--text-secondary)' }}>{h.k}</span>
           <AnimatedBar pct={h.pct} delay={i * 45} />
           <span className="mono" style={{ fontSize: 13, fontWeight: 500, textAlign: 'right' }}>
             <AnimarNumero valor={h.pct} duracion={450 + i * 40} />%
@@ -85,8 +85,8 @@ export function CompareTable({ roles }) {
           </thead>
           <tbody>
             {filas.map((f, filaIndex) => (
-              <tr key={f.k} style={{ borderTop: '1px solid rgba(242,239,233,.06)' }}>
-                <td style={{ padding: '11px 16px', color: '#d8d3ca' }}>{f.k}</td>
+              <tr key={f.k} style={{ borderTop: '1px solid var(--linea)' }}>
+                <td style={{ padding: '11px 16px', color: 'var(--text-secondary)' }}>{f.k}</td>
                 {f.valores.map((v, i) => (
                   <td key={roles[i].id} style={{ padding: '6px 8px', textAlign: 'right' }}>
                     <span
@@ -95,7 +95,7 @@ export function CompareTable({ roles }) {
                         display: 'inline-block', minWidth: 52, padding: '5px 8px', borderRadius: 8, fontSize: 13,
                         fontWeight: v >= ALTA_DEMANDA ? 600 : 400,
                         background: v >= ALTA_DEMANDA ? 'var(--accent)' : 'transparent',
-                        color: v >= ALTA_DEMANDA ? 'var(--text-primary)' : 'var(--text-secondary)',
+                        color: v >= ALTA_DEMANDA ? 'var(--accent-fg)' : 'var(--text-secondary)',
                         transition: 'all 0.35s ease',
                       }}
                     >
@@ -152,7 +152,7 @@ function SalaryRow({ r, s, e }) {
           <span style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>· n={s.n}</span>
         </span>
       </div>
-      <div style={{ position: 'relative', height: 14, borderRadius: 7, background: 'rgba(242,239,233,.06)' }}>
+      <div style={{ position: 'relative', height: 14, borderRadius: 7, background: 'var(--linea)' }}>
         <div
           style={{
             position: 'absolute',
@@ -257,7 +257,7 @@ export function GapTable({ brechas }) {
     <Panel titulo="Lo que más pide el mercado, frente a la malla de la carrera">
       {brechas.map((b, i) => (
         <div key={i} className="barra-fila">
-          <span style={{ color: '#d8d3ca' }}>{b.k}</span>
+          <span style={{ color: 'var(--text-secondary)' }}>{b.k}</span>
           <AnimatedBar pct={b.pct} delay={i * 40} />
           <span className="mono" style={{ fontSize: 13, fontWeight: 500, textAlign: 'right' }}>
             <AnimarNumero valor={b.pct} duracion={450 + i * 40} />%
@@ -266,7 +266,7 @@ export function GapTable({ brechas }) {
             className="mono animate-fade"
             style={{
               fontSize: 11, padding: '3px 8px', borderRadius: 6, whiteSpace: 'nowrap',
-              background: b.enMalla ? 'var(--bg-elevated)' : 'oklch(0.7 0.15 28 / .18)',
+              background: b.enMalla ? 'var(--bg-elevated)' : 'var(--alerta-bg)',
               color: b.enMalla ? 'var(--resalte-fg)' : 'var(--alerta-fg)',
               transition: 'all 0.3s ease',
               animationDelay: `${200 + i * 40}ms`,

@@ -3,7 +3,7 @@
 // prosa generada del proyecto, y el respaldo local (sin API) tiene que poder
 // producir esta pantalla igual.
 
-import { etiquetaDelta, porCrecimiento } from './habilidades.js';
+import { etiquetaDelta } from './habilidades.js';
 
 export const CICLOS = ['1ro – 2do', '3ro – 4to', '5to – 6to', '7mo o más'];
 
@@ -16,7 +16,7 @@ export function titular(rol, tema, filas) {
   const top = masPedida(filas);
 
   if (tema === 'salarios') {
-    const { p25, med, p75 } = rol.salario;
+    const { med, p75 } = rol.salario;
     if (!med) return `Pocas ofertas de ${rol.nombre} declaran sueldo.`;
     return `Lo típico es ${soles(med)} al mes. La parte alta llega a ${soles(p75)}.`;
   }

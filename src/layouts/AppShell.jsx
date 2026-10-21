@@ -1,9 +1,8 @@
-import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { CONSULTAS_GRATIS, useApp } from '../store.js';
 import { getTenant } from '../data/tenant.js';
 import { proximaRenovacion, vigenciaCreditos } from '../data/contenido.js';
 import ModalPlanes from '../components/ModalPlanes.jsx';
-import InterruptorTema from '../components/InterruptorTema.jsx';
 
 // El medidor de consumo. Es lo que traduce el plan a algo que el usuario
 // entiende de un vistazo, así que vive en un solo sitio.
@@ -125,15 +124,28 @@ export default function AppShell() {
 
         <div className="pila" style={{ marginTop: 'auto', gap: 10 }}>
           <Medidor />
-          <button className="fila" style={{ gap: 10, padding: '8px 6px', borderRadius: 'var(--radio-md)', background: 'none', border: 0, color: 'inherit', cursor: 'pointer', textAlign: 'left' }} onClick={() => ir('/cuenta')}>
-            <span className="avatar" aria-hidden="true">{usuario.iniciales}</span>
-            <span className="pila" style={{ lineHeight: 1.25, minWidth: 0 }}>
-              <span style={{ fontSize: 13.5, fontWeight: 500 }}>{usuario.nombre}</span>
-              <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{usuario.rol}</span>
-            </span>
-          </button>
+          <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center', padding: '6px 4px' }}>
+            <button className="fila" style={{ gap: 10, background: 'none', border: 0, color: 'inherit', cursor: 'pointer', textAlign: 'left', minWidth: 0 }} onClick={() => ir('/cuenta')}>
+              <span className="avatar" aria-hidden="true">{usuario.iniciales}</span>
+              <span className="pila" style={{ lineHeight: 1.25, minWidth: 0 }}>
+                <span style={{ fontSize: 13.5, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{usuario.nombre}</span>
+                <span style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>{usuario.rol}</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              className="enlace"
+              style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '4px 6px', background: 'none', border: 0, cursor: 'pointer' }}
+              onClick={() => {
+                useApp.getState().salir();
+                ir('/');
+              }}
+              title="Cerrar sesión"
+            >
+              Salir
+            </button>
+          </div>
         </div>
-        <InterruptorTema className="lado__item" />
       </aside>
 
       <main className="app-shell__main">

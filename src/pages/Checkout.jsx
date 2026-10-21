@@ -207,7 +207,7 @@ export default function Checkout() {
               <span className="display" style={{ fontSize: 20, whiteSpace: 'nowrap' }}>{elegido.precio}</span>
             </div>
             {elegido.tag && (
-              <span className="mono" style={{ alignSelf: 'flex-start', fontSize: 10.5, padding: '2px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--text-primary)', fontWeight: 600 }}>
+              <span className="mono" style={{ alignSelf: 'flex-start', fontSize: 10.5, padding: '2px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--accent-fg)', fontWeight: 600 }}>
                 {elegido.tag}
               </span>
             )}

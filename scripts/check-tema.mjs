@@ -143,4 +143,37 @@ const radios = [...comp.matchAll(/border-radius:\s*([^;]+);/g)]
 assert.deepEqual(radios.filter((r) => !ESCALA_RADIOS.includes(r)), [],
   `todos los radios deben salir de la escala o de un token: ${radios.join(', ')}`);
 
+// ── Pureza del JSX ───────────────────────────────────────────────────
+// La prueba anterior solo miraba componentes.css, y por ahí se colaron dos
+// literales de la paleta v1 que dejaban ilegible la pregunta del estudiante.
+// Un color escrito a mano en JSX es un color que el interruptor no cambia.
+import { readdirSync, statSync } from 'node:fs';
+
+const raiz = new URL('../src/', import.meta.url);
+const archivos = [];
+(function recorrer(dir) {
+  for (const e of readdirSync(dir)) {
+    const p = new URL(e + (statSync(new URL(e, dir)).isDirectory() ? '/' : ''), dir);
+    if (p.href.endsWith('/')) recorrer(p);
+    else if (/\.jsx?$/.test(e)) archivos.push(p);
+  }
+})(raiz);
+
+const sucios = [];
+for (const p of archivos) {
+  const src = readFileSync(p, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+  // Dentro de los SVG de la mascota la paleta es de marca y va literal a
+  // propósito: Lumi se ve igual en los dos temas, solo su contorno cambia.
+  if (p.href.includes('/mascota/')) continue;
+  // tenant.js: los acentos de marca blanca son el color de cada institucion,
+  // no un token del tema.
+  if (p.href.endsWith('/tenant.js')) continue;
+  const hex = [...src.matchAll(/['"`]#[0-9a-fA-F]{3,8}['"`]|['"`]rgba?\([^)]*\)['"`]|['"`]oklch\([^)]*\)['"`]/g)].map((m) => m[0]);
+  if (hex.length) sucios.push(`${p.href.split('/src/')[1]}: ${hex.join(', ')}`);
+}
+assert.deepEqual(sucios, [],
+  `colores literales en JSX (deben salir de tokens.css):\n  ${sucios.join('\n  ')}`);
+
 console.log('check-tema: OK');

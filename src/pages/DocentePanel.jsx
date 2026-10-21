@@ -85,7 +85,7 @@ export default function DocentePanel() {
         <div className="tarjeta" style={{ flex: '1 1 300px', minWidth: 0, padding: 20, gap: 12, borderRadius: 'var(--radio-lg)' }}>
           <strong style={{ fontSize: 15, fontWeight: 600 }}>Roles que más contratan</strong>
           {p.contratan.map((r, i) => (
-            <div key={r.id} className="fila" style={{ justifyContent: 'space-between', gap: 10, fontSize: 13.5, padding: '8px 0', borderTop: i === 0 ? 0 : '1px solid rgba(242,239,233,.06)' }}>
+            <div key={r.id} className="fila" style={{ justifyContent: 'space-between', gap: 10, fontSize: 13.5, padding: '8px 0', borderTop: i === 0 ? 0 : '1px solid var(--linea)' }}>
               <span className="truncate">{r.nombre}</span>
               <span className="mono" style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>{fmt(r.ofertas)}</span>
             </div>
