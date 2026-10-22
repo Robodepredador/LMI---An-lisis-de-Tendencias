@@ -429,9 +429,11 @@
   opacity: 0;
 }
 .lado__item-borrar:hover {
-  color: #fff;
-  background: var(--alerta, #e53e3e);
-  border-color: var(--alerta, #e53e3e);
+  /* Sobre --alerta el texto va en la superficie clara de la marca, no en un
+     blanco suelto: así sigue al tema. */
+  color: var(--bg-surface);
+  background: var(--alerta);
+  border-color: var(--alerta);
   transform: scale(1.08);
 }
 
