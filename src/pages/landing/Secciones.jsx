@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Lumi, { LumiLogo } from '../../mascota/Lumi.jsx';
 import { cobertura } from '../../data/contenido.js';
@@ -112,21 +112,27 @@ export function Funciones() {
 
 const CASOS = [
   {
-    ini: 'VQ', color: 'var(--accent)', fg: 'var(--accent-fg)',
+    ini: 'VQ', color: '#4f46e5', fg: '#ffffff',
+    nombre: 'Valeria Quispe',
+    carrera: 'Marketing · 6to c...',
     titular: 'Consiguió prácticas en una agencia tras aprender Meta Ads.',
     quien: 'Valeria Quispe · Marketing · 6to ciclo',
     detalle: 'Vio que la herramienta crecía 13 puntos y llevó un curso corto antes de postular.',
     dato: '2 meses', nota: 'de la consulta a la oferta',
   },
   {
-    ini: 'DR', color: 'var(--resalte)', fg: 'var(--resalte-fg)',
+    ini: 'DR', color: '#bef264', fg: '#0f172a',
+    nombre: 'Diego Ramos',
+    carrera: 'Contabilidad · eg...',
     titular: 'Negoció su primer sueldo 18% por encima de la oferta inicial.',
     quien: 'Diego Ramos · Contabilidad · egresado',
     detalle: 'Llevó la mediana de su rol en Lima a la entrevista, con la fuente a la mano.',
     dato: '+18%', nota: 'sobre la propuesta',
   },
   {
-    ini: 'MC', color: 'var(--dato-3)', fg: 'var(--bg-surface)',
+    ini: 'MC', color: '#b45309', fg: '#ffffff',
+    nombre: 'Mariana Chávez',
+    carrera: 'Ing. Industrial · 5...',
     titular: 'Eligió su especialidad comparando dos roles.',
     quien: 'Mariana Chávez · Ing. Industrial · 5to ciclo',
     detalle: 'Comparó Mejora Continua con Supply Chain y eligió sus electivos con el gráfico delante.',
@@ -136,108 +142,377 @@ const CASOS = [
 
 const RESENAS = [
   {
-    estrellas: 5, ini: 'LT', color: 'var(--resalte)', fg: 'var(--resalte-fg)',
-    texto: '“En mis clases de marketing nunca nos dijeron que pedían tanto Excel. Aquí lo vi en una consulta.”',
-    quien: 'Lucía Torres', ctx: 'Marketing · 5to ciclo',
-  },
-  {
-    estrellas: 5, ini: 'JM', color: 'var(--dato-1)', fg: 'var(--accent-fg)',
+    estrellas: 5, ini: 'JM', color: '#4f46e5', fg: '#ffffff',
     texto: '“Me gustó que cada dato tenga su fuente. Le mostré la metodología a mi profesora y la usamos en clase.”',
     quien: 'Joaquín Medina', ctx: 'Economía · 8vo ciclo',
   },
   {
-    estrellas: 4, ini: 'RS', color: 'var(--dato-3)', fg: 'var(--bg-surface)',
+    estrellas: 5, ini: 'LT', color: '#bef264', fg: '#0f172a',
+    texto: '“En mis clases de marketing nunca nos dijeron que pedían tanto Excel. Aquí lo vi en una consulta.”',
+    quien: 'Lucía Torres', ctx: 'Marketing · 5to ciclo',
+  },
+  {
+    estrellas: 5, ini: 'RS', color: '#7c3aed', fg: '#ffffff',
     texto: '“Con el plan gratis me alcanzó para ver qué piden en Derecho corporativo. Compraré créditos.”',
     quien: 'Renzo Salazar', ctx: 'Derecho · 2do ciclo',
   },
 ];
 
-const Avatar = ({ ini, color, fg, tam = 38 }) => (
-  <span
-    aria-hidden="true"
-    style={{
-      width: tam, height: tam, flexShrink: 0,
-      borderRadius: 'var(--radio-full)',
-      background: color, color: fg,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'var(--font-display)', fontWeight: 800,
-      fontSize: tam > 40 ? 'var(--tipo-lg)' : 'var(--tipo-sm)',
-    }}
-  >
-    {ini}
-  </span>
-);
-
-const Estrellas = ({ n }) => (
-  <span style={{ fontSize: 'var(--tipo-base)', color: 'var(--estrella)', letterSpacing: 2 }}
-        aria-label={`${n} de 5 estrellas`}>
-    {'★'.repeat(n)}{'☆'.repeat(5 - n)}
-  </span>
-);
-
 export function CasosYResenas() {
+  const [resenaActual, setResenaActual] = useState(0);
+  const [casoActual, setCasoActual] = useState(0);
+  const [pausaAuto, setPausaAuto] = useState(false);
+
+  // Avance automático uno a uno cada 4.5 segundos
+  useEffect(() => {
+    if (pausaAuto) return;
+    const interval = setInterval(() => {
+      setResenaActual((prev) => (prev + 1) % RESENAS.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [pausaAuto]);
+
+  const resena = RESENAS[resenaActual];
+  const caso = CASOS[casoActual];
+
   return (
-    <section id="sec-casos" className="sec-casos-proto">
-      <div className="pila" style={{ gap: 6 }}>
-        <span style={{ fontSize: 'var(--tipo-sm)', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>
-          CASOS DE ÉXITO
-        </span>
-        <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-3xl)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.02 }}>
-          Lo que cambió después de consultar.
-        </h2>
-      </div>
-
-      <div className="rejilla-casos-proto">
-        {CASOS.map((c) => (
-          <article key={c.ini} className="caso-card-proto">
-            <div className="caso-quien">
-              <Avatar ini={c.ini} color={c.color} fg={c.fg} tam={44} />
-              <span style={{ fontSize: 'var(--tipo-sm)', color: 'var(--text-secondary)' }}>{c.quien}</span>
-            </div>
-            <strong style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-xl)', fontWeight: 700, lineHeight: 1.15 }}>
-              {c.titular}
-            </strong>
-            <span style={{ fontSize: 'var(--tipo-base)', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
-              {c.detalle}
+    <section id="sec-casos" className="sec-casos-proto" style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 30px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+          gap: 'clamp(28px, 4vw, 40px)',
+          alignItems: 'stretch',
+        }}
+      >
+        {/* ── COLUMNA IZQUIERDA: Título + Tarjeta Oscura con Carrusel Automático + Nota al pie ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="pila" style={{ gap: 6 }}>
+            <span style={{ fontSize: 'var(--tipo-sm)', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>
+              CASOS DE ÉXITO
             </span>
-            <div style={{ display: 'flex', gap: 8, marginTop: 'auto', flexWrap: 'wrap' }}>
-              <span className="caso-dato">{c.dato}</span>
-              <span className="caso-nota">{c.nota}</span>
-            </div>
-          </article>
-        ))}
-      </div>
+            <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 'clamp(1.9rem, 3.4vw, 2.5rem)', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08 }}>
+              Lo que cambió después de consultar.
+            </h2>
+          </div>
 
-      <div className="rejilla-resenas-proto">
-        <div className="resena-resumen">
-          <span style={{ fontSize: 'var(--tipo-sm)', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--sobre-noche)' }}>
-            RESEÑAS
-          </span>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-4xl)', fontWeight: 800, lineHeight: 1 }}>4,8</strong>
-          <Estrellas n={5} />
-          <span style={{ fontSize: 'var(--tipo-sm)', color: 'var(--sobre-noche)', lineHeight: 1.4 }}>
-            Promedio de las reseñas dejadas por estudiantes.
+          {/* Tarjeta oscura con comentarios automáticos */}
+          <div
+            onMouseEnter={() => setPausaAuto(true)}
+            onMouseLeave={() => setPausaAuto(false)}
+            style={{
+              background: '#17153a',
+              borderRadius: 26,
+              padding: '28px 28px 24px',
+              color: '#ffffff',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 20,
+              boxShadow: '0 20px 40px -10px rgba(23, 21, 58, 0.45)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              flex: 1,
+              minHeight: 290,
+            }}
+          >
+            {/* Cabecera de valoración promedio */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <strong style={{ fontSize: 44, fontWeight: 800, lineHeight: 1, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: '#ffffff' }}>
+                4,8
+              </strong>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <span style={{ color: '#f59e0b', fontSize: 16, letterSpacing: 2 }}>★★★★★</span>
+                <span style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.72)', lineHeight: 1.35 }}>
+                  Promedio de las reseñas dejadas por estudiantes.
+                </span>
+              </div>
+            </div>
+
+            {/* Separador fino */}
+            <div style={{ height: 1, background: 'rgba(255, 255, 255, 0.1)' }} />
+
+            {/* Comentario individual en carrusel */}
+            <div
+              key={resenaActual}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 12,
+                animation: 'fadeInResena 0.35s ease-out',
+              }}
+            >
+              <span style={{ color: '#f59e0b', fontSize: 14, letterSpacing: 2 }}>
+                {'★'.repeat(resena.estrellas)}
+              </span>
+              <p style={{ margin: 0, fontSize: 15, lineHeight: 1.5, color: '#ffffff', minHeight: 66 }}>
+                {resena.texto}
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 }}>
+                <span
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: 999,
+                    background: resena.color,
+                    color: resena.fg,
+                    fontWeight: 700,
+                    fontSize: 14,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  {resena.ini}
+                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <strong style={{ fontSize: 14, color: '#ffffff' }}>{resena.quien}</strong>
+                  <span style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.65)' }}>{resena.ctx}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Controles inferiores: indicadores y botones de navegación */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 4 }}>
+              {/* Indicador de píldoras / puntos */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {RESENAS.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setResenaActual(i)}
+                    aria-label={`Ver reseña ${i + 1}`}
+                    style={{
+                      height: 6,
+                      width: i === resenaActual ? 26 : 6,
+                      borderRadius: 999,
+                      background: i === resenaActual ? '#bef264' : 'rgba(255, 255, 255, 0.25)',
+                      border: 0,
+                      padding: 0,
+                      cursor: 'pointer',
+                      transition: 'all 0.25s ease',
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Botones de flecha */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => setResenaActual((prev) => (prev - 1 + RESENAS.length) % RESENAS.length)}
+                  aria-label="Reseña anterior"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 999,
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 16,
+                    transition: 'background 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.16)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)')}
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setResenaActual((prev) => (prev + 1) % RESENAS.length)}
+                  aria-label="Siguiente reseña"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 999,
+                    border: 0,
+                    background: '#bef264',
+                    color: '#0f172a',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 16,
+                    fontWeight: 800,
+                    transition: 'filter 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.08)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+            Casos y reseñas ilustrativos, escritos a partir de las consultas más frecuentes.
           </span>
         </div>
 
-        {RESENAS.map((r) => (
-          <article key={r.ini} className="resena-card-proto">
-            <Estrellas n={r.estrellas} />
-            <p style={{ margin: 0, fontSize: 'var(--tipo-base)', lineHeight: 1.45 }}>{r.texto}</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 'auto' }}>
-              <Avatar ini={r.ini} color={r.color} fg={r.fg} />
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <strong style={{ fontSize: 'var(--tipo-sm)' }}>{r.quien}</strong>
-                <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)' }}>{r.ctx}</span>
+        {/* ── COLUMNA DERECHA: Pestañas de Casos + Tarjeta con Lumi animado estático ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* Fila de 3 pestañas seleccionables */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            {CASOS.map((c, idx) => {
+              const activo = idx === casoActual;
+              return (
+                <button
+                  key={c.ini}
+                  type="button"
+                  onClick={() => setCasoActual(idx)}
+                  style={{
+                    background: 'var(--bg-elevated)',
+                    border: activo ? '2px solid #eab308' : '1px solid var(--linea)',
+                    borderRadius: 18,
+                    padding: '10px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 0.18s ease',
+                    boxShadow: activo ? '0 4px 14px rgba(234, 179, 8, 0.18)' : 'none',
+                    minWidth: 0,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 38,
+                      height: 38,
+                      borderRadius: 999,
+                      background: c.color,
+                      color: c.fg,
+                      fontWeight: 800,
+                      fontSize: 14,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {c.ini}
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, lineHeight: 1.25 }}>
+                    <strong
+                      style={{
+                        fontSize: 13.5,
+                        color: 'var(--text-primary)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {c.nombre}
+                    </strong>
+                    <span
+                      style={{
+                        fontSize: 11.5,
+                        color: 'var(--text-secondary)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {c.carrera}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Tarjeta de visualización de caso */}
+          <div
+            style={{
+              background: 'var(--bg-surface, #f8faff)',
+              border: '1px solid var(--linea)',
+              borderRadius: 26,
+              padding: '34px 38px',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              flex: 1,
+              minHeight: 290,
+              overflow: 'hidden',
+            }}
+          >
+            {/* Contenido que cambia según la pestaña elegida */}
+            <div
+              key={casoActual}
+              style={{
+                maxWidth: 'calc(100% - 130px)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 12,
+                zIndex: 2,
+                animation: 'fadeInCaso 0.25s ease-out',
+              }}
+            >
+              <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>
+                {caso.quien}
+              </span>
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: 'clamp(1.35rem, 2.3vw, 1.75rem)',
+                  fontWeight: 800,
+                  color: 'var(--text-primary)',
+                  lineHeight: 1.18,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {caso.titular}
+              </h3>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 14.5,
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.5,
+                }}
+              >
+                {caso.detalle}
+              </p>
+
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 14 }}>
+                <strong
+                  style={{
+                    fontSize: 'clamp(2.2rem, 3.6vw, 2.9rem)',
+                    fontWeight: 800,
+                    color: 'var(--accent)',
+                    letterSpacing: '-0.03em',
+                    lineHeight: 1,
+                  }}
+                >
+                  {caso.dato}
+                </strong>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {caso.nota}
+                </span>
               </div>
             </div>
-          </article>
-        ))}
-      </div>
 
-      <span style={{ fontSize: 'var(--tipo-xs)', color: 'var(--text-secondary)' }}>
-        Casos y reseñas ilustrativos, escritos a partir de las consultas más frecuentes.
-      </span>
+            {/* Lumi animado: permanece estático en su posición sin re-renderizarse */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 16,
+                right: 20,
+                zIndex: 1,
+                pointerEvents: 'none',
+              }}
+            >
+              <Lumi pose="celebra" alto={110} />
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

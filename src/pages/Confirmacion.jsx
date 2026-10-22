@@ -1,14 +1,15 @@
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useApp } from '../store.js';
-import { fechaCorta, vigenciaCreditos } from '../data/contenido.js';
+import { vigenciaCreditos } from '../data/contenido.js';
 import { METODOS_PAGO } from '../data/contenido.js';
+import Lumi from '../mascota/Lumi.jsx';
 
 export default function Confirmacion() {
   const ir = useNavigate();
   const pagos = useApp((s) => s.pagos);
-  const plan = useApp((s) => s.plan);
   const creditos = useApp((s) => s.creditos);
   const pendiente = useApp((s) => s.pendiente);
+  const rutaRetornoChat = useApp((s) => s.rutaRetornoChat) || '/chat';
 
   const pago = pagos[0];
   // Llegar aquí sin haber pagado no tiene sentido.
@@ -16,39 +17,101 @@ export default function Confirmacion() {
 
   const metodo = METODOS_PAGO.find((m) => m.id === pago.metodo)?.k ?? pago.metodo;
 
-  // La pregunta guardada NO se borra aquí: el chat la reanuda solo al entrar,
-  // que es lo que hace cierto el "tu pregunta quedó guardada".
-  const seguir = () => ir('/chat', { replace: true });
+  const seguir = () => {
+    if (window.opener) {
+      window.close();
+    } else {
+      ir(rutaRetornoChat, { replace: true });
+    }
+  };
 
   return (
-    <div className="seccion pila" style={{ maxWidth: 520, gap: 24 }}>
-      <div className="pila" style={{ gap: 14, alignItems: 'flex-start' }}>
-        <span className="tic" aria-hidden="true">✓</span>
-        <h1 className="display" style={{ margin: 0, fontSize: 34 }}>Listo, ya puedes seguir preguntando</h1>
+    <div
+      className="animate-fade"
+      style={{
+        maxWidth: 480,
+        width: '100%',
+        margin: '20px auto',
+        padding: '36px 32px',
+        background: 'var(--bg-surface)',
+        borderRadius: 28,
+        border: '1px solid var(--linea)',
+        boxShadow: '0 8px 30px rgba(23, 21, 58, 0.06)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 16,
+      }}
+    >
+      {/* Lumi animado en modo de celebración (salta, agita brazos y cae confeti) */}
+      <Lumi pose="celebra" alto={150} />
+
+      <h1 className="display" style={{ margin: '4px 0 0', fontSize: 32, fontWeight: 800, textAlign: 'center' }}>
+        ¡Pago confirmado!
+      </h1>
+
+      <span style={{ fontSize: 15, color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.45, maxWidth: 360 }}>
+        Ya tienes {creditos} consultas. Tu pregunta guardada te espera en el chat.
+      </span>
+
+      {/* Recuadro de detalles de la transacción */}
+      <div
+        style={{
+          width: '100%',
+          background: 'var(--bg-elevated)',
+          borderRadius: 16,
+          border: '1px solid var(--linea)',
+          padding: '16px 20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
+          marginTop: 6,
+        }}
+      >
+        <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Pagado con</span>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>{metodo}</span>
+        </div>
+        <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Válidos hasta</span>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>{vigenciaCreditos()}</span>
+        </div>
+        <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Total</span>
+          <strong style={{ fontSize: 16, fontWeight: 800 }}>S/ {pago.monto}</strong>
+        </div>
       </div>
 
-      <div className="tarjeta" style={{ padding: 20, gap: 0 }}>
-        {[
-          ['Concepto', pago.concepto],
-          ['Pagado con', metodo],
-          ['Fecha', fechaCorta(pago.ts)],
-          plan === 'creditos' ? ['Saldo', `${creditos} consultas`] : ['Plan', 'Pro · ilimitado'],
-          plan === 'creditos' ? ['Válidos hasta', vigenciaCreditos()] : ['Se renueva', 'cada mes'],
-          ['Total', `S/ ${pago.monto}`],
-        ].map(([k, v], i) => (
-          <div key={k} className="fila" style={{ justifyContent: 'space-between', gap: 12, padding: '11px 0', borderTop: i === 0 ? 0 : '1px solid var(--linea)' }}>
-            <span style={{ fontSize: 13.5, color: 'var(--text-secondary)' }}>{k}</span>
-            <span style={{ fontSize: 13.5 }}>{v}</span>
-          </div>
-        ))}
-      </div>
+      <button
+        type="button"
+        className="btn btn--acento btn--grande btn--bloque"
+        onClick={seguir}
+        style={{ borderRadius: 14, padding: '16px', fontSize: 16, fontWeight: 700, marginTop: 6 }}
+      >
+        Volver a LMI-U
+      </button>
 
-      <div className="fila" style={{ gap: 10 }}>
-        <button className="btn btn--acento btn--grande" onClick={seguir}>
-          {pendiente ? 'Ver la respuesta a tu pregunta' : 'Volver al chat'}
-        </button>
-        <button className="btn btn--linea btn--grande" onClick={() => window.print()}>Descargar boleta</button>
-      </div>
+      <button
+        type="button"
+        onClick={() => window.print()}
+        className="enlace"
+        style={{
+          background: 'none',
+          border: 0,
+          color: 'var(--accent)',
+          cursor: 'pointer',
+          fontSize: 14,
+          fontWeight: 600,
+          textDecoration: 'none',
+          padding: '2px',
+        }}
+      >
+        Descargar boleta
+      </button>
+
+      <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', textAlign: 'center', marginTop: -4 }}>
+        Esta pestaña se cierra y te lleva de vuelta a tu chat.
+      </span>
     </div>
   );
 }

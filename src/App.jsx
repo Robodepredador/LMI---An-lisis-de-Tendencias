@@ -6,6 +6,7 @@ import { getTenant } from './data/tenant.js';
 import PublicLayout from './layouts/PublicLayout.jsx';
 import AppShell from './layouts/AppShell.jsx';
 import Landing from './pages/Landing.jsx';
+import PagoLayout from './layouts/PagoLayout.jsx';
 import Registro from './pages/Registro.jsx';
 import Login from './pages/Login.jsx';
 import Chat from './pages/Chat.jsx';
@@ -66,6 +67,18 @@ export default function App() {
   // Con hash no: ahí el destino es una sección concreta y este scroll la pisaría.
   useEffect(() => { if (!hash) window.scrollTo(0, 0); }, [pathname, hash]);
 
+  // Sincronización en vivo entre pestañas: cuando la pasarela confirma el pago
+  // en la otra pestaña, la pestaña del chat se entera al instante sin recargar.
+  useEffect(() => {
+    const sincronizarPestanas = (e) => {
+      if (e.key === 'lmiu') {
+        useApp.persist?.rehydrate();
+      }
+    };
+    window.addEventListener('storage', sincronizarPestanas);
+    return () => window.removeEventListener('storage', sincronizarPestanas);
+  }, []);
+
   return (
     <Routes>
       <Route element={<PublicLayout />}>
@@ -79,15 +92,20 @@ export default function App() {
         <Route path="*" element={<NoEncontrado />} />
       </Route>
 
+      {/* Rutas principales de la aplicación (con barra lateral de chat) */}
       <Route element={<AppShell />}>
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:consultaId" element={<Chat />} />
-        <Route path="/planes" element={<Planes />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/confirmacion" element={<Confirmacion />} />
         <Route path="/cuenta" element={<Cuenta />} />
         <Route path="/docente" element={<RutaDocente><DocenteChat /></RutaDocente>} />
         <Route path="/docente/panel" element={<RutaDocente><DocentePanel /></RutaDocente>} />
+      </Route>
+
+      {/* Rutas de Pago dedicadas (fuera del chat, sin barra lateral) */}
+      <Route element={<PagoLayout />}>
+        <Route path="/planes" element={<Planes />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/confirmacion" element={<Confirmacion />} />
       </Route>
     </Routes>
   );

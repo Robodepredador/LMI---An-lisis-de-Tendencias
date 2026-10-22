@@ -83,7 +83,7 @@ function Hero() {
         <p style={{ margin: 0, fontSize: 19, lineHeight: 1.55, color: 'var(--text-secondary)', maxWidth: 540 }}>
           Analizamos miles de ofertas publicadas en Perú para decirte qué habilidades piden las empresas, cuánto pagan y qué roles crecen. Cada cifra enlaza a su fuente.
         </p>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
           <button
             type="button"
             className="hero-cta"
@@ -92,9 +92,6 @@ function Hero() {
             Prueba gratis · 3 consultas
           </button>
         </div>
-        <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
-          Sin tarjeta. Si luego compras: Yape · Plin · Tarjeta · PagoEfectivo
-        </span>
       </div>
 
       <div className="hero-card">

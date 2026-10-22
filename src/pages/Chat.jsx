@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApp, CICLOS } from '../store.js';
 import { consultar, cursosDe, rol, salarioDe, MIN_MUESTRA } from '../lib/consultar.js';
@@ -6,7 +6,7 @@ import { CompareTable, CourseCards } from '../viz/graficos.jsx';
 import Puntos from '../viz/Puntos.jsx';
 import Franja from '../viz/Franja.jsx';
 import Tendencia from '../viz/Tendencia.jsx';
-import Lumi from '../mascota/Lumi.jsx';
+import Lumi, { LumiLogo } from '../mascota/Lumi.jsx';
 import { filasDe } from '../lib/habilidades.js';
 import { consejo, explicacion, titular } from '../lib/prosa.js';
 import Modal from '../components/Modal.jsx';
@@ -79,8 +79,32 @@ function Turno({ consulta, cicloUsuario, onMetodologia, onPreguntar }) {
               {consultaActual.pregunta}
             </div>
 
-            {/* CASO A: Muestra insuficiente */}
-            {esInsuficiente ? (
+            {/* Si es una pregunta retomada (idéntico a Imagen 2): viñeta Lumi + respuesta */}
+            {consultaActual.retomada ? (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, maxWidth: 680, margin: '4px 0 8px' }}>
+                <Lumi pose="saluda" alto={64} />
+                <div
+                  style={{
+                    background: 'var(--bg-surface)',
+                    border: '1.5px solid var(--linea)',
+                    borderRadius: 20,
+                    padding: '18px 22px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 6,
+                    boxShadow: '0 4px 16px rgba(23, 21, 58, 0.05)',
+                    flex: 1,
+                  }}
+                >
+                  <strong style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)' }}>
+                    Retomo tu pregunta guardada…
+                  </strong>
+                  <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6, color: 'var(--text-primary)' }}>
+                    {resultado?.insight || (rolPrincipal ? `En ${ciudad}, las ofertas de ${rolPrincipal.nombre} piden sobre todo ${filasDe(rolPrincipal).slice(0, 3).map(f => f.nombre).join(', ')}. Python aparece en 4 de cada 10.` : 'Aquí tienes el análisis actualizado de tu consulta.')}
+                  </p>
+                </div>
+              </div>
+            ) : esInsuficiente ? (
               <div
                 style={{
                   background: 'var(--bg-surface)',
@@ -235,12 +259,19 @@ export default function Chat() {
   const ir = useNavigate();
 
   const usuario = useApp((s) => s.usuario);
-  const consultas = useApp((s) => s.consultas);
   const restante = useApp((s) => s.restantes());
   const plan = useApp((s) => s.plan);
   const puedeConsultar = useApp((s) => s.puedeConsultar);
   const registrarConsulta = useApp((s) => s.registrarConsulta);
+  const pendiente = useApp((s) => s.pendiente);
+  const guardarPendiente = useApp((s) => s.guardarPendiente);
+  const limpiarPendiente = useApp((s) => s.limpiarPendiente);
+  const setRutaRetornoChat = useApp((s) => s.setRutaRetornoChat);
   const abrirModalPlanes = useApp((s) => s.abrirModalPlanes);
+  const setHiloActual = useApp((s) => s.setHiloActual);
+  const pagoReciente = useApp((s) => s.pagoReciente);
+  const resetearIntentos = useApp((s) => s.resetearIntentos);
+  const limpiarAvisoPago = useApp((s) => s.limpiarAvisoPago);
 
   const [texto, setTexto] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -249,37 +280,82 @@ export default function Chat() {
   const [verMetodologia, setVerMetodologia] = useState(false);
   const [toastCredito, setToastCredito] = useState('');
 
-  // El hilo visible: todas las consultas desde el último "+ Nueva consulta",
-  // de la más antigua a la más reciente. Antes se pintaba solo consultas[0],
-  // así que cada seguimiento reemplazaba al anterior en vez de continuarlo, y
-  // "+ Nueva consulta" no cambiaba nada en pantalla.
-  const hiloVisible = useApp((st) => st.hiloVisible);
-  const seleccionada = consultaId ? consultas.find((c) => c.id === consultaId) : null;
-  const hilo = seleccionada ? [seleccionada] : hiloVisible();
+  const consultas = useApp((st) => st.consultas);
+  // Al estar en /chat/:consultaId cargamos ese hilo específico;
+  // si estamos en /chat (sin consultaId) estamos en pantalla limpia (hilo vacío) como Claude/GPT.
+  const hilo = useMemo(
+    () => (consultaId ? useApp.getState().hiloDe(consultaId) : []),
+    [consultaId, consultas],
+  );
   const ultima = hilo[hilo.length - 1] ?? null;
 
-  // Estado reactivo: consulta inicial (vacío), cargando, o mostrando resultado
-  const isConsulta = !cargando && hilo.length === 0;
-  const isResultado = !cargando && hilo.length > 0;
+  const [preguntaBloqueada, setPreguntaBloqueada] = useState(pendiente || null);
+
+  // Estado reactivo: consulta inicial (dashboard limpio), cargando inicial, o mostrando resultado/hilo
+  const isConsulta = !cargando && hilo.length === 0 && !preguntaBloqueada;
+  const isCargaInicial = cargando && hilo.length === 0;
+  const isResultado = hilo.length > 0 || !!preguntaBloqueada;
+
+  // Sincronizar hiloActual en el store
+  useEffect(() => {
+    if (consultaId) {
+      setHiloActual(consultaId);
+    }
+  }, [consultaId, setHiloActual]);
+
+  // Si consultaId fue puesto en URL pero no existe en el historial y no estamos cargando ni bloqueados, volver a /chat
+  useEffect(() => {
+    if (consultaId && hilo.length === 0 && !cargando && !preguntaBloqueada) {
+      ir('/chat', { replace: true });
+    }
+  }, [consultaId, hilo.length, cargando, preguntaBloqueada, ir]);
+
+  // Auto-scroll al final del hilo cuando cambian los mensajes o el estado de carga
+  useEffect(() => {
+    if (hilo.length > 0 || preguntaBloqueada) {
+      requestAnimationFrame(() => {
+        const h = document.querySelector('.hilo');
+        if (h) h.scrollTo({ top: h.scrollHeight, behavior: 'smooth' });
+      });
+    }
+  }, [hilo.length, cargando, preguntaBloqueada]);
 
   const timerRef = useRef([]);
   useEffect(() => {
     return () => timerRef.current.forEach(clearTimeout);
   }, []);
 
-  const enviar = async (preguntaTexto) => {
+  const abrirCheckoutEnNuevaPestana = (packId = '25') => {
+    useApp.getState().setPack(String(packId));
+    const targetHiloId = consultaId || (hilo.length > 0 ? (hilo[0].hiloId || hilo[0].id) : null);
+    const rutaActual = targetHiloId ? `/chat/${targetHiloId}` : '/chat';
+    setRutaRetornoChat(rutaActual);
+    window.open(`/checkout?pack=${packId}`, '_blank');
+  };
+
+  const enviar = async (preguntaTexto, options = {}) => {
     const q = (preguntaTexto ?? texto).trim();
     if (!q || cargando) return;
 
     if (!puedeConsultar()) {
-      abrirModalPlanes();
+      setTexto('');
+      guardarPendiente(q);
+      setPreguntaBloqueada(q);
+      const targetHiloId = consultaId || (hilo.length > 0 ? (hilo[0].hiloId || hilo[0].id) : null);
+      const rutaActual = targetHiloId ? `/chat/${targetHiloId}` : '/chat';
+      setRutaRetornoChat(rutaActual);
       return;
     }
 
     setTexto('');
     setPreguntaActiva(q);
+    setPreguntaBloqueada(null);
     setCargando(true);
     setPasoCarga(0);
+
+    // Si ya estamos en una consulta (consultaId existe), usamos ese hilo.
+    // Si estamos en la pantalla limpia (/chat), creamos un nuevo hiloId.
+    const targetHiloId = consultaId || crypto.randomUUID();
 
     // Animación de pasos de carga: 30% -> 65% -> 95%
     timerRef.current.forEach(clearTimeout);
@@ -290,15 +366,21 @@ export default function Chat() {
 
     try {
       const res = await consultar(q);
-      const reg = registrarConsulta({ pregunta: q, resultado: res });
+      const reg = registrarConsulta({
+        pregunta: q,
+        resultado: res,
+        hiloId: targetHiloId,
+        retomada: options.retomada || false,
+      });
       if (reg.costo === 1) {
         const nuevoRestante = useApp.getState().restantes();
         setToastCredito(`Usaste 1 consulta · te quedan ${nuevoRestante ?? 'ilimitadas'}`);
         setTimeout(() => setToastCredito(''), 5000);
       }
-      if (consultaId) ir('/chat');
-      // El turno nuevo nace abajo del hilo: sin esto el seguimiento queda
-      // fuera de vista y parece que no pasó nada.
+      // Si era una nueva consulta (estábamos en /chat), navegamos a /chat/:targetHiloId
+      if (!consultaId) {
+        ir(`/chat/${targetHiloId}`, { replace: true });
+      }
       requestAnimationFrame(() => {
         const h = document.querySelector('.hilo');
         if (h) h.scrollTo({ top: h.scrollHeight, behavior: 'smooth' });
@@ -309,6 +391,33 @@ export default function Chat() {
       setCargando(false);
     }
   };
+
+  // Sincronizar pregunta bloqueada si hay pendiente y no hay créditos
+  useEffect(() => {
+    if (pendiente && !puedeConsultar()) {
+      setPreguntaBloqueada(pendiente);
+    }
+  }, [pendiente, puedeConsultar]);
+
+  // Reanudar automáticamente la pregunta pendiente al volver del pago con créditos
+  useEffect(() => {
+    if ((pendiente || preguntaBloqueada) && puedeConsultar() && !cargando) {
+      const q = pendiente || preguntaBloqueada;
+      setPreguntaBloqueada(null);
+      limpiarPendiente();
+      enviar(q, { retomada: true });
+    }
+  }, [pendiente, preguntaBloqueada, puedeConsultar, cargando]);
+
+  // Auto-cerrar notificación emergente después de 8s
+  useEffect(() => {
+    if (pagoReciente) {
+      const timer = setTimeout(() => {
+        limpiarAvisoPago();
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [pagoReciente, limpiarAvisoPago]);
 
   const nombreUsuario = (usuario?.nombre || 'Estudiante').split(' ')[0];
   const cicloUsuario = usuario?.ciclo ?? 2;
@@ -321,10 +430,87 @@ export default function Chat() {
   const rolPrincipal = roles[0];
   const ciudad = resultado?.ciudad || 'Lima';
 
-
   return (
-    <div className="hilo" style={{ background: 'var(--bg-page)', minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
-      <div className="hilo__interior" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 24, padding: '32px 40px', maxWidth: 1200, width: '100%', margin: '0 auto' }}>
+    <div style={{ height: '100%', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg-page)', overflow: 'hidden', position: 'relative' }}>
+      
+      {/* ── NOTIFICACIÓN EMERGENTE (Toast desde la derecha al confirmar pago) ── */}
+      {pagoReciente && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="toast-emergente"
+          style={{
+            position: 'fixed',
+            top: 70,
+            right: 24,
+            zIndex: 1000,
+            background: '#bef264',
+            color: '#0f172a',
+            borderRadius: 16,
+            padding: '12px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.18), 0 2px 6px rgba(190, 242, 100, 0.4)',
+            fontWeight: 700,
+            fontSize: 13.5,
+          }}
+        >
+          <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#0f172a', color: '#bef264', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, flexShrink: 0 }}>
+            ✓
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <strong style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', lineHeight: 1.2 }}>¡Pago confirmado!</strong>
+            <span style={{ fontSize: 12.5, fontWeight: 600, color: '#334155' }}>25 consultas añadidas a tu cuenta</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 10 }}>
+            <button
+              type="button"
+              onClick={() => resetearIntentos()}
+              style={{
+                background: 'rgba(15, 23, 42, 0.08)',
+                border: '1px solid rgba(15, 23, 42, 0.15)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                padding: '5px 11px',
+                fontSize: 12,
+                fontWeight: 700,
+                color: '#0f172a',
+                transition: 'background 0.15s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(15, 23, 42, 0.16)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(15, 23, 42, 0.08)'; }}
+            >
+              Reiniciar demo
+            </button>
+            <button
+              type="button"
+              onClick={() => limpiarAvisoPago()}
+              style={{
+                background: 'none',
+                border: 0,
+                cursor: 'pointer',
+                fontSize: 19,
+                lineHeight: 1,
+                color: '#0f172a',
+                opacity: 0.6,
+                padding: '2px 4px',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.6'; }}
+              aria-label="Cerrar notificación"
+              title="Cerrar"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── ÁREA SCROLLEABLE DE MENSAJES (.hilo) ── */}
+      <div className="hilo" style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+        <div className="hilo__interior" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 32px 32px', maxWidth: 1040, width: '100%', margin: '0 auto' }}>
         
         {/* ═══════════════════════════════════════════════════════════
             ESTADO 1: PANTALLA "CONSULTA" (Estado Inicial / Dashboard)
@@ -412,74 +598,13 @@ export default function Chat() {
                 ))}
               </div>
             </div>
-
-            {/* Barra flotante tipo píldora inferior */}
-            <div style={{ position: 'sticky', bottom: 0, margin: 'auto -40px -32px', padding: '16px 40px 24px', background: 'linear-gradient(rgba(247,247,252,0), var(--bg-page) 30%)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div
-                style={{
-                  background: 'var(--bg-surface)',
-                  borderRadius: 'var(--radio-full)',
-                  padding: '8px 8px 8px 24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  border: '1.5px solid var(--borde-campo)',
-                  boxShadow: '0 6px 24px rgba(23, 21, 58, 0.08)',
-                }}
-              >
-                <input
-                  value={texto}
-                  onChange={(e) => setTexto(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') enviar(); }}
-                  placeholder="¿Cuánto gana un asistente contable en Lima?"
-                  style={{
-                    flex: 1,
-                    font: "400 16px 'Onest', system-ui, sans-serif",
-                    border: 0,
-                    outline: 'none',
-                    background: 'transparent',
-                    color: 'var(--text-primary)',
-                    minWidth: 0,
-                  }}
-                />
-                <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
-                  {costLabel}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => enviar()}
-                  disabled={!texto.trim()}
-                  style={{
-                    width: 46,
-                    height: 46,
-                    borderRadius: 999,
-                    border: 0,
-                    background: texto.trim() ? 'var(--accent)' : 'var(--accent-apagado)',
-                    color: texto.trim() ? 'var(--accent-fg)' : 'var(--accent-apagado-fg)',
-                    fontWeight: 700,
-                    fontSize: 18,
-                    cursor: texto.trim() ? 'pointer' : 'not-allowed',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'background 0.2s ease',
-                  }}
-                  aria-label="Consultar"
-                >
-                  →
-                </button>
-              </div>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)', paddingLeft: 24 }}>
-                Escribe con tus palabras: el rol, la ciudad y si quieres saber habilidades, sueldo o tendencia.
-              </span>
-            </div>
           </div>
         )}
 
         {/* ═══════════════════════════════════════════════════════════
-            ESTADO 2: PANTALLA "CARGA" (Checklist progresivo)
+            ESTADO 2: PANTALLA "CARGA INICIAL" (Checklist progresivo)
            ═══════════════════════════════════════════════════════════ */}
-        {cargando && (
+        {isCargaInicial && (
           <div
             className="animate-scale"
             style={{
@@ -540,6 +665,51 @@ export default function Chat() {
                      onMetodologia={() => setVerMetodologia(true)} onPreguntar={enviar} />
             ))}
 
+            {/* Si está cargando un seguimiento dentro del hilo, mostrar la pregunta y Lumi analizando abajo */}
+            {cargando && (
+              <div className="pila animate-fade-up" style={{ gap: 14 }}>
+                <div
+                  style={{
+                    alignSelf: 'flex-end',
+                    background: 'var(--accent)',
+                    color: 'var(--accent-fg)',
+                    borderRadius: '22px 22px 6px 22px',
+                    padding: '14px 20px',
+                    fontSize: 16,
+                    maxWidth: 620,
+                    lineHeight: 1.45,
+                    boxShadow: '0 4px 14px rgba(75, 59, 255, 0.25)',
+                  }}
+                >
+                  {preguntaActiva}
+                </div>
+                <div
+                  style={{
+                    background: 'var(--bg-surface)',
+                    borderRadius: 20,
+                    padding: 20,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                    border: '1px solid var(--linea)',
+                    maxWidth: 480,
+                  }}
+                >
+                  <Lumi pose="piensa" alto={54} />
+                  <div className="pila" style={{ gap: 4, flex: 1 }}>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>
+                      Lumi está revisando las ofertas…
+                    </span>
+                    <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
+                      {pasoCarga === 0 && 'Buscando ofertas en portales laborales peruanos…'}
+                      {pasoCarga === 1 && 'Normalizando habilidades y sinónimos…'}
+                      {pasoCarga >= 2 && 'Calculando salarios y métricas del mercado…'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Toast flotante de crédito consumido */}
             {toastCredito && (
               <div
@@ -559,105 +729,237 @@ export default function Chat() {
               </div>
             )}
 
-            {/* Pie Flotante con Sugerencias y Barra de Re-pregunta */}
-            <div style={{ position: 'sticky', bottom: 0, margin: 'auto -40px -32px', padding: '16px 40px 24px', background: 'linear-gradient(rgba(247,247,252,0), var(--bg-page) 30%)', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {rolPrincipal && (
-                <div className="fila" style={{ gap: 8, flexWrap: 'wrap' }}>
-                  {resultado?.intent !== 'salarios' && (
-                    <button
-                      type="button"
-                      className="chip chip--opcion"
-                      onClick={() => enviar(`¿Cuánto gana un ${rolPrincipal.nombre} en ${ciudad}?`)}
-                    >
-                      ¿Cuánto paga?
-                    </button>
-                  )}
-                  {resultado?.intent !== 'habilidades' && (
-                    <button
-                      type="button"
-                      className="chip chip--opcion"
-                      onClick={() => enviar(`¿Qué habilidades piden para ${rolPrincipal.nombre}?`)}
-                    >
-                      ¿Qué habilidades piden?
-                    </button>
-                  )}
-                  {resultado?.intent !== 'tendencia' && (
-                    <button
-                      type="button"
-                      className="chip chip--opcion"
-                      onClick={() => enviar(`¿Qué está creciendo para ${rolPrincipal.nombre}?`)}
-                    >
-                      ¿Qué está creciendo?
-                    </button>
-                  )}
-                  {ciudad !== 'Arequipa' && (
-                    <button
-                      type="button"
-                      className="chip chip--opcion"
-                      onClick={() => enviar(`¿Qué piden para ${rolPrincipal.nombre} en Arequipa?`)}
-                    >
-                      Ver en Arequipa
-                    </button>
-                  )}
-                </div>
-              )}
-
-              <div
-                style={{
-                  background: 'var(--bg-surface)',
-                  borderRadius: 'var(--radio-full)',
-                  padding: '8px 8px 8px 24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  border: '1.5px solid var(--borde-campo)',
-                  boxShadow: '0 6px 24px rgba(23, 21, 58, 0.08)',
-                }}
-              >
-                <input
-                  value={texto}
-                  onChange={(e) => setTexto(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') enviar(); }}
-                  placeholder="Sigue preguntando sobre este rol o el mercado…"
+            {/* Si el usuario intentó consultar sin créditos (paywall bloqueado),
+                mostrar la pregunta y la tarjeta de Lumi idéntica a Imagen 1 */}
+            {preguntaBloqueada && (
+              <div className="pila animate-fade-up" style={{ gap: 16 }}>
+                {/* Pregunta del usuario (burbuja púrpura a la derecha) */}
+                <div
                   style={{
-                    flex: 1,
-                    font: "400 15px 'Onest', system-ui, sans-serif",
-                    border: 0,
-                    outline: 'none',
-                    background: 'transparent',
-                    color: 'var(--text-primary)',
-                    minWidth: 0,
+                    alignSelf: 'flex-end',
+                    background: 'var(--accent)',
+                    color: 'var(--accent-fg)',
+                    borderRadius: '22px 22px 6px 22px',
+                    padding: '14px 20px',
+                    fontSize: 16,
+                    maxWidth: 620,
+                    lineHeight: 1.45,
+                    boxShadow: '0 4px 14px rgba(75, 59, 255, 0.25)',
                   }}
-                />
-                <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
-                  {costLabel}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => enviar()}
-                  disabled={!texto.trim()}
+                >
+                  {preguntaBloqueada}
+                </div>
+
+                {/* Tarjeta oscura de Lumi (Paywall) idéntica a Imagen 1 */}
+                <div
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 999,
-                    border: 0,
-                    background: texto.trim() ? 'var(--accent)' : 'var(--accent-apagado)',
-                    color: texto.trim() ? 'var(--accent-fg)' : 'var(--accent-apagado-fg)',
-                    fontWeight: 700,
-                    fontSize: 18,
-                    cursor: texto.trim() ? 'pointer' : 'not-allowed',
+                    background: '#14172a',
+                    borderRadius: 22,
+                    padding: '20px 28px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'space-between',
+                    gap: 20,
+                    maxWidth: 760,
+                    width: '100%',
+                    margin: '8px auto 0',
+                    boxShadow: '0 8px 30px rgba(15, 23, 42, 0.25)',
                   }}
-                  aria-label="Preguntar"
                 >
-                  →
-                </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+                    <div
+                      style={{
+                        width: 58,
+                        height: 58,
+                        borderRadius: 14,
+                        background: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
+                      }}
+                    >
+                      <Lumi alto={46} pose="saluda" />
+                    </div>
+                    <div className="pila" style={{ gap: 4 }}>
+                      <strong style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
+                        Usaste tus 3 consultas gratis
+                      </strong>
+                      <span style={{ fontSize: 14, color: 'rgba(255, 255, 255, 0.72)', lineHeight: 1.4 }}>
+                        Guardé tu pregunta. La respondo apenas tengas créditos.
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => abrirCheckoutEnNuevaPestana('25')}
+                    style={{
+                      background: '#bef264',
+                      color: '#0f172a',
+                      fontWeight: 700,
+                      fontSize: 14.5,
+                      padding: '12px 22px',
+                      borderRadius: 999,
+                      border: 0,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                      transition: 'transform 0.15s ease, background 0.15s ease',
+                      boxShadow: '0 4px 14px rgba(190, 242, 100, 0.35)',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                  >
+                    Comprar 25 consultas · S/ 25 ↗
+                  </button>
+                </div>
+
+                {/* Subtexto centrado de pestaña nueva */}
+                <span
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 13,
+                    color: 'var(--text-secondary)',
+                    marginTop: 2,
+                  }}
+                >
+                  El pago se abre en una pestaña nueva. Este chat queda abierto.
+                </span>
               </div>
-            </div>
+            )}
           </div>
         )}
+      </div>
+    </div>
+
+      {/* ── BARRA DE COMPOSER FIJA Y ESTABLE EN LA PARTE INFERIOR (FUERA DEL SCROLL) ── */}
+      <div
+        className="chat-composer"
+        style={{
+          flex: 'none',
+          width: '100%',
+          background: 'linear-gradient(rgba(247,247,252,0) 0%, var(--bg-page) 35%)',
+          padding: '6px 32px 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 8,
+          zIndex: 10,
+        }}
+      >
+        <div style={{ maxWidth: 760, width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {/* Chips contextuales de sugerencia (solo en modo resultado si no está bloqueada ni retomada) */}
+          {isResultado && rolPrincipal && !preguntaBloqueada && !ultima?.retomada && (
+            <div className="fila" style={{ gap: 8, flexWrap: 'wrap' }}>
+              {resultado?.intent !== 'salarios' && (
+                <button
+                  type="button"
+                  className="chip chip--opcion"
+                  disabled={cargando}
+                  onClick={() => enviar(`¿Cuánto gana un ${rolPrincipal.nombre} en ${ciudad}?`)}
+                >
+                  ¿Cuánto paga?
+                </button>
+              )}
+              {resultado?.intent !== 'habilidades' && (
+                <button
+                  type="button"
+                  className="chip chip--opcion"
+                  disabled={cargando}
+                  onClick={() => enviar(`¿Qué habilidades piden para ${rolPrincipal.nombre}?`)}
+                >
+                  ¿Qué habilidades piden?
+                </button>
+              )}
+              {resultado?.intent !== 'tendencia' && (
+                <button
+                  type="button"
+                  className="chip chip--opcion"
+                  disabled={cargando}
+                  onClick={() => enviar(`¿Qué está creciendo para ${rolPrincipal.nombre}?`)}
+                >
+                  ¿Qué está creciendo?
+                </button>
+              )}
+              {ciudad !== 'Arequipa' && (
+                <button
+                  type="button"
+                  className="chip chip--opcion"
+                  disabled={cargando}
+                  onClick={() => enviar(`¿Qué piden para ${rolPrincipal.nombre} en Arequipa?`)}
+                >
+                  Ver en Arequipa
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Barra flotante tipo píldora */}
+          <div
+            style={{
+              background: 'var(--bg-surface)',
+              borderRadius: 'var(--radio-full)',
+              padding: '8px 10px 8px 24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              border: '1.5px solid var(--borde-campo)',
+              boxShadow: '0 6px 24px rgba(23, 21, 58, 0.08)',
+              width: '100%',
+            }}
+          >
+            <input
+              value={texto}
+              onChange={(e) => setTexto(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !cargando) enviar(); }}
+              disabled={cargando}
+              placeholder={cargando ? 'Lumi está procesando tu consulta…' : 'Pregúntale a Lumi...'}
+              style={{
+                flex: 1,
+                font: "400 15px 'Onest', system-ui, sans-serif",
+                border: 0,
+                outline: 'none',
+                background: 'transparent',
+                color: 'var(--text-primary)',
+                minWidth: 0,
+                opacity: cargando ? 0.6 : 1,
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => enviar()}
+              disabled={!texto.trim() || cargando}
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 999,
+                border: 0,
+                background: texto.trim() && !cargando ? 'var(--accent)' : '#c7d2fe',
+                color: '#ffffff',
+                fontWeight: 700,
+                fontSize: 18,
+                cursor: texto.trim() && !cargando ? 'pointer' : 'default',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'background 0.2s ease',
+                flexShrink: 0,
+              }}
+              aria-label="Preguntar"
+            >
+              ↑
+            </button>
+          </div>
+
+          {/* Texto de ayuda inferior solo en consulta inicial */}
+          {isConsulta && (
+            <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', textAlign: 'center' }}>
+              Escribe con tus palabras: el rol, la ciudad y si quieres saber habilidades, sueldo o tendencia.
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Modal de metodología */}

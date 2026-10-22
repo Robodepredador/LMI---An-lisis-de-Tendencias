@@ -1,19 +1,23 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../store.js';
 import { PACKS, proximaRenovacion } from '../data/contenido.js';
 import Modal from './Modal.jsx';
 
 export default function ModalPlanes() {
   const ir = useNavigate();
+  const { pathname } = useLocation();
   const modalPlanes = useApp((s) => s.modalPlanes);
   const cerrarModalPlanes = useApp((s) => s.cerrarModalPlanes);
+  const setRutaRetornoChat = useApp((s) => s.setRutaRetornoChat);
   const pack = useApp((s) => s.pack);
   const setPack = useApp((s) => s.setPack);
   const pendiente = useApp((s) => s.pendiente);
 
   const continuarAlPago = () => {
+    const rutaActual = pathname.startsWith('/chat') ? pathname : '/chat';
+    setRutaRetornoChat(rutaActual);
     cerrarModalPlanes();
-    ir('/checkout');
+    window.open(`/checkout?pack=${pack}`, '_blank');
   };
 
   return (

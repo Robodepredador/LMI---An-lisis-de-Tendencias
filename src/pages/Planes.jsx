@@ -7,6 +7,7 @@ export default function Planes() {
   const pack = useApp((s) => s.pack);
   const setPack = useApp((s) => s.setPack);
   const pendiente = useApp((s) => s.pendiente);
+  const rutaRetornoChat = useApp((s) => s.rutaRetornoChat) || '/chat';
 
   const elegido = PACKS.find((p) => p.id === pack) ?? PACKS[1];
 
@@ -15,14 +16,8 @@ export default function Planes() {
       <div className="pasarela">
         {/* ── Columna 1: Selección del Plan ── */}
         <div className="pasarela__principal">
-          <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <Link to="/chat" className="btn btn--linea" style={{ padding: '6px 14px', fontSize: 13, gap: 6 }}>
-              ← Volver al chat
-            </Link>
-            <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>PLANES Y TARIFAS</span>
-          </div>
-
-          <div className="pila" style={{ gap: 6 }}>
+          <div className="pila" style={{ gap: 8 }}>
+            <span className="eti" style={{ alignSelf: 'flex-start' }}>PLANES Y TARIFAS</span>
             <h1 className="display" style={{ margin: 0, fontSize: 32 }}>Elige cómo seguir</h1>
             {pendiente ? (
               <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>
@@ -115,9 +110,9 @@ export default function Planes() {
             <button className="btn btn--acento btn--grande btn--bloque" onClick={() => ir('/checkout')}>
               Continuar al pago →
             </button>
-            <Link to="/chat" className="btn btn--linea btn--bloque" style={{ textAlign: 'center' }}>
+            <button onClick={() => ir(rutaRetornoChat)} className="btn btn--linea btn--bloque" style={{ textAlign: 'center' }}>
               Esperar al {proximaRenovacion()}
-            </Link>
+            </button>
           </div>
 
           <div className="pila" style={{ gap: 8, borderTop: '1px solid var(--linea)', paddingTop: 14 }}>

@@ -54,10 +54,10 @@ export const PACKS = [
 ];
 
 export const METODOS_PAGO = [
-  { id: 'tarjeta', k: 'Tarjeta de crédito o débito', d: 'Visa, Mastercard, Amex, Diners' },
+  { id: 'tarjeta', k: 'Tarjeta', d: 'Visa, Mastercard, Amex, Diners' },
   { id: 'yape', k: 'Yape', d: 'Con código de aprobación' },
-  { id: 'plin', k: 'Plin', d: 'Escanea un QR desde tu banco' },
-  { id: 'pagoefectivo', k: 'PagoEfectivo', d: 'Agentes, bodegas o banca móvil' },
+  { id: 'plin', k: 'Plin', d: 'Escanea un QR' },
+  { id: 'pagoefectivo', k: 'PagoEfectivo', d: 'Agentes o banca móvil' },
 ];
 
 export const ROLES_PERFIL = [

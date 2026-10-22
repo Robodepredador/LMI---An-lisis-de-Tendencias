@@ -165,3 +165,45 @@ assert.notDeepEqual(sug.map((x) => x.q), sug2.map((x) => x.q),
   'dos carreras distintas no pueden producir las mismas preguntas');
 
 console.log('✓ perfil del registro conectado a las sugerencias');
+
+// ── Conversaciones, no preguntas sueltas ─────────────────────────────
+// Como en Claude o ChatGPT: una pregunta abre UNA conversación en el
+// historial, y los seguimientos se quedan dentro de ella. Solo
+// "+ Nueva consulta" abre otra.
+s().salir();
+s().registrar({ email: 'hilo@demo.pe', clave: 'secreta1', nombre: 'Hilo Prueba' });
+s().setPack('25'); s().confirmarPago();
+
+const respuesta = (rol) => ({ sinDatos: false, fueraDeAlcance: false, roleIds: [rol], intent: 'habilidades' });
+
+const c1 = s().registrarConsulta({ pregunta: '¿Qué piden para analista de datos?', resultado: respuesta('analista-datos-jr') });
+const c2 = s().registrarConsulta({ pregunta: '¿Cuánto paga?', resultado: respuesta('analista-datos-jr') });
+
+assert.ok(c1.hiloId, 'la primera consulta abre una conversacion');
+assert.equal(c2.hiloId, c1.hiloId, 'el seguimiento se queda en la misma conversacion');
+assert.equal(s().conversaciones().length, 1,
+  'dos preguntas de la misma charla son UNA fila en el historial');
+assert.equal(s().conversaciones()[0].titulo, '¿Qué piden para analista de datos?',
+  'la conversacion se titula con su primera pregunta');
+assert.equal(s().conversaciones()[0].consultas.length, 2);
+
+// "+ Nueva consulta" abre otra conversación, pero solo al preguntar.
+s().nuevaConsulta();
+assert.equal(s().conversaciones().length, 1,
+  'pulsar "+ Nueva consulta" no crea una fila vacia en el historial');
+
+const c3 = s().registrarConsulta({ pregunta: '¿Qué piden para asistente legal?', resultado: respuesta('asistente-legal') });
+assert.notEqual(c3.hiloId, c1.hiloId, 'tras "+ Nueva consulta" la siguiente pregunta abre otra conversacion');
+assert.equal(s().conversaciones().length, 2, 'ahora si hay dos filas en el historial');
+assert.equal(s().conversaciones()[0].titulo, '¿Qué piden para asistente legal?',
+  'la conversacion mas reciente va primero');
+
+// El hilo visible es el de la conversación activa.
+assert.deepEqual(s().hiloVisible().map((c) => c.pregunta), ['¿Qué piden para asistente legal?']);
+
+// Abrir una del historial muestra sus dos turnos, en orden.
+assert.deepEqual(s().hiloDe(c1.hiloId).map((c) => c.pregunta),
+  ['¿Qué piden para analista de datos?', '¿Cuánto paga?'],
+  'abrir una conversacion antigua muestra sus turnos de la mas antigua a la mas reciente');
+
+console.log('✓ conversaciones: una fila por charla, seguimientos dentro');
