@@ -4,6 +4,12 @@ import { CUENTAS_DEMO } from './data/demo.js';
 
 export const CONSULTAS_GRATIS = 3;
 
+// El plan gratis se queda en un diagnóstico al mes, y es deliberado: el muro
+// es parte del experimento. En Pro es ilimitado (§7.9 del plan).
+export const DIAGNOSTICOS_GRATIS = 1;
+
+export const PRECIO_PRO = 19;
+
 const periodoActual = () => new Date().toISOString().slice(0, 7); // 'YYYY-MM'
 
 // Los cuatro tramos que el registro aprobado ofrece. El indice es lo que se
@@ -14,37 +20,71 @@ const iniciales = (nombre) =>
   nombre.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
 const estadoInicial = {
-  usuario: null,          // { email, nombre, iniciales, rol, ciclo, carrera, areas, ciudades, tipo }
+  usuario: null,          // { email, nombre, iniciales, rol, ciclo, carrera, universidad, areas, ciudades, tipo }
   cuentas: {},            // email -> { clave, perfil }  — el "servidor de cuentas" del navegador
   tenant: 'LMI-U',
   docenteOpcion: null,    // 'A' | 'B' — cuál vista docente eligió
 
-  plan: 'free',           // 'free' | 'creditos' | 'pro' | 'institucional'
-  creditos: 0,
+  // Dos planes y nada más. 'institucional' no se compra: lo asigna el tenant
+  // de marca blanca, así que se conserva (§7.5). 'creditos' desapareció: ese
+  // modelo de negocio quedó inviable (§6.3).
+  plan: 'free',           // 'free' | 'pro' | 'institucional'
   usadasMes: 0,
   periodo: periodoActual(),
+
+  // El diagnóstico: lo que el estudiante contó de sí mismo y lo que salió.
+  perfil: null,           // { modoEntrada, cvParseado, skills[], carrera, universidad, ciclo, rolObjetivo, ciudades[], tiempoSemanal, presupuesto }
+  diagnostico: null,      // { fecha, pctHoy, nHoy, total, camino[], rol, ciudades }
+  diagnosticosMes: 0,
 
   consultas: [],          // [{ id, pregunta, resultado, ts, costo }]
   hiloActual: null,       // la conversación abierta; null = la próxima pregunta abre una
   pagos: [],              // [{ id, ts, concepto, monto, metodo }]
   pendiente: null,        // pregunta guardada al chocar con el paywall
 
-  pack: '25',
   metodoPago: 'yape',
-  modalPlanes: false,
+  // El paywall nuevo reemplaza a ModalPlanes en toda la app (§7.4). `paywall`
+  // es el motivo con el que se abrió, y da el titular; `paywallDestino` es a
+  // dónde llevar al confirmar el pago.
+  paywall: null,
+  paywallDestino: null,
   rutaRetornoChat: '/chat',
   pagoReciente: false,
 };
+
+// Lo que se guarda de la sesión en su cuenta. Vive en un sitio porque cuatro
+// acciones lo necesitan igual, y antes se repetía campo por campo: cada vez
+// que se agregaba uno había que acordarse de las cuatro.
+//
+// OJO con el nombre: en el registro de la cuenta, `perfil` es la identidad
+// (correo, nombre, iniciales) y existe desde antes. El perfil del diagnóstico
+// se guarda aparte como `perfilMotor`, o escribirlo borraría la sesión.
+const instantanea = (s) => ({
+  consultas: s.consultas,
+  plan: s.plan,
+  usadasMes: s.usadasMes,
+  periodo: s.periodo,
+  pagos: s.pagos,
+  tenant: s.tenant,
+  docenteOpcion: s.docenteOpcion,
+  perfilMotor: s.perfil,
+  diagnostico: s.diagnostico,
+  diagnosticosMes: s.diagnosticosMes,
+});
 
 export const useApp = create(
   persist(
     (set, get) => ({
       ...estadoInicial,
 
-      abrirModalPlanes: () => set({ modalPlanes: true }),
-      cerrarModalPlanes: () => set({ modalPlanes: false }),
+      // ── Paywall ───────────────────────────────────────────────────
+      abrirPaywall: (motivo = null, destino = null) => set({ paywall: motivo ?? 'general', paywallDestino: destino }),
+      cerrarPaywall: () => set({ paywall: null }),
+      limpiarPaywallDestino: () => set({ paywallDestino: null }),
       setRutaRetornoChat: (rutaRetornoChat) => set({ rutaRetornoChat }),
       limpiarAvisoPago: () => set({ pagoReciente: false }),
+
+      esPro: () => ['pro', 'institucional'].includes(get().plan),
 
       // ── Periodo: el plan gratis se renueva solo al cambiar de mes ──
       sincronizarPeriodo: () => {
@@ -54,9 +94,9 @@ export const useApp = create(
             const cuentas = { ...s.cuentas };
             if (s.usuario?.email) {
               const e = s.usuario.email.trim().toLowerCase();
-              if (cuentas[e]) cuentas[e] = { ...cuentas[e], periodo: p, usadasMes: 0 };
+              if (cuentas[e]) cuentas[e] = { ...cuentas[e], periodo: p, usadasMes: 0, diagnosticosMes: 0 };
             }
-            return { periodo: p, usadasMes: 0, cuentas };
+            return { periodo: p, usadasMes: 0, diagnosticosMes: 0, cuentas };
           });
         }
       },
@@ -65,31 +105,24 @@ export const useApp = create(
       registrar: ({ email, clave, nombre, ciclo = 2, carrera = null, ...extra }) => {
         const e = email.trim().toLowerCase();
         if (get().cuentas[e]) return { ok: false, error: 'Ya existe una cuenta con este correo.' };
-        const perfil = { email: e, nombre, iniciales: iniciales(nombre), rol: 'Estudiante',
-          ciclo, carrera, areas: [], ciudades: [], tipo: 'personal', ...extra };
-        const nuevaCuenta = {
-          clave,
-          perfil,
+        const identidad = { email: e, nombre, iniciales: iniciales(nombre), rol: 'Estudiante',
+          ciclo, carrera, universidad: null, areas: [], ciudades: [], tipo: 'personal', ...extra };
+        const limpio = {
           consultas: [],
           plan: 'free',
-          creditos: 0,
           usadasMes: 0,
           periodo: periodoActual(),
           pagos: [],
           tenant: 'LMI-U',
           docenteOpcion: null,
+          diagnostico: null,
+          diagnosticosMes: 0,
         };
         set((s) => ({
-          cuentas: { ...s.cuentas, [e]: nuevaCuenta },
-          usuario: perfil,
-          consultas: [],
-          plan: 'free',
-          creditos: 0,
-          usadasMes: 0,
-          periodo: periodoActual(),
-          pagos: [],
-          tenant: 'LMI-U',
-          docenteOpcion: null,
+          cuentas: { ...s.cuentas, [e]: { clave, perfil: identidad, perfilMotor: null, ...limpio } },
+          usuario: identidad,
+          perfil: null,
+          ...limpio,
           hiloActual: null,
           pendiente: null,
         }));
@@ -105,15 +138,19 @@ export const useApp = create(
           usuario: cuenta.perfil,
           consultas: cuenta.consultas || [],
           plan: cuenta.plan || 'free',
-          creditos: cuenta.creditos ?? 0,
           usadasMes: cuenta.usadasMes ?? 0,
           periodo: cuenta.periodo || periodoActual(),
           pagos: cuenta.pagos || [],
           tenant: cuenta.tenant || 'LMI-U',
           docenteOpcion: cuenta.docenteOpcion ?? null,
+          perfil: cuenta.perfilMotor ?? null,
+          diagnostico: cuenta.diagnostico ?? null,
+          diagnosticosMes: cuenta.diagnosticosMes ?? 0,
           hiloActual: null,
           pendiente: null,
           rutaRetornoChat: '/chat',
+          paywall: null,
+          paywallDestino: null,
         });
         return { ok: true };
       },
@@ -125,44 +162,30 @@ export const useApp = create(
 
         // Guardar el estado del usuario anterior si había uno
         const u = get().usuario;
-        let cuentas = { ...get().cuentas };
+        const cuentas = { ...get().cuentas };
         if (u?.email) {
           const prevE = u.email.trim().toLowerCase();
           const prevC = cuentas[prevE] || { perfil: u, clave: 'demo' };
-          cuentas[prevE] = {
-            ...prevC,
-            consultas: get().consultas,
-            plan: get().plan,
-            creditos: get().creditos,
-            usadasMes: get().usadasMes,
-            periodo: get().periodo,
-            pagos: get().pagos,
-            tenant: get().tenant,
-            docenteOpcion: get().docenteOpcion,
-          };
+          cuentas[prevE] = { ...prevC, ...instantanea(get()) };
         }
 
-        // Si es Diego, asegurar que siempre comience con historial vacío
-        if (id === 'diego' && cuentas[e]) {
-          cuentas[e] = {
-            ...cuentas[e],
-            consultas: [],
-            creditos: 25,
-            usadasMes: 0,
-          };
-        }
-
-        const guardada = cuentas[e];
-        const estadoCargar = guardada ? {
-          plan: guardada.plan ?? demo.estado.plan,
-          creditos: guardada.creditos ?? demo.estado.creditos,
-          usadasMes: guardada.usadasMes ?? demo.estado.usadasMes,
-          periodo: guardada.periodo ?? demo.estado.periodo ?? periodoActual(),
-          pagos: guardada.pagos ?? demo.estado.pagos ?? [],
-          consultas: guardada.consultas ?? demo.estado.consultas ?? [],
-          tenant: guardada.tenant ?? demo.estado.tenant ?? 'LMI-U',
-          docenteOpcion: guardada.docenteOpcion ?? demo.estado.docenteOpcion ?? null,
-        } : demo.estado;
+        // `estadoCargar` tiene la forma del ESTADO (su `perfil` es el del
+        // diagnóstico). Al registro de la cuenta se escribe con
+        // `instantanea`, que lo renombra a `perfilMotor` y deja intacta la
+        // identidad.
+        const g = cuentas[e];
+        const estadoCargar = {
+          plan: g?.plan ?? demo.estado.plan,
+          usadasMes: g?.usadasMes ?? demo.estado.usadasMes ?? 0,
+          periodo: g?.periodo ?? demo.estado.periodo ?? periodoActual(),
+          pagos: g?.pagos ?? demo.estado.pagos ?? [],
+          consultas: g?.consultas ?? demo.estado.consultas ?? [],
+          tenant: g?.tenant ?? demo.estado.tenant ?? 'LMI-U',
+          docenteOpcion: g?.docenteOpcion ?? demo.estado.docenteOpcion ?? null,
+          perfil: demo.estado.diagnostico === null ? null : (g?.perfilMotor ?? demo.estado.perfil ?? null),
+          diagnostico: demo.estado.diagnostico === null ? null : (g?.diagnostico ?? demo.estado.diagnostico ?? null),
+          diagnosticosMes: demo.estado.diagnostico === null ? 0 : (g?.diagnosticosMes ?? demo.estado.diagnosticosMes ?? 0),
+        };
 
         set({
           ...estadoCargar,
@@ -170,13 +193,11 @@ export const useApp = create(
           hiloActual: null,
           pendiente: null,
           rutaRetornoChat: '/chat',
+          paywall: null,
+          paywallDestino: null,
           cuentas: {
             ...cuentas,
-            [e]: {
-              clave: 'demo',
-              perfil: demo.perfil,
-              ...estadoCargar,
-            },
+            [e]: { clave: 'demo', perfil: demo.perfil, ...instantanea(estadoCargar) },
           },
         });
         return { ok: true };
@@ -184,27 +205,12 @@ export const useApp = create(
 
       salir: () => {
         const u = get().usuario;
-        let cuentas = { ...get().cuentas };
+        const cuentas = { ...get().cuentas };
         if (u?.email) {
           const e = u.email.trim().toLowerCase();
-          const cuenta = cuentas[e] || { perfil: u };
-          cuentas[e] = {
-            ...cuenta,
-            consultas: get().consultas,
-            plan: get().plan,
-            creditos: get().creditos,
-            usadasMes: get().usadasMes,
-            periodo: get().periodo,
-            pagos: get().pagos,
-            tenant: get().tenant,
-            docenteOpcion: get().docenteOpcion,
-          };
+          cuentas[e] = { ...(cuentas[e] || { perfil: u }), ...instantanea(get()) };
         }
-        set({
-          ...estadoInicial,
-          cuentas,
-          periodo: periodoActual(),
-        });
+        set({ ...estadoInicial, cuentas, periodo: periodoActual() });
       },
 
       actualizarPerfil: (cambios) =>
@@ -218,12 +224,42 @@ export const useApp = create(
           };
         }),
 
+      // ── Diagnóstico ───────────────────────────────────────────────
+      // Entrar a "Mi diagnóstico" con uno hecho lleva al reporte; rehacerlo es
+      // lo que consume el cupo del mes (§7.8). Así el límite de 1/mes no
+      // castiga a quien solo quiere volver a mirar su reporte.
+      guardarPerfilMotor: (cambios) =>
+        set((s) => {
+          const perfil = { ...(s.perfil ?? {}), ...cambios };
+          const cuentas = { ...s.cuentas };
+          if (s.usuario?.email) {
+            const e = s.usuario.email.trim().toLowerCase();
+            cuentas[e] = { ...(cuentas[e] || { perfil: s.usuario }), perfilMotor: perfil };
+          }
+          return { perfil, cuentas };
+        }),
+
+      puedeDiagnosticar: () => {
+        if (get().esPro()) return true;
+        return get().diagnosticosMes < DIAGNOSTICOS_GRATIS;
+      },
+
+      guardarDiagnostico: (diagnostico) =>
+        set((s) => {
+          const diagnosticosMes = s.esPro() ? s.diagnosticosMes : s.diagnosticosMes + 1;
+          const cuentas = { ...s.cuentas };
+          if (s.usuario?.email) {
+            const e = s.usuario.email.trim().toLowerCase();
+            cuentas[e] = { ...(cuentas[e] || { perfil: s.usuario }), diagnostico, diagnosticosMes };
+          }
+          return { diagnostico, diagnosticosMes, cuentas };
+        }),
+
       // ── Consumo ───────────────────────────────────────────────────
       // Cuántas consultas le quedan. null = ilimitadas.
       restantes: () => {
-        const { plan, creditos, usadasMes } = get();
+        const { plan, usadasMes } = get();
         if (plan === 'pro' || plan === 'institucional') return null;
-        if (plan === 'creditos') return creditos;
         return Math.max(0, CONSULTAS_GRATIS - usadasMes);
       },
 
@@ -246,25 +282,18 @@ export const useApp = create(
         const consulta = { id: crypto.randomUUID(), hiloId, pregunta, resultado, ts: Date.now(), costo: cobra ? 1 : 0, retomada };
         const nuevasConsultas = [consulta, ...get().consultas];
         const nuevasUsadas = cobra && plan === 'free' ? get().usadasMes + 1 : get().usadasMes;
-        const nuevosCreditos = cobra && plan === 'creditos' ? Math.max(0, get().creditos - 1) : get().creditos;
 
         set((s) => {
           const cuentas = { ...s.cuentas };
           if (s.usuario?.email) {
             const e = s.usuario.email.trim().toLowerCase();
             const cuenta = cuentas[e] || { perfil: s.usuario };
-            cuentas[e] = {
-              ...cuenta,
-              consultas: nuevasConsultas,
-              usadasMes: nuevasUsadas,
-              creditos: nuevosCreditos,
-            };
+            cuentas[e] = { ...cuenta, consultas: nuevasConsultas, usadasMes: nuevasUsadas };
           }
           return {
             consultas: nuevasConsultas,
             hiloActual: hiloId,
             usadasMes: nuevasUsadas,
-            creditos: nuevosCreditos,
             cuentas,
           };
         });
@@ -285,10 +314,7 @@ export const useApp = create(
           if (s.usuario?.email) {
             const e = s.usuario.email.trim().toLowerCase();
             const cuenta = cuentas[e] || { perfil: s.usuario };
-            cuentas[e] = {
-              ...cuenta,
-              consultas: nuevasConsultas,
-            };
+            cuentas[e] = { ...cuenta, consultas: nuevasConsultas };
           }
           return {
             consultas: nuevasConsultas,
@@ -327,68 +353,57 @@ export const useApp = create(
       limpiarPendiente: () => set({ pendiente: null }),
       resetearIntentos: () =>
         set((s) => {
-          const cuentas = { ...s.cuentas };
-          if (s.usuario?.email) {
-            const e = s.usuario.email.trim().toLowerCase();
-            if (cuentas[e]) {
-              cuentas[e] = {
-                ...cuentas[e],
-                usadasMes: 0,
-                creditos: 0,
-                plan: 'free',
-                consultas: [],
-                pagos: [],
-              };
-            }
-          }
-          return {
+          const limpio = {
             usadasMes: 0,
-            creditos: 0,
             plan: 'free',
             consultas: [],
             pagos: [],
+            diagnostico: null,
+            diagnosticosMes: 0,
+          };
+          const cuentas = { ...s.cuentas };
+          if (s.usuario?.email) {
+            const e = s.usuario.email.trim().toLowerCase();
+            if (cuentas[e]) cuentas[e] = { ...cuentas[e], ...limpio };
+          }
+          return {
+            ...limpio,
             pendiente: null,
             hiloActual: null,
             rutaRetornoChat: '/chat',
             pagoReciente: false,
+            paywall: null,
+            paywallDestino: null,
             cuentas,
           };
         }),
 
       // ── Compra ────────────────────────────────────────────────────
-      setPack: (pack) => set({ pack }),
       setMetodoPago: (metodoPago) => set({ metodoPago }),
 
-      confirmarPago: () => {
-        const { pack, metodoPago } = get();
-        const compras = {
-          '10': { concepto: '10 consultas', monto: 12, creditos: 10, plan: 'creditos' },
-          '25': { concepto: '25 consultas', monto: 25, creditos: 25, plan: 'creditos' },
-          pro: { concepto: 'Plan Pro · mensual', monto: 29, creditos: 0, plan: 'pro' },
+      // Un solo producto: la suscripción Pro estudiante. "Activar Pro" pasa
+      // por la pasarela y es al confirmar cuando se desbloquea (§6.4).
+      // `detalleMetodo` guarda lo justo para la boleta: marca y últimos 4
+      // dígitos de la tarjeta, o el celular de Yape. Nunca el número completo.
+      confirmarPago: (detalleMetodo = null) => {
+        const { metodoPago } = get();
+        const pago = {
+          id: crypto.randomUUID(),
+          ts: Date.now(),
+          concepto: 'Pro estudiante · mensual',
+          monto: PRECIO_PRO,
+          metodo: metodoPago,
+          detalleMetodo,
         };
-        const c = compras[pack];
-        const pago = { id: crypto.randomUUID(), ts: Date.now(), concepto: c.concepto, monto: c.monto, metodo: metodoPago };
         set((s) => {
-          const nuevosCreditos = c.plan === 'creditos' ? s.creditos + c.creditos : s.creditos;
           const nuevosPagos = [pago, ...s.pagos];
           const cuentas = { ...s.cuentas };
           if (s.usuario?.email) {
             const e = s.usuario.email.trim().toLowerCase();
             const cuenta = cuentas[e] || { perfil: s.usuario };
-            cuentas[e] = {
-              ...cuenta,
-              plan: c.plan,
-              creditos: nuevosCreditos,
-              pagos: nuevosPagos,
-            };
+            cuentas[e] = { ...cuenta, plan: 'pro', pagos: nuevosPagos };
           }
-          return {
-            plan: c.plan,
-            creditos: nuevosCreditos,
-            pagos: nuevosPagos,
-            pagoReciente: true,
-            cuentas,
-          };
+          return { plan: 'pro', pagos: nuevosPagos, pagoReciente: true, paywall: null, cuentas };
         });
         return pago;
       },
@@ -398,47 +413,66 @@ export const useApp = create(
     }),
     {
       name: 'lmiu',
-      version: 2,
-      migrate: (persistedState) => {
+      // v3: se fue el plan de créditos. Sin esta migración, un tester que ya
+      // entró abre la app con `plan: 'creditos'` guardado en su navegador y ve
+      // un plan que no existe.
+      version: 3,
+      migrate: (persistedState, version) => {
         if (!persistedState) return persistedState;
-        const cuentas = { ...(persistedState.cuentas || {}) };
-        // Limpiar consultas de Diego en cuentas guardadas
+        const s = { ...persistedState };
+
+        if (version < 3) {
+          const aPlanVigente = (c) => {
+            const limpio = { ...c };
+            delete limpio.creditos;
+            if (limpio.plan === 'creditos') limpio.plan = 'free';
+            return limpio;
+          };
+          // Quien tenía créditos pasa a gratis SIN perder su historial.
+          delete s.creditos;
+          delete s.pack;
+          if (s.plan === 'creditos') s.plan = 'free';
+          const cuentas = {};
+          for (const [k, v] of Object.entries(s.cuentas || {})) cuentas[k] = aPlanVigente(v);
+          s.cuentas = cuentas;
+          s.perfil = s.perfil ?? null;
+          s.diagnostico = s.diagnostico ?? null;
+          s.diagnosticosMes = s.diagnosticosMes ?? 0;
+        }
+
+        // Diego arranca sin historial propio del plan de créditos.
+        const cuentas = { ...(s.cuentas || {}) };
         if (cuentas['diego.ramos@demo.pe']) {
           cuentas['diego.ramos@demo.pe'] = {
             ...cuentas['diego.ramos@demo.pe'],
-            consultas: [],
-            creditos: 25,
+            plan: 'free',
             usadasMes: 0,
           };
         }
         // Asegurar que las cuentas registradas mantengan sus consultas
         for (const k of Object.keys(cuentas)) {
           if (!cuentas[k].consultas) {
-            if (persistedState.usuario?.email?.toLowerCase() === k.toLowerCase()) {
-              cuentas[k].consultas = persistedState.consultas || [];
-              cuentas[k].plan = persistedState.plan;
-              cuentas[k].creditos = persistedState.creditos;
-              cuentas[k].usadasMes = persistedState.usadasMes;
-              cuentas[k].pagos = persistedState.pagos || [];
+            if (s.usuario?.email?.toLowerCase() === k.toLowerCase()) {
+              cuentas[k].consultas = s.consultas || [];
+              cuentas[k].plan = s.plan;
+              cuentas[k].usadasMes = s.usadasMes;
+              cuentas[k].pagos = s.pagos || [];
             } else {
               cuentas[k].consultas = [];
             }
           }
         }
-        let consultas = persistedState.consultas || [];
-        if (persistedState.usuario?.email === 'diego.ramos@demo.pe') {
-          consultas = [];
-        } else {
-          consultas = consultas.filter((c) => !String(c.id).startsWith('demo-c'));
-        }
-        return {
-          ...persistedState,
-          cuentas,
-          consultas,
-        };
+        let consultas = s.consultas || [];
+        if (s.usuario?.email === 'diego.ramos@demo.pe') consultas = [];
+        else consultas = consultas.filter((c) => !String(c.id).startsWith('demo-c'));
+
+        return { ...s, cuentas, consultas };
       },
-      // Las acciones no se serializan; solo el estado persistente.
-      partialize: (s) => Object.fromEntries(Object.entries(s).filter(([k, v]) => typeof v !== 'function' && k !== 'modalPlanes')),
+      // Las acciones no se serializan; solo el estado persistente. `paywall`
+      // es de la sesión: un refresh no debe reabrir el muro.
+      partialize: (s) => Object.fromEntries(
+        Object.entries(s).filter(([k, v]) => typeof v !== 'function' && k !== 'paywall'),
+      ),
     },
   ),
 );

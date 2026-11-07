@@ -12,6 +12,8 @@ import { consejo, explicacion, titular } from '../lib/prosa.js';
 import Modal from '../components/Modal.jsx';
 import ContenidoMetodologia from '../components/metodologia.jsx';
 import { fmt, ventanaAnalisis } from '../data/contenido.js';
+import { atomicasDe, evidenciaDe, tieneEvidencia } from '../lib/mercado.js';
+import { CIUDADES_DEFECTO } from '../data/mercado.js';
 
 const ETIQUETA = {
   habilidades: 'HABILIDADES',
@@ -46,11 +48,12 @@ const PREGUNTAS_DESTACADAS = [
 // ── Un turno del hilo ────────────────────────────────────────────────
 // Antes la pantalla solo sabia pintar UNA consulta: cada seguimiento
 // reemplazaba la anterior en vez de continuarla. Ahora el hilo mapea esto.
-function Turno({ consulta, cicloUsuario, onMetodologia, onPreguntar }) {
+function Turno({ consulta, cicloUsuario, onMetodologia, onPreguntar, motor }) {
   const resultado = consulta?.resultado;
   const roles = (resultado?.roleIds ?? []).map(rol).filter(Boolean);
   const rolPrincipal = roles[0] || null;
   const ciudad = resultado?.ciudad || 'Lima';
+  const conEvidencia = Boolean(motor && rolPrincipal && tieneEvidencia(rolPrincipal.id));
   const esInsuficiente = resultado?.sinDatos
     || (rolPrincipal && salarioDe(rolPrincipal, ciudad).n < MIN_MUESTRA && resultado?.intent === 'salarios');
   const consultaActual = consulta;
@@ -219,7 +222,20 @@ function Turno({ consulta, cicloUsuario, onMetodologia, onPreguntar }) {
                         <Tendencia filas={filasDe(rolPrincipal)} />
                       )}
                       {(!resultado?.intent || resultado?.intent === 'habilidades' || resultado?.intent === 'otro') && (
-                        <Puntos filas={filasDe(rolPrincipal)} />
+                        /* El chip de estado y el panel de frases literales se
+                           dibujan solo donde hay evidencia cargada: cuatro de
+                           los 35 roles. En el resto, el gráfico queda como
+                           hoy y no se renderiza ningún botón (§7.12). */
+                        <Puntos
+                          filas={filasDe(rolPrincipal).map((f) => ({ ...f, atomicas: atomicasDe(f.k) }))}
+                          skills={motor?.skills ?? null}
+                          evidencia={conEvidencia
+                            ? (k) => evidenciaDe(rolPrincipal.id, k, motor.ciudades)
+                            : null}
+                          onRuta={(k, tiene) => motor.irA(tiene ? '/cv' : '/ruta')}
+                          onOfertas={() => motor.irA('/ofertas')}
+                          onDiagnostico={() => motor.irA('/diagnostico')}
+                        />
                       )}
                     </>
                   )}
@@ -246,6 +262,37 @@ function Turno({ consulta, cicloUsuario, onMetodologia, onPreguntar }) {
                       <span>Computrabajo, Bumeran, LinkedIn</span>
                     </div>
                   </div>
+
+                  {/* El resultado deja de terminar en un gráfico: si la
+                      pantalla no ofrece un siguiente paso concreto, el
+                      trabajo no sirvió. */}
+                  {conEvidencia && (
+                    <div className="pila" style={{ gap: 10, borderTop: '1px solid var(--linea)', paddingTop: 16 }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', letterSpacing: '.02em' }}>
+                        SIGUIENTE PASO SUGERIDO
+                      </span>
+                      <div className="fila" style={{ gap: 8, flexWrap: 'wrap' }}>
+                        {(motor.skills
+                          ? [
+                            ['Ver las ofertas donde ya calzo', '/ofertas'],
+                            ['Qué aprender primero', '/ruta'],
+                            ['Adaptar mi CV a estas ofertas', '/cv'],
+                          ]
+                          : [['Hacer mi diagnóstico', '/diagnostico']]
+                        ).map(([texto, destino], i) => (
+                          <button
+                            key={destino}
+                            type="button"
+                            className={`btn ${i === 0 ? 'btn--acento' : 'btn--linea'}`}
+                            style={{ fontSize: 13, padding: '10px 16px' }}
+                            onClick={() => motor.irA(destino)}
+                          >
+                            {texto}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -267,7 +314,9 @@ export default function Chat() {
   const guardarPendiente = useApp((s) => s.guardarPendiente);
   const limpiarPendiente = useApp((s) => s.limpiarPendiente);
   const setRutaRetornoChat = useApp((s) => s.setRutaRetornoChat);
-  const abrirModalPlanes = useApp((s) => s.abrirModalPlanes);
+  const abrirPaywall = useApp((s) => s.abrirPaywall);
+  const perfil = useApp((s) => s.perfil);
+  const diagnostico = useApp((s) => s.diagnostico);
   const setHiloActual = useApp((s) => s.setHiloActual);
   const pagoReciente = useApp((s) => s.pagoReciente);
   const resetearIntentos = useApp((s) => s.resetearIntentos);
@@ -325,12 +374,28 @@ export default function Chat() {
     return () => timerRef.current.forEach(clearTimeout);
   }, []);
 
-  const abrirCheckoutEnNuevaPestana = (packId = '25') => {
-    useApp.getState().setPack(String(packId));
+  // Un solo muro en toda la app: el paywall nuevo, que guarda el destino y
+  // pasa por la pasarela al activar (§7.4, §6.4).
+  const mostrarPaywall = (motivo = 'consultas') => {
     const targetHiloId = consultaId || (hilo.length > 0 ? (hilo[0].hiloId || hilo[0].id) : null);
     const rutaActual = targetHiloId ? `/chat/${targetHiloId}` : '/chat';
     setRutaRetornoChat(rutaActual);
-    window.open(`/checkout?pack=${packId}`, '_blank');
+    abrirPaywall(motivo, rutaActual);
+  };
+
+  // Lo que el turno necesita para hablar del usuario y no solo del mercado.
+  const motor = {
+    skills: diagnostico ? (perfil?.skills ?? []) : null,
+    ciudades: perfil?.ciudades?.length ? perfil.ciudades : CIUDADES_DEFECTO,
+    irA: (destino) => {
+      const proDestinos = ['/ofertas', '/ruta', '/cv'];
+      if (proDestinos.includes(destino) && !useApp.getState().esPro()) {
+        setRutaRetornoChat(window.location.pathname);
+        abrirPaywall(destino, destino);
+        return;
+      }
+      ir(destino);
+    },
   };
 
   const enviar = async (preguntaTexto, options = {}) => {
@@ -392,14 +457,14 @@ export default function Chat() {
     }
   };
 
-  // Sincronizar pregunta bloqueada si hay pendiente y no hay créditos
+  // Sincronizar pregunta bloqueada si hay pendiente y no quedan consultas
   useEffect(() => {
     if (pendiente && !puedeConsultar()) {
       setPreguntaBloqueada(pendiente);
     }
   }, [pendiente, puedeConsultar]);
 
-  // Reanudar automáticamente la pregunta pendiente al volver del pago con créditos
+  // Reanudar automáticamente la pregunta pendiente al volver del pago
   useEffect(() => {
     if ((pendiente || preguntaBloqueada) && puedeConsultar() && !cargando) {
       const q = pendiente || preguntaBloqueada;
@@ -422,7 +487,6 @@ export default function Chat() {
   const nombreUsuario = (usuario?.nombre || 'Estudiante').split(' ')[0];
   const cicloUsuario = usuario?.ciclo ?? 2;
   const labelCreditos = plan === 'pro' || plan === 'institucional' ? 'Ilimitadas' : `${restante ?? 0} de 3`;
-  const costLabel = plan === 'pro' ? 'incluida en Pro' : 'usa 1 crédito';
 
   // Datos para la visualización del resultado
   const resultado = ultima?.resultado;
@@ -444,43 +508,41 @@ export default function Chat() {
             top: 70,
             right: 24,
             zIndex: 1000,
-            background: '#bef264',
-            color: '#0f172a',
+            background: 'var(--lima-fija)',
+            color: 'var(--sobre-lima-fija)',
             borderRadius: 16,
             padding: '12px 18px',
             display: 'flex',
             alignItems: 'center',
             gap: 14,
-            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.18), 0 2px 6px rgba(190, 242, 100, 0.4)',
+            boxShadow: 'var(--sombra-modal)',
             fontWeight: 700,
             fontSize: 13.5,
           }}
         >
-          <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#0f172a', color: '#bef264', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, flexShrink: 0 }}>
-            ✓
-          </div>
+          <Lumi pose="celebra" alto={40} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <strong style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', lineHeight: 1.2 }}>¡Pago confirmado!</strong>
-            <span style={{ fontSize: 12.5, fontWeight: 600, color: '#334155' }}>25 consultas añadidas a tu cuenta</span>
+            <strong style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--sobre-lima-fija)', lineHeight: 1.2 }}>¡Pro estudiante activado!</strong>
+            <span style={{ fontSize: 12.5, fontWeight: 600, opacity: 0.8 }}>Ofertas, ruta y CV desbloqueados</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 10 }}>
             <button
               type="button"
               onClick={() => resetearIntentos()}
               style={{
-                background: 'rgba(15, 23, 42, 0.08)',
-                border: '1px solid rgba(15, 23, 42, 0.15)',
+                background: 'color-mix(in oklch, var(--sobre-lima-fija) 10%, transparent)',
+                border: '1px solid color-mix(in oklch, var(--sobre-lima-fija) 20%, transparent)',
                 borderRadius: 8,
                 cursor: 'pointer',
                 padding: '5px 11px',
                 fontSize: 12,
                 fontWeight: 700,
-                color: '#0f172a',
-                transition: 'background 0.15s ease',
+                color: 'var(--sobre-lima-fija)',
+                transition: 'background var(--duration) var(--ease-out)',
                 whiteSpace: 'nowrap',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(15, 23, 42, 0.16)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(15, 23, 42, 0.08)'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'color-mix(in oklch, var(--sobre-lima-fija) 20%, transparent)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'color-mix(in oklch, var(--sobre-lima-fija) 10%, transparent)'; }}
             >
               Reiniciar demo
             </button>
@@ -493,7 +555,7 @@ export default function Chat() {
                 cursor: 'pointer',
                 fontSize: 19,
                 lineHeight: 1,
-                color: '#0f172a',
+                color: 'var(--sobre-lima-fija)',
                 opacity: 0.6,
                 padding: '2px 4px',
               }}
@@ -592,7 +654,7 @@ export default function Chat() {
                       {p.q}
                     </span>
                     <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
-                      Consultar · usa 1 crédito →
+                      Consultar →
                     </span>
                   </button>
                 ))}
@@ -661,7 +723,7 @@ export default function Chat() {
         {isResultado && (
           <div className="pila" style={{ gap: 20, flex: 1 }}>
             {hilo.map((c) => (
-              <Turno key={c.id} consulta={c} cicloUsuario={cicloUsuario}
+              <Turno key={c.id} consulta={c} cicloUsuario={cicloUsuario} motor={motor}
                      onMetodologia={() => setVerMetodologia(true)} onPreguntar={enviar} />
             ))}
 
@@ -710,7 +772,7 @@ export default function Chat() {
               </div>
             )}
 
-            {/* Toast flotante de crédito consumido */}
+            {/* Toast flotante de consulta consumida */}
             {toastCredito && (
               <div
                 className="animate-scale"
@@ -729,7 +791,7 @@ export default function Chat() {
               </div>
             )}
 
-            {/* Si el usuario intentó consultar sin créditos (paywall bloqueado),
+            {/* Si el usuario intentó consultar sin consultas (paywall bloqueado),
                 mostrar la pregunta y la tarjeta de Lumi idéntica a Imagen 1 */}
             {preguntaBloqueada && (
               <div className="pila animate-fade-up" style={{ gap: 16 }}>
@@ -753,7 +815,7 @@ export default function Chat() {
                 {/* Tarjeta oscura de Lumi (Paywall) idéntica a Imagen 1 */}
                 <div
                   style={{
-                    background: '#14172a',
+                    background: 'var(--bg-noche)',
                     borderRadius: 22,
                     padding: '20px 28px',
                     display: 'flex',
@@ -772,7 +834,7 @@ export default function Chat() {
                         width: 58,
                         height: 58,
                         borderRadius: 14,
-                        background: '#ffffff',
+                        background: 'var(--blanco-fijo)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -783,21 +845,21 @@ export default function Chat() {
                       <Lumi alto={46} pose="saluda" />
                     </div>
                     <div className="pila" style={{ gap: 4 }}>
-                      <strong style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
+                      <strong style={{ fontSize: 18, fontWeight: 800, color: 'var(--blanco-fijo)', letterSpacing: '-0.01em' }}>
                         Usaste tus 3 consultas gratis
                       </strong>
-                      <span style={{ fontSize: 14, color: 'rgba(255, 255, 255, 0.72)', lineHeight: 1.4 }}>
-                        Guardé tu pregunta. La respondo apenas tengas créditos.
+                      <span style={{ fontSize: 14, color: 'var(--sobre-noche)', lineHeight: 1.4 }}>
+                        Guardé tu pregunta. La respondo apenas actives Pro estudiante.
                       </span>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => abrirCheckoutEnNuevaPestana('25')}
+                    onClick={() => mostrarPaywall('consultas')}
                     style={{
-                      background: '#bef264',
-                      color: '#0f172a',
+                      background: 'var(--lima-fija)',
+                      color: 'var(--sobre-lima-fija)',
                       fontWeight: 700,
                       fontSize: 14.5,
                       padding: '12px 22px',
@@ -806,13 +868,13 @@ export default function Chat() {
                       cursor: 'pointer',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
-                      transition: 'transform 0.15s ease, background 0.15s ease',
-                      boxShadow: '0 4px 14px rgba(190, 242, 100, 0.35)',
+                      transition: 'transform var(--duration) var(--ease-out), background var(--duration) var(--ease-out)',
+                      boxShadow: 'var(--sombra-cta)',
                     }}
                     onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
-                    Comprar 25 consultas · S/ 25 ↗
+                    Activar Pro estudiante · S/ 19/mes
                   </button>
                 </div>
 
@@ -825,7 +887,7 @@ export default function Chat() {
                     marginTop: 2,
                   }}
                 >
-                  El pago se abre en una pestaña nueva. Este chat queda abierto.
+                  Verás qué desbloqueas antes de pagar. Este chat queda abierto.
                 </span>
               </div>
             )}
@@ -936,8 +998,8 @@ export default function Chat() {
                 height: 38,
                 borderRadius: 999,
                 border: 0,
-                background: texto.trim() && !cargando ? 'var(--accent)' : '#c7d2fe',
-                color: '#ffffff',
+                background: texto.trim() && !cargando ? 'var(--accent)' : 'var(--accent-apagado)',
+                color: texto.trim() && !cargando ? 'var(--accent-fg)' : 'var(--accent-apagado-fg)',
                 fontWeight: 700,
                 fontSize: 18,
                 cursor: texto.trim() && !cargando ? 'pointer' : 'default',

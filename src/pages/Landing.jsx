@@ -78,10 +78,12 @@ function Hero() {
     <section className="hero-seccion">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
         <h1 className="hero-titulo">
-          Descubre qué pide el mercado para tu carrera <span className="hero-resalte">antes</span> de graduarte.
+          Sabe con cuántas ofertas <span className="hero-resalte">calzas hoy</span> y qué te falta para las demás.
         </h1>
         <p style={{ margin: 0, fontSize: 19, lineHeight: 1.55, color: 'var(--text-secondary)', maxWidth: 540 }}>
-          Analizamos miles de ofertas publicadas en Perú para decirte qué habilidades piden las empresas, cuánto pagan y qué roles crecen. Cada cifra enlaza a su fuente.
+          Cruzamos lo que sabes contra miles de ofertas publicadas en Perú. En tres pasos y sin escribir nada
+          te decimos tu porcentaje de compatibilidad, qué dos habilidades te desbloquean más avisos,
+          en cuáles ya puedes postular y cómo reescribir tu CV para ellos.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
           <button
@@ -89,7 +91,7 @@ function Hero() {
             className="hero-cta"
             onClick={() => ir('/registro')}
           >
-            Prueba gratis · 3 consultas
+            Hacer mi diagnóstico gratis
           </button>
         </div>
       </div>

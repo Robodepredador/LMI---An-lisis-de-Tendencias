@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { CONSULTAS_GRATIS, useApp } from '../store.js';
-import { fechaCorta, proximaRenovacion, vigenciaCreditos } from '../data/contenido.js';
+import { fechaCorta, proximaRenovacion } from '../data/contenido.js';
 import { METODOS_PAGO } from '../data/contenido.js';
+import { descargarBoleta } from '../lib/boleta.js';
 
 const Bloque = ({ titulo, extra, children }) => (
   <section className="pila" style={{ gap: 12 }}>
@@ -19,21 +20,20 @@ const Vacio = ({ children }) => (
 
 export default function Cuenta() {
   const ir = useNavigate();
-  const { usuario, plan, creditos, consultas, pagos, usadasMes, salir, resetearIntentos } = useApp();
+  const { usuario, plan, consultas, pagos, usadasMes, salir, resetearIntentos } = useApp();
   const restantes = useApp((s) => s.restantes());
 
   const cerrar = () => { salir(); ir('/', { replace: true }); };
 
   const resumenPlan = {
-    free: { t: 'Plan gratis', d: `${restantes} de ${CONSULTAS_GRATIS} consultas este mes · se renueva el ${proximaRenovacion()}` },
-    creditos: { t: 'Créditos', d: `${creditos} consultas disponibles · válidas hasta el ${vigenciaCreditos()}` },
-    pro: { t: 'Plan Pro', d: 'Consultas ilimitadas · se renueva cada mes' },
-    institucional: { t: 'Licencia institucional', d: 'Consultas ilimitadas mientras la licencia esté activa' },
+    free: { t: 'Plan gratis', d: `${restantes} de ${CONSULTAS_GRATIS} consultas y 1 diagnóstico este mes · se renueva el ${proximaRenovacion()}` },
+    pro: { t: 'Pro estudiante', d: 'S/ 19 al mes · ofertas, ruta y CV desbloqueados · cancela cuando quieras' },
+    institucional: { t: 'Licencia institucional', d: 'Todo desbloqueado mientras la licencia esté activa' },
   }[plan];
 
   return (
     <div className="seccion pila" style={{ maxWidth: 720, gap: 32, paddingBottom: 48 }}>
-      <Link to="/chat" className="btn btn--linea" style={{ alignSelf: 'flex-start' }}>← Volver al chat</Link>
+      <Link to="/diagnostico" className="btn btn--linea" style={{ alignSelf: 'flex-start' }}>← Volver a mi diagnóstico</Link>
 
       <div className="fila" style={{ gap: 14, alignItems: 'center' }}>
         <span className="avatar" style={{ width: 48, height: 48, fontSize: 16 }} aria-hidden="true">{usuario.iniciales}</span>
@@ -47,7 +47,7 @@ export default function Cuenta() {
         titulo="Tu plan"
         extra={plan !== 'institucional' && (
           <Link to="/planes" style={{ fontSize: 13.5, fontWeight: 600 }}>
-            {plan === 'free' ? 'Ver opciones' : plan === 'creditos' ? 'Comprar más' : 'Gestionar'}
+            {plan === 'free' ? 'Ver Pro estudiante' : 'Gestionar'}
           </Link>
         )}
       >
@@ -94,7 +94,7 @@ export default function Cuenta() {
                 </span>
                 <span className="fila" style={{ gap: 12 }}>
                   <span className="mono" style={{ fontSize: 13 }}>S/ {p.monto}</span>
-                  <button className="chip" style={{ padding: '5px 10px', fontSize: 12 }} onClick={() => window.print()}>Boleta</button>
+                  <button className="chip" style={{ padding: '5px 10px', fontSize: 12 }} onClick={() => descargarBoleta(p, usuario)}>Boleta</button>
                 </span>
               </div>
             ))}
@@ -108,7 +108,7 @@ export default function Cuenta() {
           onClick={() => { resetearIntentos(); ir('/chat'); }}
           title="Restaura 3 consultas gratis y limpia el historial para nuevas pruebas"
         >
-          Reiniciar intentos (3 de 3)
+          Reiniciar intentos (3 consultas y 1 diagnóstico)
         </button>
         <Link to="/onboarding" className="btn btn--linea">Editar perfil</Link>
         <button className="btn btn--linea" onClick={cerrar}>Cerrar sesión</button>

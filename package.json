@@ -11,7 +11,8 @@
     "catalogo": "node scripts/build-catalogo.mjs",
     "check": "node scripts/check-store.mjs",
     "check:chat": "node scripts/check-chat.mjs",
-    "verify": "node scripts/build-catalogo.mjs && node scripts/check-tema.mjs && node scripts/check-datos.mjs && node scripts/check-graficos.mjs && node scripts/check-respaldo.mjs && node scripts/check-store.mjs",
+    "verify": "node scripts/build-catalogo.mjs && node scripts/check-tema.mjs && node scripts/check-datos.mjs && node scripts/check-graficos.mjs && node scripts/check-respaldo.mjs && node scripts/check-mercado.mjs && node scripts/check-store.mjs",
+    "check:mercado": "node scripts/check-mercado.mjs",
     "check:tema": "node scripts/check-tema.mjs",
     "check:datos": "node scripts/check-datos.mjs",
     "check:graficos": "node scripts/check-graficos.mjs",
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "@google/genai": "^2.27.0",
+    "jspdf": "^4.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4",

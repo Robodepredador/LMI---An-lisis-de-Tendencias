@@ -12,6 +12,11 @@
 // el modelo.
 import { GoogleGenAI, Type } from '@google/genai';
 import catalogo from '../src/data/catalogo.json' with { type: 'json' };
+// La evidencia y su conteo salen del mismo sitio que el diagnóstico, no de una
+// fórmula repetida aquí: si el chat dijera 314 y el diagnóstico 695 del mismo
+// rol y la misma ciudad, el producto se contradiría a sí mismo (§7.11).
+import { CIUDADES_DIAG } from '../src/data/mercado.js';
+import { evidenciaDe, tieneEvidencia } from '../src/lib/mercado.js';
 
 // En orden de preferencia, medido contra la API real, no elegido de catálogo:
 // los Flash completos devuelven 429 (cuota agotada) o 503 (saturación) a
@@ -103,6 +108,22 @@ function ficha(rol, ciudad) {
   return `${rol.nombre} — ${rol.ofertas} ofertas. Habilidades: ${hab}. ${sueldo}.`;
 }
 
+// Lo que los avisos DICEN, para los cuatro roles con evidencia cargada. En los
+// otros 31 esto va vacío y el modelo se comporta como hasta ahora.
+function evidencia(rol, ciudad) {
+  if (!tieneEvidencia(rol.id)) return '';
+  const ciudades = ciudad ? [ciudad] : CIUDADES_DIAG;
+  const lineas = [];
+  for (const h of rol.habilidades) {
+    const ev = evidenciaDe(rol.id, h.k, ciudades);
+    if (!ev) continue;
+    const frases = ev.frags.slice(0, 2).map((f) => `«${f.f}»`).join(' ');
+    lineas.push(`- ${h.k}: la piden en ${ev.conteo} de ${ev.total} ofertas. ${ev.resumen} Lo escriben así: ${frases}`);
+  }
+  if (!lineas.length) return '';
+  return `\n\nQué dicen los avisos de ${rol.nombre} (texto literal de las ofertas):\n${lineas.join('\n')}`;
+}
+
 const SYS_REDACTAR = `Eres LMI-U. Escribe el titular que acompaña a un gráfico de datos laborales.
 
 Reglas estrictas:
@@ -111,7 +132,14 @@ Reglas estrictas:
   no lo menciones. Jamás inventes ni redondees a un valor distinto.
 - No repitas todas las cifras: destaca lo más útil (lo que más se pide, lo que creció,
   la mediana) porque el gráfico ya muestra el detalle.
-- No saludes ni te presentes. Ve directo al hallazgo.`;
+- No saludes ni te presentes. Ve directo al hallazgo.
+- Si recibes "Qué dicen los avisos", HABLA DE ESO: qué piden las empresas con esa
+  habilidad en concreto, con las palabras de los avisos. No des teoría general ni
+  expliques qué es la tecnología. Entre "SQL aparece en el 84% de las ofertas" y
+  "piden escribir consultas y procedimientos, no administrar bases de datos", la
+  segunda es la que sirve para decidir.
+- No copies una frase del aviso entera entre comillas: resúmela en tus palabras. Las
+  frases literales ya se muestran aparte en la pantalla.`;
 
 const ESQUEMA_REDACTAR = {
   type: Type.OBJECT,
@@ -167,7 +195,7 @@ export default async function handler(req, res) {
     }
 
     // ── 2. Redactar, viendo solo las cifras de estos roles ──
-    const datos = roles.map((r) => ficha(r, ciudad)).join('\n');
+    const datos = roles.map((r) => ficha(r, ciudad) + evidencia(r, ciudad)).join('\n');
     const r2 = await generar(ai, {
       contents: `Pregunta: ${pregunta}\n\nDatos disponibles:\n${datos}`,
       config: { systemInstruction: SYS_REDACTAR, responseMimeType: 'application/json', responseJsonSchema: ESQUEMA_REDACTAR },

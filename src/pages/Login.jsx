@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../store.js';
+import { destinoTrasLogin } from '../lib/motor.js';
 import { CUENTAS_DEMO } from '../data/demo.js';
 import { LumiLogo } from '../mascota/Lumi.jsx';
 import GoogleIcon from '../mascota/GoogleIcon.jsx';
@@ -27,13 +28,15 @@ export default function Login() {
     }
     const r = entrar(f);
     if (!r.ok) return setError(r.error);
-    ir('/chat');
+    // Sin diagnóstico, al diagnóstico: el destino lo decide un solo sitio
+    // (§9.1), para que las cuatro entradas a la app no vuelvan a separarse.
+    ir(destinoTrasLogin());
   };
 
   const loginConGoogle = () => {
     // Simulación de Google SSO con el perfil de estudiante Valeria
     entrarDemo('valeria');
-    ir('/chat');
+    ir(destinoTrasLogin());
   };
 
   const cuentasValidas = CUENTAS_DEMO.filter((c) => c.perfil?.tipo !== 'docente');
@@ -167,7 +170,7 @@ export default function Login() {
                 type="button"
                 className="chip chip--opcion"
                 style={{ flex: 1, padding: '9px 12px', fontSize: 12.5, textAlign: 'center', justifyContent: 'center' }}
-                onClick={() => { entrarDemo(c.id); ir('/chat'); }}
+                onClick={() => { entrarDemo(c.id); ir(destinoTrasLogin()); }}
               >
                 <strong>{c.etiqueta}</strong> ({c.perfil?.rol})
               </button>

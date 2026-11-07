@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useApp } from './store.js';
 import { getTenant } from './data/tenant.js';
+import { destinoTrasLogin } from './lib/motor.js';
 
 import PublicLayout from './layouts/PublicLayout.jsx';
 import AppShell from './layouts/AppShell.jsx';
@@ -10,6 +11,12 @@ import PagoLayout from './layouts/PagoLayout.jsx';
 import Registro from './pages/Registro.jsx';
 import Login from './pages/Login.jsx';
 import Chat from './pages/Chat.jsx';
+import Diagnostico from './pages/Diagnostico.jsx';
+import DiagnosticoResultado from './pages/DiagnosticoResultado.jsx';
+import Ofertas from './pages/Ofertas.jsx';
+import OfertaDetalle from './pages/OfertaDetalle.jsx';
+import Ruta from './pages/Ruta.jsx';
+import CV from './pages/CV.jsx';
 import Planes from './pages/Planes.jsx';
 import Checkout from './pages/Checkout.jsx';
 import Confirmacion from './pages/Confirmacion.jsx';
@@ -21,10 +28,10 @@ import DocentePanel from './pages/DocentePanel.jsx';
 // te manda adentro en vez de volver a pedirte la contraseña.
 function SoloInvitados({ children }) {
   const usuario = useApp((s) => s.usuario);
+  const diagnostico = useApp((s) => s.diagnostico);
   const docenteOpcion = useApp((s) => s.docenteOpcion);
   if (!usuario) return children;
-  if (usuario.tipo !== 'docente') return <Navigate to="/chat" replace />;
-  return <Navigate to={docenteOpcion === 'B' ? '/docente/panel' : '/docente'} replace />;
+  return <Navigate to={destinoTrasLogin({ usuario, diagnostico, docenteOpcion })} replace />;
 }
 
 function RutaDocente({ children }) {
@@ -34,12 +41,29 @@ function RutaDocente({ children }) {
 }
 
 function NoEncontrado() {
+  const usuario = useApp((s) => s.usuario);
+  const diagnostico = useApp((s) => s.diagnostico);
+  const docenteOpcion = useApp((s) => s.docenteOpcion);
+
+  // Con la sesión abierta, "el inicio" no es la landing: es la app. Mandar a
+  // la página pública a quien solo tecleó mal una URL lo saca de donde estaba
+  // y le hace volver a entrar.
+  const sesion = Boolean(usuario);
+  const destino = sesion ? destinoTrasLogin({ usuario, diagnostico, docenteOpcion }) : '/';
+  const etiqueta = !sesion
+    ? '← Volver al inicio'
+    : usuario.tipo === 'docente'
+      ? '← Volver al panel'
+      : '← Volver a mi diagnóstico';
+
   return (
     <div className="seccion seccion--angosta pila" style={{ gap: 16 }}>
       <span className="eti">ERROR 404</span>
       <h1 className="display display--pag" style={{ margin: 0 }}>Esta página no existe</h1>
       <p className="lead" style={{ margin: 0 }}>Puede que el enlace esté mal escrito o que la página haya cambiado de sitio.</p>
-      <a href="/" className="btn btn--linea" style={{ alignSelf: 'flex-start' }}>← Volver al inicio</a>
+      {/* <Link> y no <a href>: una recarga entera perdería el estado en vuelo
+          y haría parpadear la app por un enlace mal escrito. */}
+      <Link to={destino} className="btn btn--linea" style={{ alignSelf: 'flex-start' }}>{etiqueta}</Link>
     </div>
   );
 }
@@ -92,8 +116,15 @@ export default function App() {
         <Route path="*" element={<NoEncontrado />} />
       </Route>
 
-      {/* Rutas principales de la aplicación (con barra lateral de chat) */}
+      {/* Rutas principales de la aplicación (con barra lateral) */}
       <Route element={<AppShell />}>
+        {/* Las cinco secciones del motor de decisión */}
+        <Route path="/diagnostico" element={<Diagnostico />} />
+        <Route path="/diagnostico/resultado" element={<DiagnosticoResultado />} />
+        <Route path="/ofertas" element={<Ofertas />} />
+        <Route path="/ofertas/:ofertaId" element={<OfertaDetalle />} />
+        <Route path="/ruta" element={<Ruta />} />
+        <Route path="/cv" element={<CV />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:consultaId" element={<Chat />} />
         <Route path="/cuenta" element={<Cuenta />} />

@@ -16,7 +16,7 @@ const almacen = {
 globalThis.localStorage = almacen;
 globalThis.window = { localStorage: almacen };
 
-const { useApp, CONSULTAS_GRATIS } = await import('../src/store.js');
+const { useApp, CONSULTAS_GRATIS, DIAGNOSTICOS_GRATIS, PRECIO_PRO } = await import('../src/store.js');
 const s = () => useApp.getState();
 
 const ok = { sinDatos: false, fueraDeAlcance: false, roleIds: ['analista-datos-jr'] };
@@ -71,38 +71,74 @@ assert.equal(s().restantes(), 0, 'agotadas las 3');
 assert.equal(s().puedeConsultar(), false, 'y ya no puede consultar');
 
 // ── Compra ───────────────────────────────────────────────────────────
-s().setPack('25');
+// Un solo producto: la suscripción Pro estudiante. Los paquetes de créditos
+// salieron de toda la app (§6.3), así que no hay nada que elegir.
 s().setMetodoPago('yape');
 const pago = s().confirmarPago();
-assert.equal(s().plan, 'creditos');
-assert.equal(s().creditos, 25, 'la compra acredita 25');
-assert.equal(s().restantes(), 25, 'y pasan a ser las consultas disponibles');
+assert.equal(s().plan, 'pro', 'confirmar el pago deja el plan en Pro');
 assert.equal(s().pagos[0].id, pago.id, 'el pago queda registrado para la pantalla de cuenta');
-assert.equal(s().pagos[0].monto, 25);
+assert.equal(s().pagos[0].monto, PRECIO_PRO, 'y cobra S/ 19');
+assert.equal(PRECIO_PRO, 19, 'el precio del plan Pro estudiante');
+assert.equal(s().pagos[0].concepto, 'Pro estudiante · mensual');
 
-s().registrarConsulta({ pregunta: 'c', resultado: ok });
-assert.equal(s().creditos, 24, 'con plan de créditos se descuenta del saldo');
-s().registrarConsulta({ pregunta: 'd', resultado: sinDatos });
-assert.equal(s().creditos, 24, 'y sin datos sigue sin cobrar');
-
-s().setPack('pro');
-s().confirmarPago();
 assert.equal(s().restantes(), null, 'Pro es ilimitado');
 assert.equal(s().puedeConsultar(), true);
+s().registrarConsulta({ pregunta: 'c', resultado: ok });
+assert.equal(s().restantes(), null, 'y seguir consultando no lo agota');
+assert.equal(s().esPro(), true);
+
+// ── El diagnóstico: uno al mes en gratis, ilimitado en Pro ───────────
+// El muro es parte del experimento: la idea es que el tester se quede con
+// las ganas de jugar con el diagnóstico y diga si llegó al modo de pago.
+assert.equal(DIAGNOSTICOS_GRATIS, 1, 'el plan gratis se queda en un diagnóstico al mes');
+assert.equal(s().puedeDiagnosticar(), true, 'en Pro siempre se puede');
+s().guardarDiagnostico({ fecha: Date.now(), rol: 'desarrollador-backend-jr', pctHoy: 31 });
+assert.equal(s().diagnosticosMes, 0, 'en Pro el diagnóstico no consume cupo');
+assert.equal(s().puedeDiagnosticar(), true);
+assert.equal(s().diagnostico.pctHoy, 31, 'y el diagnóstico queda guardado para volver a verlo');
+
+useApp.setState({ plan: 'free', diagnosticosMes: 0, diagnostico: null });
+assert.equal(s().puedeDiagnosticar(), true, 'en gratis queda uno');
+s().guardarDiagnostico({ fecha: Date.now(), rol: 'analista-qa', pctHoy: 44 });
+assert.equal(s().diagnosticosMes, 1, 'hacerlo consume el cupo del mes');
+assert.equal(s().puedeDiagnosticar(), false, 'y el segundo intento choca con el muro');
+assert.ok(s().diagnostico, 'pero el reporte sigue ahí: volver a mirarlo no cuesta nada');
+
+// El perfil del diagnóstico NO puede pisar la identidad de la cuenta.
+const correoAntes = s().usuario.email;
+s().guardarPerfilMotor({ skills: ['Java', 'SQL'], rolObjetivo: 'desarrollador-backend-jr' });
+assert.deepEqual(s().perfil.skills, ['Java', 'SQL'], 'el perfil del diagnóstico se guarda');
+assert.equal(s().usuario.email, correoAntes, 'y no toca la identidad de la sesión');
+const cuentaGuardada = s().cuentas[correoAntes.toLowerCase()];
+assert.equal(cuentaGuardada.perfil.email, correoAntes,
+  'en la cuenta, `perfil` sigue siendo la identidad');
+assert.deepEqual(cuentaGuardada.perfilMotor.skills, ['Java', 'SQL'],
+  'y el del diagnóstico vive aparte, en `perfilMotor`');
 
 // ── Renovación mensual (defensa 3: ninguna fecha escrita a mano) ─────
-useApp.setState({ plan: 'free', usadasMes: 3, periodo: '2000-01' });
+useApp.setState({ plan: 'free', usadasMes: 3, diagnosticosMes: 1, periodo: '2000-01' });
 assert.equal(s().restantes(), 0);
+assert.equal(s().puedeDiagnosticar(), false);
 s().sincronizarPeriodo();
 assert.equal(s().usadasMes, 0, 'al cambiar de mes el plan gratis se renueva solo');
 assert.equal(s().restantes(), CONSULTAS_GRATIS);
+assert.equal(s().diagnosticosMes, 0, 'y el diagnóstico del mes también se renueva');
+assert.equal(s().puedeDiagnosticar(), true);
 
 // ── Cuentas de demostración ──────────────────────────────────────────
+// Las dos cuentas de estudiante arrancan en gratis: nadie se salta la
+// pasarela, porque cruzarla es lo que se está midiendo (§6.10).
+assert.equal(s().entrarDemo('valeria').ok, true);
+assert.equal(s().plan, 'free', 'Valeria entra en plan gratis');
+assert.equal(s().diagnostico, null, 'y sin diagnóstico hecho, para que lo haga ella');
+assert.equal(s().restantes(), CONSULTAS_GRATIS);
+assert.equal(s().usuario.carrera, 'Ingeniería de Sistemas', 'es la persona del CV (§7.13)');
+assert.ok(s().usuario.universidad, 'y su universidad está en el perfil, que el paso 1 pide');
+
 assert.equal(s().entrarDemo('diego').ok, true);
-assert.equal(s().plan, 'creditos');
-assert.equal(s().creditos, 21, 'Diego entra con saldo');
-assert.ok(s().consultas.length > 0, 'y con historial');
-assert.ok(s().pagos.length > 0, 'y con pagos previos');
+assert.equal(s().plan, 'free', 'Diego también: ya no hay créditos que haber comprado');
+assert.ok(s().consultas.length > 0, 'pero sí con historial de consultas');
+assert.equal(s().pagos.length, 0, 'y sin pagos, que es lo que reemplazó el historial');
 
 assert.equal(s().entrarDemo('martin').ok, true);
 assert.equal(s().restantes(), null, 'Martín entra con licencia institucional ilimitada');
@@ -172,7 +208,7 @@ console.log('✓ perfil del registro conectado a las sugerencias');
 // "+ Nueva consulta" abre otra.
 s().salir();
 s().registrar({ email: 'hilo@demo.pe', clave: 'secreta1', nombre: 'Hilo Prueba' });
-s().setPack('25'); s().confirmarPago();
+s().confirmarPago(); // Pro, para que las 5 preguntas de la prueba no choquen con el muro
 
 const respuesta = (rol) => ({ sinDatos: false, fueraDeAlcance: false, roleIds: [rol], intent: 'habilidades' });
 
@@ -207,3 +243,43 @@ assert.deepEqual(s().hiloDe(c1.hiloId).map((c) => c.pregunta),
   'abrir una conversacion antigua muestra sus turnos de la mas antigua a la mas reciente');
 
 console.log('✓ conversaciones: una fila por charla, seguimientos dentro');
+
+// ── Migración v2 → v3: quien tenía créditos pasa a gratis ────────────
+// Sin esto, un tester que ya entró abre la app con `plan: 'creditos'` guardado
+// en su navegador y ve un plan que no existe.
+const guardadoV2 = {
+  version: 2,
+  state: {
+    usuario: { email: 'viejo@demo.pe', nombre: 'Tester Previo', iniciales: 'TP', tipo: 'personal' },
+    plan: 'creditos',
+    creditos: 17,
+    pack: '25',
+    usadasMes: 2,
+    consultas: [{ id: 'c-vieja', hiloId: 'h-vieja', pregunta: '¿Qué piden para backend?', resultado: ok, ts: Date.now(), costo: 1 }],
+    pagos: [{ id: 'p-viejo', ts: Date.now(), concepto: '25 consultas', monto: 25, metodo: 'yape' }],
+    cuentas: {
+      'viejo@demo.pe': {
+        clave: 'x',
+        perfil: { email: 'viejo@demo.pe', nombre: 'Tester Previo', iniciales: 'TP', tipo: 'personal' },
+        plan: 'creditos',
+        creditos: 17,
+        consultas: [{ id: 'c-vieja', hiloId: 'h-vieja', pregunta: '¿Qué piden para backend?', resultado: ok, ts: Date.now(), costo: 1 }],
+        pagos: [],
+      },
+    },
+  },
+};
+
+mem.set('lmiu', JSON.stringify(guardadoV2));
+await useApp.persist.rehydrate();
+
+assert.equal(s().plan, 'free', 'el plan de créditos migra a gratis');
+assert.equal(s().creditos, undefined, 'y el saldo de créditos desaparece del estado');
+assert.equal(s().cuentas['viejo@demo.pe'].plan, 'free', 'también en la cuenta guardada');
+assert.equal(s().cuentas['viejo@demo.pe'].creditos, undefined);
+assert.equal(s().consultas.length, 1, 'SIN PERDER SU HISTORIAL');
+assert.equal(s().consultas[0].pregunta, '¿Qué piden para backend?');
+assert.equal(s().usuario.email, 'viejo@demo.pe', 'ni su sesión');
+assert.equal(s().restantes(), CONSULTAS_GRATIS - 2, 'y lo que ya había usado este mes se respeta');
+
+console.log('✓ migración v2 → v3: de créditos a gratis sin perder el historial');

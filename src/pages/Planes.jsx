@@ -1,71 +1,78 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store.js';
-import { PACKS, proximaRenovacion } from '../data/contenido.js';
+import { PLANES, PRO, proximaRenovacion } from '../data/contenido.js';
 
+// Pantalla de planes con ruta propia. El paywall la cubre dentro de la app,
+// pero esta sigue viva para el enlace "Ver Pro estudiante" de la cuenta y
+// para cualquier link compartido.
 export default function Planes() {
   const ir = useNavigate();
-  const pack = useApp((s) => s.pack);
-  const setPack = useApp((s) => s.setPack);
   const pendiente = useApp((s) => s.pendiente);
+  const plan = useApp((s) => s.plan);
   const rutaRetornoChat = useApp((s) => s.rutaRetornoChat) || '/chat';
+  const [gratis, pro] = PLANES;
 
-  const elegido = PACKS.find((p) => p.id === pack) ?? PACKS[1];
+  const yaEsPro = plan === 'pro' || plan === 'institucional';
 
   return (
     <div className="seccion animate-fade" style={{ maxWidth: 1040, padding: 'clamp(20px, 3.5vw, 40px) clamp(16px, 3vw, 32px)' }}>
       <div className="pasarela">
-        {/* ── Columna 1: Selección del Plan ── */}
         <div className="pasarela__principal">
           <div className="pila" style={{ gap: 8 }}>
-            <span className="eti" style={{ alignSelf: 'flex-start' }}>PLANES Y TARIFAS</span>
-            <h1 className="display" style={{ margin: 0, fontSize: 32 }}>Elige cómo seguir</h1>
+            <span className="eti" style={{ alignSelf: 'flex-start' }}>PLANES</span>
+            <h1 className="display" style={{ margin: 0, fontSize: 32 }}>
+              Gratis te dice qué. Pro te dice cómo.
+            </h1>
             {pendiente ? (
               <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>
-                Tu pregunta «<strong style={{ color: 'var(--text-primary)' }}>{pendiente}</strong>» quedó guardada y se responderá apenas elijas una opción.
+                Tu pregunta «<strong style={{ color: 'var(--text-primary)' }}>{pendiente}</strong>» quedó
+                guardada y se responderá apenas actives tu plan.
               </span>
             ) : (
               <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>
-                Selecciona la opción de créditos o suscripción que mejor se adapte a tus consultas.
+                El plan gratis te dice qué pide el mercado. Pro estudiante te dice qué hacer con eso.
               </span>
             )}
           </div>
 
-          <div className="pila" style={{ gap: 10 }}>
-            {PACKS.map((p) => (
-              <button
-                key={p.id}
-                className="opcion animate-scale"
-                aria-pressed={pack === p.id}
-                aria-label={`${p.k}, ${p.precio}. ${p.d}`}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 18 }}
-                onClick={() => setPack(p.id)}
-              >
-                <span className="radio" data-on={pack === p.id} aria-hidden="true" />
-                <span className="pila" style={{ gap: 4, flex: 1, minWidth: 0 }}>
-                  <span className="fila" style={{ gap: 8 }}>
-                    <strong style={{ fontSize: 15.5 }}>{p.k}</strong>
-                    {p.tag && (
-                      <span className="mono" style={{ fontSize: 10.5, padding: '3px 8px', borderRadius: 'var(--radio-full)', background: 'var(--accent)', color: 'var(--accent-fg)', fontWeight: 600 }}>
-                        {p.tag}
-                      </span>
-                    )}
-                  </span>
-                  <small style={{ color: 'var(--text-secondary)' }}>{p.d}</small>
-                </span>
-                <span className="display" style={{ fontSize: 24, whiteSpace: 'nowrap' }}>{p.precio}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="pila" style={{ gap: 8, marginTop: 8 }}>
-            <span style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              • <strong>Créditos:</strong> Válidos por 12 meses. No vencen mientras uses la plataforma.<br />
-              • <strong>Plan Pro:</strong> Renovación mensual automática. Cancela en cualquier momento sin penalidad.
-            </span>
+          <div className="fila" style={{ gap: 14, alignItems: 'stretch', flexWrap: 'wrap' }}>
+            {[gratis, pro].map((p) => {
+              const destacada = p.id === 'pro';
+              return (
+                <div
+                  key={p.id}
+                  className="pila"
+                  style={{
+                    gap: 14, padding: 24, flex: 1, minWidth: 250,
+                    borderRadius: 'var(--radio-xl)',
+                    background: destacada ? 'var(--bg-surface)' : 'var(--bg-elevated)',
+                    border: destacada ? '2px solid var(--accent)' : '1px solid var(--linea)',
+                  }}
+                >
+                  <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
+                    <strong style={{ fontSize: 15.5 }}>{p.name}</strong>
+                    {p.tag && <span className="plan-etiqueta">{p.tag}</span>}
+                  </div>
+                  <div className="fila" style={{ alignItems: 'baseline', gap: 4 }}>
+                    <span className="display" style={{ fontSize: 34 }}>{p.price}</span>
+                    <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>{p.unit}</span>
+                  </div>
+                  <ul className="pila" style={{ gap: 10, margin: 0, padding: 0, listStyle: 'none' }}>
+                    {p.items.map((i) => (
+                      <li key={i} className="fila" style={{ gap: 8, alignItems: 'flex-start', fontSize: 13.5, lineHeight: 1.45 }}>
+                        <span aria-hidden="true" style={{ color: destacada ? 'var(--accent)' : 'var(--text-secondary)', fontWeight: 700 }}>
+                          {destacada ? '✓' : '·'}
+                        </span>
+                        <span style={{ color: destacada ? 'var(--text-primary)' : 'var(--text-secondary)' }}>{i}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* ── Columna 2: Resumen del Plan Seleccionado ── */}
         <aside className="pasarela__resumen-card animate-fade-up">
           <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-secondary)', letterSpacing: '.06em' }}>
             RESUMEN DE SELECCIÓN
@@ -74,51 +81,49 @@ export default function Planes() {
           <div className="pasarela__item-plan">
             <div className="fila" style={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
               <div className="pila" style={{ gap: 4 }}>
-                <strong style={{ fontSize: 17 }}>{elegido.k}</strong>
-                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{elegido.d}</span>
+                <strong style={{ fontSize: 17 }}>{PRO.k}</strong>
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{PRO.d}</span>
               </div>
-              <span className="display" style={{ fontSize: 22, whiteSpace: 'nowrap' }}>{elegido.precio}</span>
+              <span className="display" style={{ fontSize: 22, whiteSpace: 'nowrap' }}>{PRO.precio}</span>
             </div>
           </div>
 
           <div className="pila" style={{ gap: 10, fontSize: 13.5, color: 'var(--text-secondary)' }}>
-            <strong style={{ fontSize: 13.5, color: 'var(--text-primary)' }}>¿Qué incluye tu selección?</strong>
-            <div className="fila" style={{ gap: 8, alignItems: 'center' }}>
-              <span style={{ color: 'var(--accent)' }}>✓</span>
-              <span>Acceso ilimitado a análisis de habilidades y salarios</span>
-            </div>
-            <div className="fila" style={{ gap: 8, alignItems: 'center' }}>
-              <span style={{ color: 'var(--accent)' }}>✓</span>
-              <span>Muestras estadísticas oficiales del mercado peruano</span>
-            </div>
-            <div className="fila" style={{ gap: 8, alignItems: 'center' }}>
-              <span style={{ color: 'var(--accent)' }}>✓</span>
-              <span>Exportación de informes a PDF</span>
-            </div>
+            <strong style={{ fontSize: 13.5, color: 'var(--text-primary)' }}>¿Qué desbloqueas?</strong>
+            {PRO_INCLUYE.map((t) => (
+              <div key={t} className="fila" style={{ gap: 8, alignItems: 'flex-start' }}>
+                <span style={{ color: 'var(--accent)' }}>✓</span>
+                <span>{t}</span>
+              </div>
+            ))}
           </div>
 
           <div className="pasarela__desglose" style={{ borderTop: '1px solid var(--linea)', paddingTop: 14 }}>
             <div className="pasarela__desglose-fila">
               <strong style={{ fontSize: 16, color: 'var(--text-primary)' }}>Total</strong>
-              <strong className="display" style={{ fontSize: 26, color: 'var(--text-primary)' }}>
-                {elegido.precio}
-              </strong>
+              <strong className="display" style={{ fontSize: 26, color: 'var(--text-primary)' }}>{PRO.precio}</strong>
             </div>
           </div>
 
           <div className="pila" style={{ gap: 10 }}>
-            <button className="btn btn--acento btn--grande btn--bloque" onClick={() => ir('/checkout')}>
-              Continuar al pago →
-            </button>
+            {yaEsPro ? (
+              <button className="btn btn--linea btn--bloque" onClick={() => ir('/diagnostico')}>
+                Ya lo tienes activo · volver a la app
+              </button>
+            ) : (
+              <button className="btn btn--acento btn--grande btn--bloque" onClick={() => ir('/checkout')}>
+                Activar Pro estudiante →
+              </button>
+            )}
             <button onClick={() => ir(rutaRetornoChat)} className="btn btn--linea btn--bloque" style={{ textAlign: 'center' }}>
-              Esperar al {proximaRenovacion()}
+              Seguir gratis hasta el {proximaRenovacion()}
             </button>
           </div>
 
           <div className="pila" style={{ gap: 8, borderTop: '1px solid var(--linea)', paddingTop: 14 }}>
             <div className="pasarela__seguridad">
               <span>🔒</span>
-              <span>Pasarela 100% segura con Yape, Plin y tarjetas</span>
+              <span>Sin permanencia · Tarjeta, Yape, Plin o PagoEfectivo</span>
             </div>
           </div>
         </aside>
@@ -126,3 +131,10 @@ export default function Planes() {
     </div>
   );
 }
+
+const PRO_INCLUYE = [
+  'Las ofertas donde ya calzas, ordenadas por tu brecha',
+  'Tu ruta de aprendizaje con recursos gratis primero',
+  'Tu CV reescrito con las frases de los avisos',
+  'Diagnósticos y consultas a Lumi sin límite',
+];

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CICLOS, useApp } from '../store.js';
+import { destinoTrasLogin } from '../lib/motor.js';
 import {
   CARRERAS, CIUDADES_REGISTRO, INTERESES, areasDePerfil, ciudadDeRegistro,
 } from '../data/taxonomia.js';
@@ -85,7 +86,7 @@ export default function Registro() {
       ...datos,
     });
     if (!r.ok) { setPaso(0); return setError(r.error); }
-    ir('/chat');
+    ir(destinoTrasLogin());
   };
 
   const siguiente = () => {

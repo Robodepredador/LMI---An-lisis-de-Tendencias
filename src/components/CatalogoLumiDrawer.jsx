@@ -307,7 +307,7 @@ export default function CatalogoLumiDrawer() {
                       color: 'var(--accent)',
                     }}
                   >
-                    Muestra insuficiente · sin créditos
+                    Muestra insuficiente · no se cobra
                   </span>
                 </div>
               </div>

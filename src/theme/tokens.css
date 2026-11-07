@@ -32,6 +32,16 @@
   --resalte:     #C6F24E;
   --resalte-fg:  #2F3A0E;
 
+  /* ── Lima fija ──
+     Dentro de una tarjeta noche el lima tiene que seguir siendo lima en los
+     dos temas: la tarjeta es oscura en ambos. Pero en oscuro --resalte se
+     vuelve índigo, así que usarlo ahí rompe el diseño, y un #C6F24E literal
+     en JSX rompe check-tema. Estos tres valen lo mismo en claro y en oscuro
+     a propósito: son el color de la marca sobre fondo noche, no del tema. */
+  --lima-fija:        #C6F24E;
+  --sobre-lima-fija:  #2F3A0E;
+  --blanco-fijo:      #FFFFFF;
+
   /* ── Líneas y bordes ── */
   --linea:        #EEEDF8;
   /* #E4E2F3 daba 1.27:1: los campos se veían sin borde. 3.15:1 cumple 1.4.11. */
@@ -127,6 +137,11 @@
 
   --resalte:     #8A80FF;
   --resalte-fg:  #0F0E29;
+
+  /* Mismos valores que en claro: ver el bloque "Lima fija" de :root. */
+  --lima-fija:        #C6F24E;
+  --sobre-lima-fija:  #2F3A0E;
+  --blanco-fijo:      #FFFFFF;
 
   --linea:        #2E2A66;
   --borde-campo:  #6F68A8;

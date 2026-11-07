@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CONSULTAS_GRATIS, useApp } from '../store.js';
-import { fechaCorta, proximaRenovacion, vigenciaCreditos } from '../data/contenido.js';
+import { fechaCorta, proximaRenovacion } from '../data/contenido.js';
 import { alternarTema, leerTema } from '../lib/tema.js';
 import Lumi from '../mascota/Lumi.jsx';
+import { descargarBoleta } from '../lib/boleta.js';
 
 // Iconos vectoriales limpios y coherentes con el sistema de diseño
 function IconoPerfil() {
@@ -83,14 +84,13 @@ function formatearHoraConsulta(ts) {
 export default function MenuPerfil() {
   const usuario = useApp((s) => s.usuario);
   const plan = useApp((s) => s.plan);
-  const creditos = useApp((s) => s.creditos);
   const usadasMes = useApp((s) => s.usadasMes) || 0;
   const restantes = useApp((s) => s.restantes());
   const pagos = useApp((s) => s.pagos) || [];
   const consultas = useApp((s) => s.consultas) || [];
   const salir = useApp((s) => s.salir);
   const resetearIntentos = useApp((s) => s.resetearIntentos);
-  const abrirModalPlanes = useApp((s) => s.abrirModalPlanes);
+  const abrirPaywall = useApp((s) => s.abrirPaywall);
   const setRutaRetornoChat = useApp((s) => s.setRutaRetornoChat);
   const actualizarPerfil = useApp((s) => s.actualizarPerfil);
 
@@ -179,7 +179,7 @@ export default function MenuPerfil() {
     setMenuAbierto(false);
     setDrawerActivo(null);
     setRutaRetornoChat(pathname.startsWith('/chat') ? pathname : '/chat');
-    abrirModalPlanes();
+    abrirPaywall('general', pathname);
   };
 
   const handleGuardarPerfil = (e) => {
@@ -338,18 +338,14 @@ export default function MenuPerfil() {
               <strong style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>
                 {plan === 'free'
                   ? 'Plan gratis'
-                  : plan === 'creditos'
-                    ? 'Créditos'
-                    : plan === 'pro'
-                      ? 'Plan Pro'
-                      : 'Licencia institucional'}
+                  : plan === 'pro'
+                    ? 'Pro estudiante'
+                    : 'Licencia institucional'}
               </strong>
               <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', fontWeight: 600 }}>
                 {plan === 'free'
                   ? `${restantes} de ${CONSULTAS_GRATIS}`
-                  : plan === 'creditos'
-                    ? `${creditos} cr.`
-                    : 'Ilimitado'}
+                  : 'Todo desbloqueado'}
               </span>
             </div>
 
@@ -358,19 +354,14 @@ export default function MenuPerfil() {
               style={{
                 width: '100%',
                 height: 6,
-                background: 'rgba(99, 102, 241, 0.15)',
+                background: 'color-mix(in oklch, var(--accent) 15%, transparent)',
                 borderRadius: 999,
                 overflow: 'hidden',
               }}
             >
               <div
                 style={{
-                  width:
-                    plan === 'free'
-                      ? `${(restantes / CONSULTAS_GRATIS) * 100}%`
-                      : plan === 'creditos'
-                        ? `${Math.min(100, (creditos / 25) * 100)}%`
-                        : '100%',
+                  width: plan === 'free' ? `${(restantes / CONSULTAS_GRATIS) * 100}%` : '100%',
                   height: '100%',
                   background: 'var(--accent)',
                   borderRadius: 999,
@@ -382,9 +373,7 @@ export default function MenuPerfil() {
             <span style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.4 }}>
               {plan === 'free'
                 ? `${restantes} de ${CONSULTAS_GRATIS} consultas este mes · se renueva el ${proximaRenovacion()}`
-                : plan === 'creditos'
-                  ? `Válidos hasta el ${vigenciaCreditos()}`
-                  : 'Consultas ilimitadas'}
+                : 'Todo desbloqueado · sin límite de consultas'}
             </span>
 
             <button
@@ -392,7 +381,7 @@ export default function MenuPerfil() {
               onClick={abrirPlanes}
               style={{
                 background: 'var(--accent)',
-                color: '#ffffff',
+                color: 'var(--accent-fg)',
                 border: 0,
                 borderRadius: 12,
                 padding: '10px 14px',
@@ -529,7 +518,7 @@ export default function MenuPerfil() {
                   width: 40,
                   height: 22,
                   borderRadius: 999,
-                  background: esOscuro ? 'var(--accent)' : '#cbd5e1',
+                  background: esOscuro ? 'var(--accent)' : 'var(--borde-campo)',
                   position: 'relative',
                   transition: 'background 0.2s ease',
                   flexShrink: 0,
@@ -540,7 +529,7 @@ export default function MenuPerfil() {
                     width: 16,
                     height: 16,
                     borderRadius: 999,
-                    background: '#ffffff',
+                    background: 'var(--bg-surface)',
                     position: 'absolute',
                     top: 3,
                     left: 3,
@@ -604,16 +593,16 @@ export default function MenuPerfil() {
                 background: 'none',
                 border: 0,
                 cursor: 'pointer',
-                color: '#dc2626',
+                color: 'var(--alerta-fg)',
                 fontSize: 14,
                 fontWeight: 600,
                 textAlign: 'left',
                 transition: 'background 0.12s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)')}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'color-mix(in oklch, var(--alerta) 12%, transparent)')}
               onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
             >
-              <span style={{ color: '#dc2626', display: 'flex' }}><IconoSalir /></span>
+              <span style={{ color: 'var(--alerta-fg)', display: 'flex' }}><IconoSalir /></span>
               <span>Cerrar sesión</span>
             </button>
           </div>
@@ -629,7 +618,7 @@ export default function MenuPerfil() {
             style={{
               position: 'fixed',
               inset: 0,
-              background: 'rgba(15, 23, 42, 0.45)',
+              background: 'var(--bg-overlay)',
               backdropFilter: 'blur(2px)',
               zIndex: 9990,
               animation: 'fadeInOverlay 0.2s ease-out',
@@ -843,7 +832,7 @@ export default function MenuPerfil() {
                               fontWeight: seleccionado ? 700 : 500,
                               cursor: 'pointer',
                               border: seleccionado ? '1.5px solid var(--accent)' : '1px solid var(--linea)',
-                              background: seleccionado ? 'rgba(99, 102, 241, 0.08)' : 'var(--bg-surface)',
+                              background: seleccionado ? 'color-mix(in oklch, var(--accent) 10%, transparent)' : 'var(--bg-surface)',
                               color: seleccionado ? 'var(--accent)' : 'var(--text-secondary)',
                               transition: 'all 0.15s ease',
                             }}
@@ -892,8 +881,8 @@ export default function MenuPerfil() {
                       padding: '11px 24px',
                       borderRadius: 999,
                       border: 0,
-                      background: guardadoExito ? '#10b981' : 'var(--accent)',
-                      color: '#ffffff',
+                      background: guardadoExito ? 'var(--resalte)' : 'var(--accent)',
+                      color: guardadoExito ? 'var(--resalte-fg)' : 'var(--accent-fg)',
                       fontSize: 14,
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -981,7 +970,7 @@ export default function MenuPerfil() {
                         No tienes pagos registrados
                       </strong>
                       <p style={{ fontSize: 13.5, color: 'var(--text-secondary)', maxWidth: 280, margin: 0, lineHeight: 1.5 }}>
-                        Cuando compres consultas, aquí verás cada pago con su boleta.
+                        Cuando actives Pro estudiante, aquí verás cada pago con su boleta.
                       </p>
                       <button
                         type="button"
@@ -1029,7 +1018,7 @@ export default function MenuPerfil() {
                           </strong>
                           <button
                             type="button"
-                            onClick={() => window.print()}
+                            onClick={() => descargarBoleta(p, usuario)}
                             style={{
                               padding: '5px 12px',
                               borderRadius: 999,
@@ -1197,8 +1186,8 @@ export default function MenuPerfil() {
                             </span>
                             <span
                               style={{
-                                background: c.costo ? 'var(--bg-elevated)' : '#bef264',
-                                color: c.costo ? 'var(--text-secondary)' : '#0f172a',
+                                background: c.costo ? 'var(--bg-elevated)' : 'var(--resalte)',
+                                color: c.costo ? 'var(--text-secondary)' : 'var(--resalte-fg)',
                                 border: c.costo ? '1px solid var(--linea)' : 0,
                                 borderRadius: 999,
                                 padding: '2px 8px',

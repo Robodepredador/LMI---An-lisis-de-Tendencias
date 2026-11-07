@@ -1,4 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
+import { FEATURES } from '../../data/contenido.js';
+
+// El tono de cada tarjeta de función. Sale de tokens para que el interruptor
+// de tema lo pueda cambiar: en oscuro acento y resalte se invierten.
+const TONOS = {
+  accento: { bg: 'var(--accent)', fg: 'var(--accent-fg)', tenue: 'var(--sobre-accent-tenue)' },
+  resalte: { bg: 'var(--resalte)', fg: 'var(--resalte-fg)', tenue: 'var(--resalte-fg)' },
+  suave: { bg: 'var(--bg-elevated)', fg: 'var(--text-primary)', tenue: 'var(--text-secondary)' },
+  noche: { bg: 'var(--bg-noche)', fg: 'var(--sobre-accent)', tenue: 'var(--sobre-noche)' },
+};
 import { useNavigate } from 'react-router-dom';
 import Lumi, { LumiLogo } from '../../mascota/Lumi.jsx';
 import { cobertura } from '../../data/contenido.js';
@@ -60,46 +70,31 @@ export function Funciones() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)' }}>FUNCIONES</span>
         <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 46, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.02 }}>
-          Deja de adivinar qué estudiar este ciclo.
+          Deja de llevarte el dato a otra parte.
         </h2>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: 18 }}>
-        <div style={{ background: 'var(--accent)', color: 'var(--accent-fg)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
-          <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--sobre-accent-tenue)' }}>Habilidades</span>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
-            “Sabes qué aprender antes de tus prácticas.”
-          </strong>
-          <p style={{ margin: 'auto 0 0', fontSize: 17, lineHeight: 1.55, color: 'var(--sobre-accent-tenue)' }}>
-            Qué porcentaje de ofertas pide cada herramienta para tu rol y qué está creciendo: redes, Excel, Power BI, SAP, Figma.
-          </p>
-        </div>
-        <div style={{ background: 'var(--resalte)', color: 'var(--resalte-fg)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
-          <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--resalte-fg)' }}>Salarios</span>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
-            “Negocia tu primer sueldo con datos, no con suposiciones.”
-          </strong>
-          <p style={{ margin: 'auto 0 0', fontSize: 17, lineHeight: 1.55, color: 'var(--resalte-fg)' }}>
-            Rango y mediana por rol, ciudad y experiencia, solo con ofertas que declaran sueldo.
-          </p>
-        </div>
-        <div style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
-          <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--text-secondary)' }}>Pregunta libre</span>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
-            “Pregunta como le preguntarías a un asesor de carrera.”
-          </strong>
-          <p style={{ margin: 'auto 0 0', fontSize: 17, lineHeight: 1.55, color: 'var(--text-secondary)' }}>
-            Escribe tu duda sobre el mercado o un puesto. Te respondemos con una explicación, el dato y ofertas reales de ejemplo.
-          </p>
-        </div>
-        <div style={{ background: 'var(--bg-noche)', color: 'var(--sobre-accent)', borderRadius: 'var(--radio-3xl)', padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 'var(--fn-min)' }}>
-          <span style={{ fontSize: 15, font: 'inherit', fontWeight: 600, color: 'var(--sobre-noche)' }}>Comparar y cerrar brechas</span>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
-            “Elige tu especialidad con evidencia.”
-          </strong>
-          <p style={{ margin: 'auto 0 0', fontSize: 17, lineHeight: 1.55, color: 'var(--sobre-noche)' }}>
-            Compara dos roles lado a lado y encuentra cursos para lo que te falta.
-          </p>
-        </div>
+        {FEATURES.map((f) => {
+          const tono = TONOS[f.tono];
+          return (
+            <div
+              key={f.n}
+              style={{
+                background: tono.bg, color: tono.fg, borderRadius: 'var(--radio-3xl)',
+                padding: 'var(--fn-pad)', display: 'flex', flexDirection: 'column', gap: 12,
+                minHeight: 'var(--fn-min)',
+              }}
+            >
+              <span style={{ fontSize: 15, fontWeight: 600, color: tono.tenue }}>{f.t}</span>
+              <strong style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
+                {f.titular}
+              </strong>
+              <p style={{ margin: 'auto 0 0', fontSize: 17, lineHeight: 1.55, color: tono.tenue }}>
+                {f.d}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -112,7 +107,7 @@ export function Funciones() {
 
 const CASOS = [
   {
-    ini: 'VQ', color: '#4f46e5', fg: '#ffffff',
+    ini: 'VQ', color: 'var(--dato-1)', fg: 'var(--blanco-fijo)',
     nombre: 'Valeria Quispe',
     carrera: 'Marketing · 6to c...',
     titular: 'Consiguió prácticas en una agencia tras aprender Meta Ads.',
@@ -121,7 +116,7 @@ const CASOS = [
     dato: '2 meses', nota: 'de la consulta a la oferta',
   },
   {
-    ini: 'DR', color: '#bef264', fg: '#0f172a',
+    ini: 'DR', color: 'var(--lima-fija)', fg: 'var(--sobre-lima-fija)',
     nombre: 'Diego Ramos',
     carrera: 'Contabilidad · eg...',
     titular: 'Negoció su primer sueldo 18% por encima de la oferta inicial.',
@@ -130,7 +125,7 @@ const CASOS = [
     dato: '+18%', nota: 'sobre la propuesta',
   },
   {
-    ini: 'MC', color: '#b45309', fg: '#ffffff',
+    ini: 'MC', color: 'var(--dato-3)', fg: 'var(--blanco-fijo)',
     nombre: 'Mariana Chávez',
     carrera: 'Ing. Industrial · 5...',
     titular: 'Eligió su especialidad comparando dos roles.',
@@ -142,18 +137,18 @@ const CASOS = [
 
 const RESENAS = [
   {
-    estrellas: 5, ini: 'JM', color: '#4f46e5', fg: '#ffffff',
+    estrellas: 5, ini: 'JM', color: 'var(--dato-1)', fg: 'var(--blanco-fijo)',
     texto: '“Me gustó que cada dato tenga su fuente. Le mostré la metodología a mi profesora y la usamos en clase.”',
     quien: 'Joaquín Medina', ctx: 'Economía · 8vo ciclo',
   },
   {
-    estrellas: 5, ini: 'LT', color: '#bef264', fg: '#0f172a',
+    estrellas: 5, ini: 'LT', color: 'var(--lima-fija)', fg: 'var(--sobre-lima-fija)',
     texto: '“En mis clases de marketing nunca nos dijeron que pedían tanto Excel. Aquí lo vi en una consulta.”',
     quien: 'Lucía Torres', ctx: 'Marketing · 5to ciclo',
   },
   {
-    estrellas: 5, ini: 'RS', color: '#7c3aed', fg: '#ffffff',
-    texto: '“Con el plan gratis me alcanzó para ver qué piden en Derecho corporativo. Compraré créditos.”',
+    estrellas: 5, ini: 'RS', color: 'var(--dato-5)', fg: 'var(--blanco-fijo)',
+    texto: '“Con el plan gratis vi mi porcentaje y qué me faltaba. Activé Pro para ver en qué avisos ya calzo.”',
     quien: 'Renzo Salazar', ctx: 'Derecho · 2do ciclo',
   },
 ];
@@ -201,10 +196,10 @@ export function CasosYResenas() {
             onMouseEnter={() => setPausaAuto(true)}
             onMouseLeave={() => setPausaAuto(false)}
             style={{
-              background: '#17153a',
+              background: 'var(--bg-noche)',
               borderRadius: 26,
               padding: '28px 28px 24px',
-              color: '#ffffff',
+              color: 'var(--blanco-fijo)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -217,19 +212,19 @@ export function CasosYResenas() {
           >
             {/* Cabecera de valoración promedio */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <strong style={{ fontSize: 44, fontWeight: 800, lineHeight: 1, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: '#ffffff' }}>
+              <strong style={{ fontSize: 44, fontWeight: 800, lineHeight: 1, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: 'var(--blanco-fijo)' }}>
                 4,8
               </strong>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <span style={{ color: '#f59e0b', fontSize: 16, letterSpacing: 2 }}>★★★★★</span>
-                <span style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.72)', lineHeight: 1.35 }}>
+                <span style={{ color: 'var(--estrella)', fontSize: 16, letterSpacing: 2 }}>★★★★★</span>
+                <span style={{ fontSize: 13, color: 'var(--sobre-noche)', lineHeight: 1.35 }}>
                   Promedio de las reseñas dejadas por estudiantes.
                 </span>
               </div>
             </div>
 
             {/* Separador fino */}
-            <div style={{ height: 1, background: 'rgba(255, 255, 255, 0.1)' }} />
+            <div style={{ height: 1, background: 'color-mix(in oklch, var(--blanco-fijo) 12%, transparent)' }} />
 
             {/* Comentario individual en carrusel */}
             <div
@@ -241,10 +236,10 @@ export function CasosYResenas() {
                 animation: 'fadeInResena 0.35s ease-out',
               }}
             >
-              <span style={{ color: '#f59e0b', fontSize: 14, letterSpacing: 2 }}>
+              <span style={{ color: 'var(--estrella)', fontSize: 14, letterSpacing: 2 }}>
                 {'★'.repeat(resena.estrellas)}
               </span>
-              <p style={{ margin: 0, fontSize: 15, lineHeight: 1.5, color: '#ffffff', minHeight: 66 }}>
+              <p style={{ margin: 0, fontSize: 15, lineHeight: 1.5, color: 'var(--blanco-fijo)', minHeight: 66 }}>
                 {resena.texto}
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 }}>
@@ -266,8 +261,8 @@ export function CasosYResenas() {
                   {resena.ini}
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <strong style={{ fontSize: 14, color: '#ffffff' }}>{resena.quien}</strong>
-                  <span style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.65)' }}>{resena.ctx}</span>
+                  <strong style={{ fontSize: 14, color: 'var(--blanco-fijo)' }}>{resena.quien}</strong>
+                  <span style={{ fontSize: 12, color: 'var(--sobre-noche)' }}>{resena.ctx}</span>
                 </div>
               </div>
             </div>
@@ -286,7 +281,7 @@ export function CasosYResenas() {
                       height: 6,
                       width: i === resenaActual ? 26 : 6,
                       borderRadius: 999,
-                      background: i === resenaActual ? '#bef264' : 'rgba(255, 255, 255, 0.25)',
+                      background: i === resenaActual ? 'var(--lima-fija)' : 'color-mix(in oklch, var(--blanco-fijo) 25%, transparent)',
                       border: 0,
                       padding: 0,
                       cursor: 'pointer',
@@ -307,8 +302,8 @@ export function CasosYResenas() {
                     height: 36,
                     borderRadius: 999,
                     border: '1px solid rgba(255, 255, 255, 0.2)',
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    color: '#ffffff',
+                    background: 'color-mix(in oklch, var(--blanco-fijo) 8%, transparent)',
+                    color: 'var(--blanco-fijo)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -316,8 +311,8 @@ export function CasosYResenas() {
                     fontSize: 16,
                     transition: 'background 0.15s ease',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.16)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)')}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'color-mix(in oklch, var(--blanco-fijo) 18%, transparent)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'color-mix(in oklch, var(--blanco-fijo) 8%, transparent)')}
                 >
                   ←
                 </button>
@@ -330,8 +325,8 @@ export function CasosYResenas() {
                     height: 36,
                     borderRadius: 999,
                     border: 0,
-                    background: '#bef264',
-                    color: '#0f172a',
+                    background: 'var(--lima-fija)',
+                    color: 'var(--sobre-lima-fija)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -521,32 +516,29 @@ export function CasosYResenas() {
 // Una sola sección. Para que los tres planes y la tabla quepan juntos en una
 // laptop, las tarjetas son compactas y la tabla deja de repetir el precio.
 
-const PLANES = [
+// Dos planes. Los paquetes de créditos y el Pro de S/ 29 salieron de toda la
+// app, landing incluida: un tester que ve S/ 19 en el paywall y S/ 29 aquí no
+// evalúa el producto, evalúa si la app está terminada (§6.3).
+const PLANES_LANDING = [
   {
     id: 'gratis', nombre: 'Gratis', precio: 'S/ 0', sufijo: '',
-    puntos: ['3 consultas al mes', 'Lima Metropolitana', 'Exportar a PDF'],
+    puntos: ['1 diagnóstico de perfil al mes', 'Tu % y las skills que te faltan', '3 consultas a Lumi al mes'],
     cta: 'Empezar gratis', clase: 'plan-card-proto',
     btn: 'btn btn--linea',
   },
   {
-    id: 'creditos', nombre: 'Créditos', precio: 'S/ 12', sufijo: '10 consultas',
-    puntos: ['O 25 consultas por S/ 25', 'Todas las regiones', 'Válidos 12 meses'],
-    cta: 'Comprar créditos', clase: 'plan-card-proto plan-card-proto--destacado',
-    btn: 'btn btn--acento', etiqueta: 'Más elegido',
-  },
-  {
-    id: 'pro', nombre: 'Pro', precio: 'S/ 29', sufijo: '/mes',
-    puntos: ['Consultas ilimitadas', 'Todas las regiones', 'Historial y comparativas'],
-    cta: 'Activar Pro', clase: 'plan-card-proto plan-card-proto--noche',
-    btn: 'btn btn--resalte',
+    id: 'pro', nombre: 'Pro estudiante', precio: 'S/ 19', sufijo: '/mes',
+    puntos: ['Las ofertas donde ya calzas', 'Tu ruta con recursos gratis', 'Tu CV con las frases de los avisos'],
+    cta: 'Activar Pro estudiante', clase: 'plan-card-proto plan-card-proto--destacado',
+    btn: 'btn btn--acento', etiqueta: 'Para decidir',
   },
 ];
 
 const COMPARATIVA = [
-  ['Precio', 'Desde S/ 0', 'Suscripción mensual', 'Gratis'],
-  ['Habilidades que piden por carrera', '✓', 'Parcial', '—'],
-  ['Salarios con fuente, Perú', '✓', '—', 'Solo si la oferta lo dice'],
-  ['Preguntas libres sobre el mercado', '✓', '—', '—'],
+  ['Precio', 'Gratis o S/ 19/mes', 'Suscripción mensual', 'Gratis'],
+  ['Con cuántas ofertas calzas hoy', '✓', '—', '—'],
+  ['Qué aprender primero, por ofertas que desbloquea', '✓', '—', '—'],
+  ['Tu CV con las frases literales de los avisos', '✓', '—', '—'],
 ];
 
 export function PlanesYComparativa() {
@@ -560,15 +552,15 @@ export function PlanesYComparativa() {
             PLANES
           </span>
           <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 'var(--tipo-3xl)', fontWeight: 800, letterSpacing: '-0.03em' }}>
-            Precios de estudiante.
+            Gratis te dice qué. Pro te dice cómo.
           </h2>
           <p style={{ margin: 0, fontSize: 'var(--tipo-base)', color: 'var(--text-secondary)' }}>
-            Empieza gratis. Paga solo si necesitas más.
+            Precio de estudiante, sin permanencia. Cancela cuando quieras.
           </p>
         </div>
 
         <div className="rejilla-planes-proto">
-          {PLANES.map((p) => (
+          {PLANES_LANDING.map((p) => (
             <div key={p.id} className={p.clase}>
               <div className="plan-card-proto__cabecera">
                 <strong style={{ fontSize: 'var(--tipo-lg)' }}>{p.nombre}</strong>

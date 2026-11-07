@@ -30,9 +30,16 @@ h1, h2, h3, h4, h5, h6 { margin: 0; }
 p { margin: 0; }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 7px; height: 7px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--borde-campo); border-radius: 3px; }
+::-webkit-scrollbar-thumb {
+  background: var(--linea);
+  border-radius: var(--radio-full);
+  transition: background var(--duration);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--borde-campo);
+}
 
 /* ── Utilities ── */
 .mono { font-family: var(--font-mono); }

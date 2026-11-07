@@ -1,90 +1,97 @@
 import { useMemo, useState } from 'react';
 import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { CONSULTAS_GRATIS, useApp } from '../store.js';
+import { CONSULTAS_GRATIS, DIAGNOSTICOS_GRATIS, useApp } from '../store.js';
 import { getTenant } from '../data/tenant.js';
-import { proximaRenovacion, vigenciaCreditos } from '../data/contenido.js';
-import ModalPlanes from '../components/ModalPlanes.jsx';
+import { proximaRenovacion } from '../data/contenido.js';
+import Paywall from '../components/Paywall.jsx';
+import { EtiquetaPro } from '../components/mercado.jsx';
 import MenuPerfil from '../components/MenuPerfil.jsx';
 import { LumiLogo } from '../mascota/Lumi.jsx';
+
+// Las cinco secciones del motor de decisión. La barra lateral ya no es
+// "nueva consulta + historial": eso pasó a ser una sección más.
+const SECCIONES = [
+  { ruta: '/chat', texto: 'Consultar a Lumi', pro: false },
+  { ruta: '/diagnostico', texto: 'Mi diagnóstico', pro: false },
+  { ruta: '/ofertas', texto: 'Ofertas para mí', pro: true },
+  { ruta: '/ruta', texto: 'Ruta de aprendizaje', pro: true },
+  { ruta: '/cv', texto: 'Adaptar mi CV', pro: true },
+];
 
 // El medidor de consumo. Es lo que traduce el plan a algo que el usuario
 // entiende de un vistazo, así que vive en un solo sitio.
 export function useMedidor() {
   const plan = useApp((s) => s.plan);
-  const creditos = useApp((s) => s.creditos);
   const restantes = useApp((s) => s.restantes());
+  const diagnosticosMes = useApp((s) => s.diagnosticosMes);
   const tenant = getTenant(useApp((s) => s.tenant));
 
   if (plan === 'institucional') {
-    return { titulo: 'Licencia institucional', num: '∞', barra: null, corto: 'Ilimitado',
-      nota: `${tenant.uni} · consultas ilimitadas`, cta: null };
+    return {
+      titulo: 'Licencia institucional', num: '∞', barra: null, corto: 'Ilimitado',
+      nota: `${tenant.uni} · todo desbloqueado`, cta: null
+    };
   }
   if (plan === 'pro') {
-    return { titulo: 'Plan Pro', num: '∞', barra: null, corto: 'Pro',
-      nota: 'Consultas ilimitadas · renovación mensual', cta: null };
+    return {
+      titulo: 'Pro estudiante', num: '∞', barra: null, corto: 'Pro',
+      nota: 'Todo desbloqueado · renovación mensual', cta: null
+    };
   }
-  if (plan === 'creditos') {
-    return { titulo: 'Créditos', num: String(creditos), barra: null, corto: `${creditos} cr.`,
-      nota: `Válidos hasta el ${vigenciaCreditos()}`, cta: 'Comprar más' };
-  }
+  const diagRestantes = Math.max(0, DIAGNOSTICOS_GRATIS - diagnosticosMes);
   return {
     titulo: 'Plan gratis',
     num: `${restantes} de ${CONSULTAS_GRATIS}`,
     barra: (restantes / CONSULTAS_GRATIS) * 100,
     corto: `${restantes}/${CONSULTAS_GRATIS}`,
-    nota: restantes === 0 ? `Se renueva el ${proximaRenovacion()}`
-      : restantes === 1 ? 'Te queda 1 consulta este mes'
-      : 'Consultas disponibles este mes',
-    cta: restantes <= 1 ? 'Ver planes' : null,
+    // En gratis el medidor dice las dos cosas: las consultas y si queda el
+    // diagnóstico del mes. Son los dos muros que el tester puede chocar.
+    nota: diagRestantes > 0
+      ? `${restantes} ${restantes === 1 ? 'consulta' : 'consultas'} y tu diagnóstico del mes`
+      : restantes === 0
+        ? `Sin consultas ni diagnóstico · se renueva el ${proximaRenovacion()}`
+        : `${restantes} ${restantes === 1 ? 'consulta' : 'consultas'} · diagnóstico del mes usado`,
+    cta: restantes <= 1 || diagRestantes === 0 ? 'Ver Pro estudiante' : null,
   };
 }
 
 function Medidor({ compacto }) {
   const m = useMedidor();
-  const restantes = useApp((s) => s.restantes());
-  const creditos = useApp((s) => s.creditos);
   const plan = useApp((s) => s.plan);
+  const restantes = useApp((s) => s.restantes());
   const { pathname } = useLocation();
   const setRutaRetornoChat = useApp((s) => s.setRutaRetornoChat);
-  const abrirModalPlanes = useApp((s) => s.abrirModalPlanes);
+  const abrirPaywall = useApp((s) => s.abrirPaywall);
 
   const mostrarPlanes = () => {
     setRutaRetornoChat(pathname.startsWith('/chat') ? pathname : '/chat');
-    abrirModalPlanes();
+    abrirPaywall('general', pathname);
   };
 
   if (compacto) {
-    const esCero = plan === 'free' ? restantes === 0 : (plan === 'creditos' && creditos === 0);
-    const textoBadge = plan === 'pro' || plan === 'institucional'
-      ? 'Ilimitado'
-      : esCero
-        ? '0 consultas'
-        : plan === 'creditos'
-          ? `${creditos} consultas`
-          : `${restantes} consultas`;
-
+    const esPro = plan === 'pro' || plan === 'institucional';
+    const esCero = !esPro && restantes === 0;
     return (
       <button
         type="button"
         style={{
-          background: esCero ? '#ffedd5' : '#bef264',
-          color: esCero ? '#c2410c' : '#0f172a',
-          border: esCero ? '1px solid #fed7aa' : '0',
-          borderRadius: 999,
+          background: esCero ? 'var(--alerta-bg)' : 'var(--resalte)',
+          color: esCero ? 'var(--alerta-fg)' : 'var(--resalte-fg)',
+          border: esCero ? '1px solid var(--alerta)' : '0',
+          borderRadius: 'var(--radio-full)',
           padding: '7px 18px',
-          fontSize: 13.5,
+          fontSize: 13,
           fontWeight: 700,
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           gap: 6,
-          transition: 'all 0.15s ease',
-          boxShadow: esCero ? '0 2px 8px rgba(234, 88, 12, 0.15)' : 'none',
+          transition: 'all var(--duration) var(--ease-out)',
         }}
         onClick={mostrarPlanes}
-        title="Ver planes y consultas"
+        title="Ver tu plan"
       >
-        {textoBadge}
+        {esPro ? m.corto : esCero ? '0 consultas' : `${restantes} consultas`}
       </button>
     );
   }
@@ -120,6 +127,8 @@ export default function AppShell() {
   const consultas = useApp((s) => s.consultas);
   const charlas = useMemo(() => useApp.getState().conversaciones(), [consultas]);
   const nuevaConsulta = useApp((s) => s.nuevaConsulta);
+  const diagnostico = useApp((s) => s.diagnostico);
+  const plan = useApp((s) => s.plan);
   const tenant = getTenant(useApp((s) => s.tenant));
   const ir = useNavigate();
   const { pathname } = useLocation();
@@ -130,11 +139,20 @@ export default function AppShell() {
   if (!usuario) return <Navigate to="/login" replace />;
 
   const esDocente = usuario.tipo === 'docente';
+  const esPro = plan === 'pro' || plan === 'institucional';
+
+  // "Mi diagnóstico" lleva al reporte si ya existe uno: entrar a mirarlo no
+  // consume el cupo del mes (§7.8).
+  const rutaDe = (s) => (s.ruta === '/diagnostico' && diagnostico ? '/diagnostico/resultado' : s.ruta);
+  const activa = (s) => pathname === s.ruta
+    || (s.ruta === '/diagnostico' && pathname.startsWith('/diagnostico'))
+    || (s.ruta === '/ofertas' && pathname.startsWith('/ofertas'))
+    || (s.ruta === '/chat' && pathname.startsWith('/chat'));
 
   return (
     <div className="app-shell">
       <aside className={`app-shell__lado ${!sidebarAbierta ? 'app-shell__lado--cerrado' : ''}`}>
-        <button className="marca" style={{ padding: '0 6px', gap: 10 }} onClick={() => { if (!esDocente) nuevaConsulta(); ir(esDocente ? '/docente' : '/chat'); }}>
+        <button className="marca" style={{ padding: '0 6px', gap: 10 }} onClick={() => ir(esDocente ? '/docente' : '/diagnostico')}>
           <LumiLogo alto={32} />
           <span className="pila" style={{ alignItems: 'flex-start', lineHeight: 1.15 }}>
             <strong style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-0.01em' }}>{tenant.name}</strong>
@@ -143,13 +161,29 @@ export default function AppShell() {
         </button>
 
         {!esDocente && (
+          <nav className="pila" style={{ gap: 2 }}>
+            {SECCIONES.map((s) => (
+              <Link
+                key={s.ruta}
+                to={rutaDe(s)}
+                className={`lado__item${activa(s) ? ' lado__item--on' : ''}`}
+                style={activa(s) ? { background: 'var(--bg-elevated)', fontWeight: 600 } : undefined}
+              >
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.texto}</span>
+                {s.pro && !esPro && <EtiquetaPro />}
+              </Link>
+            ))}
+          </nav>
+        )}
+
+        {!esDocente && (
           <button
             className="btn btn--linea"
-            style={{ borderRadius: 'var(--radio-md)', background: 'var(--bg-elevated)', textAlign: 'left' }}
+            style={{ borderRadius: 'var(--radio-md)', background: 'var(--bg-elevated)', textAlign: 'left', fontSize: 14, padding: '10px 14px' }}
             onClick={() => {
               if (!useApp.getState().puedeConsultar()) {
                 useApp.getState().setRutaRetornoChat('/chat');
-                useApp.getState().abrirModalPlanes();
+                useApp.getState().abrirPaywall('consultas', '/chat');
                 return;
               }
               nuevaConsulta();
@@ -158,11 +192,6 @@ export default function AppShell() {
           >
             + Nueva consulta
           </button>
-        )}
-
-        {esDocente && (
-          <div className="pila" style={{ gap: 2 }}>
-          </div>
         )}
 
         <div className="pila" style={{ gap: 2, minHeight: 0, overflow: 'auto' }}>
@@ -232,7 +261,7 @@ export default function AppShell() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'background 0.15s ease, color 0.15s ease',
+                transition: 'background var(--duration) var(--ease-out), color var(--duration) var(--ease-out)',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-elevated)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
@@ -243,7 +272,7 @@ export default function AppShell() {
               </svg>
             </button>
             {!sidebarAbierta && (
-              <button className="marca animate-fade" onClick={() => { if (!esDocente) nuevaConsulta(); ir(esDocente ? '/docente' : '/chat'); }}>
+              <button className="marca animate-fade" onClick={() => ir(esDocente ? '/docente' : '/diagnostico')}>
                 <LumiLogo alto={32} />
                 <strong style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.01em' }}>{tenant.name}</strong>
               </button>
@@ -256,7 +285,7 @@ export default function AppShell() {
         </header>
         <Outlet />
       </main>
-      <ModalPlanes />
+      <Paywall />
     </div>
   );
 }

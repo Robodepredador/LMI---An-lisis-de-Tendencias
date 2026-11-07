@@ -44,7 +44,7 @@ export default function PagoLayout() {
 
         {/* Indicador de pestaña de chat activa idéntico a Imagen 2 */}
         <div className="fila solo-desktop" style={{ gap: 8, alignItems: 'center', fontSize: 13.5, color: 'var(--text-secondary)' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', display: 'inline-block', boxShadow: '0 0 6px rgba(34, 197, 94, 0.6)' }} />
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--dato-5)', display: 'inline-block', boxShadow: 'var(--sombra-sm)' }} />
           <span>Tu chat sigue abierto en la otra pestaña</span>
         </div>
 

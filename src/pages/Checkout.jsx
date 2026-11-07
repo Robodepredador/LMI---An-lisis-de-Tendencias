@@ -1,34 +1,24 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store.js';
-import { METODOS_PAGO, PACKS } from '../data/contenido.js';
+import { METODOS_PAGO, PRO } from '../data/contenido.js';
 import { celularValido, esRechazada, formatearTarjeta, formatearVencimiento, marcaDe, validarTarjeta } from '../lib/pago.js';
 
 export default function Checkout() {
   const ir = useNavigate();
-  const [searchParams] = useSearchParams();
-  const pack = useApp((s) => s.pack);
-  const setPack = useApp((s) => s.setPack);
   const pendiente = useApp((s) => s.pendiente);
   const metodo = useApp((s) => s.metodoPago);
   const setMetodoPago = useApp((s) => s.setMetodoPago);
   const confirmarPago = useApp((s) => s.confirmarPago);
   const rutaRetornoChat = useApp((s) => s.rutaRetornoChat) || '/chat';
 
-  // Leer pack desde la URL si viene en ?pack=25
-  const packParam = searchParams.get('pack');
-  useEffect(() => {
-    if (packParam && PACKS.some((p) => p.id === packParam)) {
-      setPack(packParam);
-    }
-  }, [packParam, setPack]);
-
   const [tarjeta, setTarjeta] = useState({ numero: '', vencimiento: '', cvv: '' });
   const [celular, setCelular] = useState('');
   const [error, setError] = useState('');
   const [procesando, setProcesando] = useState(false);
 
-  const elegido = PACKS.find((p) => p.id === pack) ?? PACKS[1];
+  // Un solo producto: la suscripción Pro estudiante (§6.3).
+  const elegido = PRO;
   const marca = marcaDe(tarjeta.numero);
 
   // Desglose de impuestos (18% IGV peruano)
@@ -54,7 +44,13 @@ export default function Checkout() {
       return setError('Tu banco rechazó la operación. Prueba con otra tarjeta o elige otro método.');
     }
 
-    confirmarPago();
+    confirmarPago(
+      metodo === 'tarjeta'
+        ? { marca: marca ?? 'Tarjeta', ultimos4: tarjeta.numero.replace(/\D/g, '').slice(-4) }
+        : metodo === 'yape'
+          ? { celular }
+          : null,
+    );
     setProcesando(false);
     ir('/confirmacion', { replace: true });
   };
@@ -65,9 +61,9 @@ export default function Checkout() {
         {/* ── Columna 1: Selección e Ingreso de Información ── */}
         <div className="pasarela__principal">
           <div className="pila" style={{ gap: 8 }}>
-            <h1 className="display" style={{ margin: 0, fontSize: 34, fontWeight: 800 }}>Finalizar compra</h1>
+            <h1 className="display" style={{ margin: 0, fontSize: 34, fontWeight: 800 }}>Activar Pro estudiante</h1>
             <span style={{ fontSize: 15, color: 'var(--text-secondary)' }}>
-              Al terminar, vuelves a tu chat y Lumi responde tu pregunta guardada.
+              Al confirmar, se desbloquean tus ofertas, tu ruta y tu CV, y te llevamos ahí.
             </span>
             {pendiente && (
               <div
@@ -110,9 +106,9 @@ export default function Checkout() {
                       gap: 12,
                       padding: '16px 18px',
                       borderRadius: 16,
-                      border: activo ? '2px solid #4f46e5' : '1.5px solid var(--linea)',
-                      background: activo ? '#f5f3ff' : 'var(--bg-surface)',
-                      boxShadow: activo ? '0 0 0 1px #4f46e5' : 'none',
+                      border: activo ? '2px solid var(--accent)' : '1.5px solid var(--linea)',
+                      background: activo ? 'var(--bg-elevated)' : 'var(--bg-surface)',
+                      boxShadow: activo ? 'var(--sombra-sm)' : 'none',
                     }}
                     onClick={() => { setMetodoPago(m.id); setError(''); }}
                   >
@@ -235,7 +231,7 @@ export default function Checkout() {
 
           <div
             style={{
-              background: '#f5f3ff',
+              background: 'var(--bg-elevated)',
               borderRadius: 16,
               padding: '18px 20px',
               display: 'flex',
@@ -251,8 +247,8 @@ export default function Checkout() {
                 <span
                   style={{
                     alignSelf: 'flex-start',
-                    background: '#bef264',
-                    color: '#0f172a',
+                    background: 'var(--resalte)',
+                    color: 'var(--resalte-fg)',
                     fontSize: 11,
                     fontWeight: 800,
                     padding: '3px 10px',
@@ -325,7 +321,7 @@ export default function Checkout() {
             </div>
             <div className="fila" style={{ gap: 8 }}>
               <span>⚡</span>
-              <span>Créditos disponibles al instante</span>
+              <span>Ofertas, ruta y CV desbloqueados al instante</span>
             </div>
           </div>
         </aside>
